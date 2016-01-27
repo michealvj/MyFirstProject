@@ -8,10 +8,22 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import "LocationTracker.h"
+#import "SideBar.h"
+#import "utils.h"
+#import "SVProgressHUD.h"
+#import "WebServiceHandler.h"
+#import "LocationTracker.h"
+
+@import GoogleMaps;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+
+@property LocationTracker *locationTracker;
+@property (nonatomic) NSTimer* locationUpdateTimer;
+
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
