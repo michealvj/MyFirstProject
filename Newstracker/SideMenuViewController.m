@@ -94,15 +94,6 @@
         }
         case 4:
         {
-            MapViewController *nav = [self.storyboard instantiateViewControllerWithIdentifier:@"MapViewController"];
-            UINavigationController *navigationController = self.menuContainerViewController.centerViewController;
-            NSArray *controllers = [NSArray arrayWithObject:nav];
-            navigationController.viewControllers = controllers;
-            [self.menuContainerViewController setMenuState:MFSideMenuStateClosed];
-            break;
-        }
-        case 5:
-        {
             [self.menuContainerViewController setMenuState:MFSideMenuStateClosed];
             [WebServiceHandler sharedInstance].delegate = self;
             [[WebServiceHandler sharedInstance] logOffUser];

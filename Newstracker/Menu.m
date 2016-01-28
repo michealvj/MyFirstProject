@@ -23,8 +23,8 @@
 - (NSArray *)getMenuList
 {
     NSMutableArray *list = [[NSMutableArray alloc] init];
-    NSArray *menuArray = @[@"Region Map", @"Online/Offline Users", @"Incident List", @"Settings", @"About Us", @"Log out"];
-    NSArray *menuImageArray = @[@"map.png", @"user.png", @"incident.png", @"settings.png", @"aboutus.png", @"logout.png"];
+    NSArray *menuArray = @[@"Region Map", @"Online/Offline Users", @"Incident List", @"Settings", @"Log out"];
+    NSArray *menuImageArray = @[@"map.png", @"user.png", @"incident.png", @"settings.png", @"logout.png"];
 
     
     for (int i = 0; i<menuArray.count; i++) {

@@ -182,14 +182,14 @@
     self.viewIncidentTopConstraint.constant = -self.viewIncidentView.frame.size.height-100;
     self.addNewUserTopConstraint.constant = -self.addNewUserView.frame.size.height-100;
     
-    
-//    self.notificationBottomConstraint.constant = -2000;
-//    self.morePeopleViewLeftConstraint.constant = -2000;
-//    self.userDetailTopConstraint.constant = -2000;
-//    self.incidentDetailTopConstraint.constant = -2000;
-//    self.viewIncidentTopConstraint.constant = -2000;
-//    self.addNewUserTopConstraint.constant = -2000;
-    
+    //Hide Views
+    self.notificationView.hidden = YES;
+    self.notificationMoreView.hidden = YES;
+    self.morePeopleView.hidden = YES;
+    self.userDetailView.hidden = YES;
+    self.incidentDetailView.hidden = YES;
+    self.viewIncidentView.hidden = YES;
+    self.addNewUserView.hidden = YES;
 }
 
 - (void)resetAllIncidentMarkers
@@ -472,7 +472,6 @@
     [self.incidentDetailAddress resignFirstResponder];
     [self.incidentDetailDescription resignFirstResponder];
     
-    [[CodeSnip sharedInstance] showAlert:incident.incidentName withMessage:@"Incident Created Successfully" withTarget:self];
     
     //Plot new incident in Map
     MapViewHelper *map = [MapViewHelper sharedInstance];
@@ -484,6 +483,8 @@
     selectedIncidentMarker = incidentMarker;
     [self loadViewIncidentViewForMarker:incidentMarker];
     [self showViewIncidentView];
+    
+    [[CodeSnip sharedInstance] showAlert:incident.incidentName withMessage:@"Incident Created Successfully" withTarget:self];
 }
 
 - (void)didDeleteIncident
@@ -1047,8 +1048,14 @@
     self.incidentDescriptionEditButton.hidden = YES;
     self.incidentAddressEditButton.hidden = YES;
     
+    self.editTitleImage.hidden = YES;
+    self.editAddressImage.hidden = YES;
+    self.editDescriptionImage.hidden = YES;
+    
     clickedSearch = @"newAddress";
+    [self sizeToFitNewIncident];
     [self showIncidentDetailView];
+    
 }
 
 - (void)loadCreateIncidentViewWithData:(Geocode *)data
@@ -1060,6 +1067,7 @@
     [self.incidentDetailTitle resignFirstResponder];
     [self.incidentDetailAddress resignFirstResponder];
     [self.incidentDetailDescription resignFirstResponder];
+    [self sizeToFitNewIncident];
 }
 
 - (void)loadViewIncidentViewWithData:(Geocode *)data
@@ -1067,7 +1075,7 @@
     self.viewIncidentAddress.text = data.address;
     searchedLocation = data.coordinate;
     self.viewIncidentAddress.userInteractionEnabled = NO;
-    self.editIncidentAddressButton.selected = NO;
+    self.incidentAddressEditButton.selected = NO;
     
     [self.viewIncidentTitle resignFirstResponder];
     [self.viewIncidentAddress resignFirstResponder];
@@ -1169,13 +1177,27 @@
     [self hideIncidentDetailView];
 }
 
+- (void)sizeToFitNewIncident
+{
+    //Size to Fit
+    [self.incidentDetailTitle sizeToFit];
+    self.incidentTitleHeight.constant = self.incidentDetailTitle.frame.size.height;
+    
+    [self.incidentDetailAddress sizeToFit];
+    self.incidentAddressHeight.constant = self.incidentDetailAddress.frame.size.height;
+    
+    [self.incidentDetailDescription sizeToFit];
+    self.incidentDescriptionHeight.constant = self.incidentDetailDescription.frame.size.height;
+    
+}
+
 #pragma mark - View Incident View
 
 - (void)deleteIncident:(id)sender
 {
     NSString *incidentID = selectedIncidentMarker.userData[@"incidentID"];
     
-    UIAlertController *alert = [[CodeSnip sharedInstance] createAlertWithAction:selectedIncidentMarker.title withMessage:@"Are you sure to delete it?" withCancelButton:@"NO" withTarget:self];
+    UIAlertController *alert = [[CodeSnip sharedInstance] createAlertWithAction:selectedIncidentMarker.title withMessage:@"Are you sure to delete this incident?" withCancelButton:@"NO" withTarget:self];
     
     [alert addAction:[UIAlertAction actionWithTitle:@"YES" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action)
     {
@@ -1198,9 +1220,9 @@
     self.viewIncidentDescription.userInteractionEnabled = NO;
 
     
-    self.editIncidentTitleButton.selected = NO;
-    self.editIncidentAddressButton.selected = NO;
-    self.editIncidentDescriptionButton.selected = NO;
+    self.editViewIncidentTitleButton.selected = NO;
+    self.editViewIncidentAddressButton.selected = NO;
+    self.editViewIncidentDescriptionButton.selected = NO;
     
     [self.incidentDetailTitle resignFirstResponder];
     [self.incidentDetailAddress resignFirstResponder];
@@ -1437,14 +1459,19 @@
         [self.incidentDetailScrollView setContentOffset:CGPointMake(0, 0)];
         
         self.incidentTitleEditButton.hidden = NO;
+        self.editTitleImage.hidden = NO;
+
         self.incidentTitleEditButton.selected = YES;
         self.incidentDetailTitle.userInteractionEnabled = YES;
     }
     else if ([textView isEqual:self.incidentDetailAddress])
     {
-        [self.incidentDetailScrollView setContentOffset:CGPointMake(0, 80)];
-        
+        CGPoint scrollPosition = [self.incidentDetailAddress superview].frame.origin;
+        [self.incidentDetailScrollView setContentOffset:CGPointMake(0, scrollPosition.y-20)];
+
         self.incidentAddressEditButton.hidden = NO;
+        self.editAddressImage.hidden = NO;
+
         self.incidentAddressEditButton.selected = YES;
         self.incidentDetailAddress.userInteractionEnabled = YES;
         
@@ -1453,9 +1480,12 @@
     }
     else if ([textView isEqual:self.incidentDetailDescription])
     {
-        [self.incidentDetailScrollView setContentOffset:CGPointMake(0, 180)];
+        CGPoint scrollPosition = [self.incidentDetailDescription superview].frame.origin;
+        [self.incidentDetailScrollView setContentOffset:CGPointMake(0, scrollPosition.y-20)];
         
         self.incidentDescriptionEditButton.hidden = NO;
+        self.editDescriptionImage.hidden = NO;
+
         self.incidentDescriptionEditButton.selected = YES;
         self.incidentDetailDescription.userInteractionEnabled = YES;
     }
@@ -1466,7 +1496,7 @@
         
         [self.viewIncidentScrollView setContentOffset:CGPointMake(0, 0)];
         
-        self.editIncidentTitleButton.selected = YES;
+        self.editViewIncidentTitleButton.selected = YES;
         self.viewIncidentTitle.userInteractionEnabled = YES;
     }
     else if ([textView isEqual:self.viewIncidentAddress])
@@ -1477,7 +1507,7 @@
         clickedSearch = @"updateAddress";
         [[MapViewHelper sharedInstance] showGoogleSearchBaronTarget:self];
         
-        self.editIncidentAddressButton.selected = YES;
+        self.editViewIncidentAddressButton.selected = YES;
         self.viewIncidentAddress.userInteractionEnabled = YES;
     }
     else if ([textView isEqual:self.viewIncidentDescription])
@@ -1485,7 +1515,7 @@
         CGPoint scrollPosition = [self.viewIncidentDescription superview].frame.origin;
         [self.viewIncidentScrollView setContentOffset:CGPointMake(0, scrollPosition.y)];
         
-        self.editIncidentDescriptionButton.selected = YES;
+        self.editViewIncidentDescriptionButton.selected = YES;
         self.viewIncidentDescription.userInteractionEnabled = YES;
     }
 }
@@ -1527,13 +1557,34 @@
 
 - (void)textViewDidChange:(UITextView *)textView
 {
+    
     CGSize newSize = textView.contentSize;
     CGRect textFrame = textView.frame;
     float diff = newSize.height - textFrame.size.height;
     if (textFrame.size.height!=newSize.height)
     {
         [textView setFrame:CGRectMake(CGRectGetMinX(textFrame), CGRectGetMinY(textFrame), CGRectGetWidth(textFrame), newSize.height)];
-        if ([textView isEqual:self.viewIncidentTitle])
+        
+        if ([textView isEqual:self.incidentDetailTitle]) {
+            self.incidentTitleHeight.constant = newSize.height;
+            [self.incidentDetailTitle updateConstraints];
+        }
+        else if ([textView isEqual:self.incidentDetailAddress])
+        {
+            self.incidentAddressHeight.constant = newSize.height;
+            [self.incidentDetailAddress updateConstraints];
+        }
+        else if ([textView isEqual:self.incidentDetailDescription])
+        {
+            CGPoint scrollPosition = [self.incidentDetailScrollView contentOffset];
+            self.incidentDescriptionHeight.constant = newSize.height;
+            [self.incidentDetailScrollView setContentOffset:CGPointMake(0, scrollPosition.y+20)];
+            
+            NSLog(@"%f:%f", scrollPosition.x, scrollPosition.y);
+//            [self.incidentDetailScrollView setContentOffset:CGPointMake(scrollPosition.x, scrollPosition.y+diff+30)];
+            [self.incidentDetailDescription updateConstraints];
+        }
+        else if ([textView isEqual:self.viewIncidentTitle])
         {
             self.viewIncidentTitleHeightConstraint.constant = newSize.height;
         }
@@ -1936,6 +1987,8 @@
 
 - (void)showNotificationMoreView
 {
+    self.notificationMoreView.hidden = NO;
+
     [self hideOtherViews:self.notificationMoreView];
     
     POPSpringAnimation *layoutAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayoutConstraintConstant];
@@ -1957,6 +2010,8 @@
 
 - (void)showNotificationView
 {
+    self.notificationView.hidden = NO;
+    
     [self hideOtherViews:self.notificationView];
     
     POPSpringAnimation *layoutAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayoutConstraintConstant];
@@ -1978,6 +2033,8 @@
 
 - (void)showMorePeopleView
 {
+    self.morePeopleView.hidden = NO;
+    
     [self hideOtherViews:self.morePeopleView];
     
     POPSpringAnimation *layoutAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayoutConstraintConstant];
@@ -2000,6 +2057,8 @@
 
 - (void)showUserDetailView:(NSString *)userName
 {
+    self.userDetailView.hidden = NO;
+    
     [self hideOtherViews:self.userDetailView];
 
     [self userIncidentNavigationBar:userName];
@@ -2031,6 +2090,8 @@
     self.incidentDetailAddress.userInteractionEnabled = YES;
     self.incidentDetailDescription.userInteractionEnabled = YES;
     
+    self.incidentDetailView.hidden = NO;
+    
     [self hideOtherViews:self.incidentDetailView];
     
     [self createIncidentNavigationBar];
@@ -2057,6 +2118,8 @@
 {
     [self hideOtherViews:self.viewIncidentView];
     
+    self.viewIncidentView.hidden = NO;
+    
     self.viewIncidentTitle.userInteractionEnabled = NO;
     self.viewIncidentAddress.userInteractionEnabled = NO;
     self.viewIncidentDescription.userInteractionEnabled = NO;
@@ -2082,6 +2145,7 @@
 
 - (void)showAddNewUserView
 {
+    self.addNewUserView.hidden = NO;
     [self hideOtherViews:self.addNewUserView];
     
     [self viewIncidentNavigationBar:@"Assign User"];

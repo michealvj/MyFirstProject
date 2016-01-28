@@ -1091,7 +1091,8 @@
                 detail.userID = userIDs;
                 detail.coordinate = firstCoordinate;
                 detail.reachablity = userIDs.count==1 ? GPSStatus : @"YES";
-                
+                //TODO:
+                detail.reachablity = @"YES";
                 [memberList addObject:detail];
                 
             }

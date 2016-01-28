@@ -59,6 +59,13 @@
 @property (weak, nonatomic) IBOutlet UIButton *incidentTitleEditButton;
 @property (weak, nonatomic) IBOutlet UIButton *incidentAddressEditButton;
 @property (weak, nonatomic) IBOutlet UIButton *incidentDescriptionEditButton;
+@property (weak, nonatomic) IBOutlet UIImageView *editTitleImage;
+@property (weak, nonatomic) IBOutlet UIImageView *editAddressImage;
+@property (weak, nonatomic) IBOutlet UIImageView *editDescriptionImage;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *incidentTitleHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *incidentAddressHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *incidentDescriptionHeight;
+
 
 //View Incident View
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *viewIncidentTopConstraint;
@@ -77,9 +84,6 @@
 @property (weak, nonatomic) IBOutlet UIView *viewIncidentView;
 @property (weak, nonatomic) IBOutlet UIScrollView *viewIncidentScrollView;
 @property (weak, nonatomic) IBOutlet UIButton *updateIncidentButton;
-@property (weak, nonatomic) IBOutlet UIButton *editIncidentTitleButton;
-@property (weak, nonatomic) IBOutlet UIButton *editIncidentAddressButton;
-@property (weak, nonatomic) IBOutlet UIButton *editIncidentDescriptionButton;
 @property (weak, nonatomic) IBOutlet UITableView *viewIncidentTableView;
 
 //Add New User View

@@ -13,6 +13,9 @@
 		04227F8A1C452FBC00166C7A /* LocationTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 04227F851C452FBC00166C7A /* LocationTracker.m */; };
 		04227F8B1C452FBC00166C7A /* BackgroundTaskManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04227F871C452FBC00166C7A /* BackgroundTaskManager.m */; };
 		04227F8C1C452FBC00166C7A /* LocationShareModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04227F891C452FBC00166C7A /* LocationShareModel.m */; };
+		042538B31C58E328004FE875 /* CREATE.png in Resources */ = {isa = PBXBuildFile; fileRef = 042538B11C58E328004FE875 /* CREATE.png */; };
+		042538B41C58E328004FE875 /* deleteIncident.png in Resources */ = {isa = PBXBuildFile; fileRef = 042538B21C58E328004FE875 /* deleteIncident.png */; };
+		042538B61C58E350004FE875 /* map-pointer.png in Resources */ = {isa = PBXBuildFile; fileRef = 042538B51C58E350004FE875 /* map-pointer.png */; };
 		042AF56B1C1FDDF2004291EE /* email.png in Resources */ = {isa = PBXBuildFile; fileRef = 042AF5681C1FDDF2004291EE /* email.png */; };
 		042AF56C1C1FDDF2004291EE /* loginicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 042AF5691C1FDDF2004291EE /* loginicon.png */; };
 		042AF56D1C1FDDF2004291EE /* password.png in Resources */ = {isa = PBXBuildFile; fileRef = 042AF56A1C1FDDF2004291EE /* password.png */; };
@@ -45,7 +48,6 @@
 		043C17F91C23D41100FB242E /* UserAssignTableButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 043C17F81C23D41100FB242E /* UserAssignTableButton.m */; };
 		043C17FD1C23DA2800FB242E /* greecircle.png in Resources */ = {isa = PBXBuildFile; fileRef = 043C17FB1C23DA2800FB242E /* greecircle.png */; };
 		043C17FE1C23DA2800FB242E /* greycircle.png in Resources */ = {isa = PBXBuildFile; fileRef = 043C17FC1C23DA2800FB242E /* greycircle.png */; };
-		043C18011C23E3F200FB242E /* map-pointer.png in Resources */ = {isa = PBXBuildFile; fileRef = 043C18001C23E3F200FB242E /* map-pointer.png */; };
 		043C18031C23E72300FB242E /* sideuser.png in Resources */ = {isa = PBXBuildFile; fileRef = 043C18021C23E72300FB242E /* sideuser.png */; };
 		045E573B1C293B3E00CA4462 /* searchbluepin.png in Resources */ = {isa = PBXBuildFile; fileRef = 045E573A1C293B3E00CA4462 /* searchbluepin.png */; };
 		045E573F1C293CAD00CA4462 /* SearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 045E573E1C293CAD00CA4462 /* SearchTableViewController.m */; };
@@ -152,6 +154,9 @@
 		04227F871C452FBC00166C7A /* BackgroundTaskManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackgroundTaskManager.m; sourceTree = "<group>"; };
 		04227F881C452FBC00166C7A /* LocationShareModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationShareModel.h; sourceTree = "<group>"; };
 		04227F891C452FBC00166C7A /* LocationShareModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationShareModel.m; sourceTree = "<group>"; };
+		042538B11C58E328004FE875 /* CREATE.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CREATE.png; sourceTree = "<group>"; };
+		042538B21C58E328004FE875 /* deleteIncident.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = deleteIncident.png; sourceTree = "<group>"; };
+		042538B51C58E350004FE875 /* map-pointer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map-pointer.png"; sourceTree = "<group>"; };
 		042AF5681C1FDDF2004291EE /* email.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = email.png; sourceTree = "<group>"; };
 		042AF5691C1FDDF2004291EE /* loginicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loginicon.png; sourceTree = "<group>"; };
 		042AF56A1C1FDDF2004291EE /* password.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = password.png; sourceTree = "<group>"; };
@@ -177,7 +182,6 @@
 		043C17F81C23D41100FB242E /* UserAssignTableButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserAssignTableButton.m; sourceTree = "<group>"; };
 		043C17FB1C23DA2800FB242E /* greecircle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = greecircle.png; sourceTree = "<group>"; };
 		043C17FC1C23DA2800FB242E /* greycircle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = greycircle.png; sourceTree = "<group>"; };
-		043C18001C23E3F200FB242E /* map-pointer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map-pointer.png"; sourceTree = "<group>"; };
 		043C18021C23E72300FB242E /* sideuser.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sideuser.png; sourceTree = "<group>"; };
 		04469FA21C2C263400E965BF /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		045E573A1C293B3E00CA4462 /* searchbluepin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = searchbluepin.png; sourceTree = "<group>"; };
@@ -380,6 +384,8 @@
 		042AF5891C204E63004291EE /* Incident List */ = {
 			isa = PBXGroup;
 			children = (
+				042538B11C58E328004FE875 /* CREATE.png */,
+				042538B21C58E328004FE875 /* deleteIncident.png */,
 				04B955AE1C34F9E10078C8CA /* edit.png */,
 				042AF5851C204E5E004291EE /* arrow.png */,
 			);
@@ -535,7 +541,7 @@
 		04650B511C173D7600007047 /* MapImages */ = {
 			isa = PBXGroup;
 			children = (
-				043C18001C23E3F200FB242E /* map-pointer.png */,
+				042538B51C58E350004FE875 /* map-pointer.png */,
 				042CE4D51C1AE8C300503F62 /* redot.png */,
 				04BD0FB01C1EC55200B37ACB /* blackpin.png */,
 				04650B471C173D7100007047 /* bluepin.png */,
@@ -871,17 +877,19 @@
 				04E6BB8C1C27E3CF00EE3AB6 /* ltarrow.png in Resources */,
 				04EF68871C0F0EE100EC8A06 /* LaunchScreen.storyboard in Resources */,
 				042CE4D61C1AE8C300503F62 /* redot.png in Resources */,
+				042538B31C58E328004FE875 /* CREATE.png in Resources */,
 				04EF68841C0F0EE100EC8A06 /* Assets.xcassets in Resources */,
+				042538B41C58E328004FE875 /* deleteIncident.png in Resources */,
 				048C26351C3D19C300E95215 /* usericon.png in Resources */,
 				04E6BB7B1C27CA4300EE3AB6 /* gps.png in Resources */,
 				04BD0FBF1C1EE2A400B37ACB /* map.png in Resources */,
 				04650B501C173D7100007047 /* search.png in Resources */,
 				042AF5911C205C87004291EE /* splashicon.png in Resources */,
 				04EF687F1C0F0EE100EC8A06 /* Main.storyboard in Resources */,
-				043C18011C23E3F200FB242E /* map-pointer.png in Resources */,
 				043C17FD1C23DA2800FB242E /* greecircle.png in Resources */,
 				04BD0FBC1C1EE2A400B37ACB /* aboutus.png in Resources */,
 				042AF5701C1FF3F2004291EE /* AllerDisplay.ttf in Resources */,
+				042538B61C58E350004FE875 /* map-pointer.png in Resources */,
 				04650B4C1C173D7100007047 /* bluepin.png in Resources */,
 				04E6BB7D1C27CA4300EE3AB6 /* incidentdeletion.png in Resources */,
 				04BD0FBE1C1EE2A400B37ACB /* logout.png in Resources */,
@@ -1180,14 +1188,14 @@
 			baseConfigurationReference = F500388903745AC75D7ED686 /* Pods-Newstracker.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Newstracker/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.dci.Newstracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f94b2305-2bcd-49f9-8b8b-a5b75c5e0657";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -1196,14 +1204,14 @@
 			baseConfigurationReference = 575A5FF8DFAE43D41E3F5038 /* Pods-Newstracker.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Newstracker/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.dci.Newstracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f94b2305-2bcd-49f9-8b8b-a5b75c5e0657";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
