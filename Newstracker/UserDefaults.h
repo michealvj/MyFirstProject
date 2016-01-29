@@ -19,6 +19,7 @@
 + (void)setDeviceTokenWithValue:(NSString *)token;
 + (void)setGPSTime:(id)value;
 + (void)setMapAddressWithValue:(NSString *)address;
++ (void)setUserTypeWithValue:(id)value;
 
 + (id)getUserID;
 + (id)getLastIncidentID;
@@ -30,6 +31,7 @@
 + (id)getMapAddress;
 
 + (BOOL)isLogin;
++ (BOOL)isManager;
 
 + (void)clearUserID;
 + (void)clearGroupID;

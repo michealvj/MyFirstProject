@@ -52,6 +52,8 @@
     [self animateMarkerToBottom:gmarker];
     [self.mapParentView bringSubviewToFront:self.searchView];
     [self.mapParentView bringSubviewToFront:self.searchTableView];
+    
+    self.searchTextField.text = [UserDefaults getMapAddress];
 }
 
 - (IBAction)searchButton:(id)sender

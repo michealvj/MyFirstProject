@@ -59,6 +59,7 @@
                                        selector:@selector(updateLocation)
                                        userInfo:nil
                                         repeats:YES];
+        NSLog(@"Will Update Location after %f seconds", [self getSettingsTime]);
     }
 
 }
@@ -91,34 +92,12 @@
 
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
 {
-    NSString * divec_str = [NSString stringWithFormat:@"%@",deviceToken];
-    divec_str = [divec_str stringByReplacingOccurrencesOfString:@"<" withString:@""];
-    divec_str = [divec_str stringByReplacingOccurrencesOfString:@">" withString:@""];
-    divec_str = [divec_str stringByReplacingOccurrencesOfString:@" " withString:@""];
-    NSLog(@"My token is: %@", divec_str);
-    [UserDefaults setDeviceTokenWithValue:divec_str];
-    
-//    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-//    NSDictionary *params = @{@"token": divec_str,@"os": @"iOS"};
-//    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-//    [manager.requestSerializer setValue:@"Content-Type" forHTTPHeaderField:@"application/x-www-form-urlencoded"];
-//    
-//    [manager POST:@"http://bangkok2016.gmasa.org/pnfw/register/" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//        NSLog(@"JSON: %@", responseObject);
-//        NSDictionary *jsonList = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-//        NSLog(@"JSON1123: %@", jsonList);
-//        
-//        
-//        
-//    }
-//          failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//              NSLog(@"Error: %@", error);
-//              
-//              UIAlertView * alert = [[UIAlertView alloc]initWithTitle:@"GMASA Bangkok 2016" message:error.localizedDescription delegate:self cancelButtonTitle:@"ok" otherButtonTitles:nil, nil];
-//              
-//              [alert show];
-//              
-//          }];
+    NSString * devToken = [NSString stringWithFormat:@"%@",deviceToken];
+    devToken = [devToken stringByReplacingOccurrencesOfString:@"<" withString:@""];
+    devToken = [devToken stringByReplacingOccurrencesOfString:@">" withString:@""];
+    devToken = [devToken stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSLog(@"My token is: %@", devToken);
+    [UserDefaults setDeviceTokenWithValue:devToken];
 }
 
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
@@ -146,19 +125,24 @@
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     NSLog(@"app enter background");
-    
+
+    NSTimeInterval remainingTime = self.locationUpdateTimer.fireDate.timeIntervalSinceNow;
+    NSString *time = remainingTime>60 ? [NSString stringWithFormat:@"%.f minutes", remainingTime/60] : [NSString stringWithFormat:@"%.f seconds", remainingTime];
+    NSLog(@"Will Update Location after %@", time);
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     NSLog(@"app enter foreground");
-
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     NSLog(@"app become active");
    
+    NSTimeInterval remainingTime = self.locationUpdateTimer.fireDate.timeIntervalSinceNow;
+    NSString *time = remainingTime>60 ? [NSString stringWithFormat:@"%.f minutes", remainingTime/60] : [NSString stringWithFormat:@"%.f seconds", remainingTime];
+    NSLog(@"Will Update Location after %@", time);
 
 }
 

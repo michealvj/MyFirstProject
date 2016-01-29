@@ -7,13 +7,14 @@
 //
 
 #import "WebServiceHandler.h"
-#import "ModalObjects.h"
 #import "utils.h"
 #import "CodeSnip.h"
 
 @implementation WebServiceHandler
 {
     BOOL isRefreshingMap;
+    void (^gsuccess)(Settings *settings);
+    void (^gfailure)(NSString *error);
 }
 @synthesize delegate, currentElementName, progressStatus;
 
@@ -144,6 +145,9 @@
          if ([self.delegate respondsToSelector:@selector(requestFailedWithError:)]) {
              [self.delegate requestFailedWithError:error];
          }
+         if (gfailure!=nil) {
+             gfailure([error localizedDescription]);
+         }
          [SVProgressHUD dismiss];
          [[UIApplication sharedApplication] endIgnoringInteractionEvents];
      }];
@@ -151,15 +155,28 @@
     
 }
 
-- (void)saveSettings
+- (void)getSettingsWithSuccess:(void (^)(Settings *settings))success WithError:(void (^)(NSString * failure))failure
 {
-    NSString *mapLatitude = [NSString stringWithFormat:@"%f", [UserDefaults getMapLocation].latitude];
-    NSString *mapLongitude = [NSString stringWithFormat:@"%f", [UserDefaults getMapLocation].longitude];
-    NSString *mapAddress = [UserDefaults getMapAddress];
-    NSString *userView = @"0";
-    NSString *incidentDeletionStatus = @"0";
-    NSString *deletionTime = @"12:00 AM";
-    NSString *logoutTime = @"12:00 AM";
+    NSString *userID = [UserDefaults getUserID];
+    self.progressStatus = @"Loading Settings";
+    NSString *soapBeginTag = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">\n<soap12:Body>\n"];
+    NSString *soapEndTag = [NSString stringWithFormat:@"\n</soap12:Body>\n</soap12:Envelope>"];
+    
+    NSMutableString *soapMessage = [[NSMutableString alloc] init];
+    [soapMessage appendString:soapBeginTag];
+    [soapMessage appendString:[NSString stringWithFormat:@"<GetSettings xmlns=\"http://tempuri.org/\">\n"]];
+    [soapMessage appendString:[NSString stringWithFormat:@"<UserId>%@</UserId>\n", userID]];
+    [soapMessage appendString:[NSString stringWithFormat:@"</GetSettings>"]];
+    [soapMessage appendString:soapEndTag];
+    
+    gsuccess = success;
+    gfailure = failure;
+    [self postSoapMessage:soapMessage WithContentType:@"application/soap+xml; charset=utf-8"];
+
+}
+
+- (void)saveSettings:(Settings *)settings
+{
     NSString *userID = [UserDefaults getUserID];
     
     
@@ -170,15 +187,35 @@
     NSMutableString *soapMessage = [[NSMutableString alloc] init];
     [soapMessage appendString:soapBeginTag];
     [soapMessage appendString:[NSString stringWithFormat:@"<AddSettings xmlns=\"http://tempuri.org/\">\n"]];
-    [soapMessage appendString:[NSString stringWithFormat:@"<Latitude>%@</Latitude>\n", mapLatitude]];
-    [soapMessage appendString:[NSString stringWithFormat:@"<Longitude>%@</Longitude>\n", mapLongitude]];
-    [soapMessage appendString:[NSString stringWithFormat:@"<Location>%@</Location>\n", mapAddress]];
-    [soapMessage appendString:[NSString stringWithFormat:@"<UserView>%@</UserView>\n", userView]];
-    [soapMessage appendString:[NSString stringWithFormat:@"<IncidentDeleteStatus>%@</IncidentDeleteStatus>\n", incidentDeletionStatus]];
-    [soapMessage appendString:[NSString stringWithFormat:@"<DeletionTime>%@</DeletionTime>\n", deletionTime]];
-    [soapMessage appendString:[NSString stringWithFormat:@"<LogoutTime>%@</LogoutTime>\n", logoutTime]];
+    [soapMessage appendString:[NSString stringWithFormat:@"<Latitude>%f</Latitude>\n", settings.mapCoordinate.latitude]];
+    [soapMessage appendString:[NSString stringWithFormat:@"<Longitude>%f</Longitude>\n", settings.mapCoordinate.longitude]];
+    [soapMessage appendString:[NSString stringWithFormat:@"<Location>%@</Location>\n", settings.mapLocation]];
+    [soapMessage appendString:[NSString stringWithFormat:@"<UserView>%i</UserView>\n", settings.isVisibleToOtherUsers]];
+    [soapMessage appendString:[NSString stringWithFormat:@"<IncidentDeleteStatus>%i</IncidentDeleteStatus>\n", settings.isAutomaticDeletionEnabled]];
+    [soapMessage appendString:[NSString stringWithFormat:@"<DeletionTime>%@</DeletionTime>\n", settings.incidentDeletionTime]];
+    [soapMessage appendString:[NSString stringWithFormat:@"<LogoutTime>%@</LogoutTime>\n", settings.logoutTime]];
     [soapMessage appendString:[NSString stringWithFormat:@"<UserId>%@</UserId>\n", userID]];
     [soapMessage appendString:[NSString stringWithFormat:@"</AddSettings>"]];
+    [soapMessage appendString:soapEndTag];
+    
+    [self postSoapMessage:soapMessage WithContentType:@"application/soap+xml; charset=utf-8"];
+}
+
+- (void)sendGroupMessage:(NSString *)message
+{
+    NSString *userID = [UserDefaults getUserID];
+    
+    
+    self.progressStatus = @"Sending Message...";
+    NSString *soapBeginTag = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">\n<soap12:Body>\n"];
+    NSString *soapEndTag = [NSString stringWithFormat:@"\n</soap12:Body>\n</soap12:Envelope>"];
+    
+    NSMutableString *soapMessage = [[NSMutableString alloc] init];
+    [soapMessage appendString:soapBeginTag];
+    [soapMessage appendString:[NSString stringWithFormat:@"<SendGroupMessage xmlns=\"http://tempuri.org/\">\n"]];
+    [soapMessage appendString:[NSString stringWithFormat:@"<UserId>%@</UserId>\n", userID]];
+    [soapMessage appendString:[NSString stringWithFormat:@"<Msg>%@</Msg>\n", message]];
+    [soapMessage appendString:[NSString stringWithFormat:@"</SendGroupMessage>"]];
     [soapMessage appendString:soapEndTag];
     
     [self postSoapMessage:soapMessage WithContentType:@"application/soap+xml; charset=utf-8"];
@@ -577,7 +614,7 @@
     [self postSoapMessage:soapMessage WithContentType:@"application/soap+xml; charset=utf-8"];
 }
 
-- (void)updateCurrentLocation:(CLLocationCoordinate2D)currentCoordinate
+- (void)updateCurrentLocation:(CLLocationCoordinate2D)currentCoordinate WithGPSStatus:(NSString *)gpsStatus
 {
     NSString *userID = [UserDefaults getUserID];
     NSLog(@"Updating current Location...");
@@ -590,6 +627,7 @@
     [soapMessage appendString:[NSString stringWithFormat:@"<UserId>%@</UserId>\n", userID]];
     [soapMessage appendString:[NSString stringWithFormat:@"<Latitude>%f</Latitude>\n", currentCoordinate.latitude]];
     [soapMessage appendString:[NSString stringWithFormat:@"<Longitude>%f</Longitude>\n", currentCoordinate.longitude]];
+    [soapMessage appendString:[NSString stringWithFormat:@"<GPS>%@</GPS>\n", gpsStatus]];
     [soapMessage appendString:[NSString stringWithFormat:@"</UpdateCurrentLocation>"]];
     [soapMessage appendString:soapEndTag];
     
@@ -686,9 +724,7 @@
     }
     else if ([currentElementName isEqualToString:@"AddSettingsResult"])
     {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [SVProgressHUD showSuccessWithStatus:@"Saved"];
-        });
+        [self parseSetSettings:json];
     }
     else if ([currentElementName isEqualToString:@"UpdateCurrentLocationResult"])
     {
@@ -697,9 +733,91 @@
             [[LocationTracker sharedLocationManager] stopUpdatingLocation];
         }
     }
+    else if ([currentElementName isEqualToString:@"GetSettingsResult"])
+    {
+        [self parseGetSettings:json];
+    }
+    else if ([currentElementName isEqualToString:@"SendGroupMessageResult"])
+    {
+        [self parseGroupMessage:json];
+    }
 }
 
 #pragma mark - Parse Received Data
+
+- (void)parseSetSettings:(id)data
+{
+    NSString *errorStatus = data[@"Status"];
+    
+    if ([errorStatus isEqualToString:@"Failed"])
+    {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [SVProgressHUD showErrorWithStatus:@"Not saved"];
+        });
+    }
+    else if ([errorStatus isEqualToString:@"Success"])
+    {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [SVProgressHUD showSuccessWithStatus:@"Saved"];
+        });
+    }
+}
+
+- (void)parseGroupMessage:(id)data
+{
+    NSString *errorStatus = data[@"Status"];
+    
+    if ([errorStatus isEqualToString:@"Failed"])
+    {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [SVProgressHUD showErrorWithStatus:@"Message not sent"];
+        });
+    }
+    else if ([errorStatus isEqualToString:@"Success"])
+    {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [SVProgressHUD showSuccessWithStatus:@"Message sent"];
+        });
+
+    }
+}
+
+- (void)parseGetSettings:(id)data
+{
+    NSString *errorStatus = data[@"Status"];
+    
+    if ([errorStatus isEqualToString:@"Failed"])
+    {
+        gfailure(data[@"Message"]);
+    }
+    else if ([errorStatus isEqualToString:@"Success"])
+    {
+        NSDictionary *settingsDict = data[@"Message"];
+        NSString *min = [[UserDefaults getGPSTime] intValue]==1 ? @"min":@"mins";
+        NSString *gpsTime = [NSString stringWithFormat:@"%@ %@", [UserDefaults getGPSTime], min];
+        NSString *lat = settingsDict[@"Latitude"];
+        NSString *lng = settingsDict[@"Longitude"];
+        NSString *logoutTime = settingsDict[@"LogoutTime"];
+        NSString *incidentDeletionTime = settingsDict[@"IncDeletionTime"];
+        NSString *incDeletionStatus = [NSString stringWithFormat:@"%@", settingsDict[@"IncDeletionStatus"]];
+        NSString *userView = [NSString stringWithFormat:@"%@", settingsDict[@"UserView"]];
+        NSString *location = [NSString stringWithFormat:@"%@", settingsDict[@"Location"]];
+        
+        
+        Settings *settings = [Settings new];
+        settings.gpsTime = gpsTime;
+        settings.logoutTime = logoutTime;
+        settings.incidentDeletionTime = incidentDeletionTime;
+        settings.isAutomaticDeletionEnabled = [incDeletionStatus isEqualToString:@"0"] ? NO:YES;
+        settings.isVisibleToOtherUsers = [userView isEqualToString:@"0"] ? NO:YES;
+        settings.mapLocation = location;
+        settings.mapCoordinate = CLLocationCoordinate2DMake([lat doubleValue], [lng doubleValue]);
+        gsuccess(settings);
+        
+        [UserDefaults setMapCoordinateWithValue:settings.mapCoordinate];
+        [UserDefaults setMapAddressWithValue:settings.mapLocation];
+    }
+}
 
 - (void)parseAllUsersDetails:(id)data
 {
@@ -1091,14 +1209,12 @@
                 detail.userID = userIDs;
                 detail.coordinate = firstCoordinate;
                 detail.reachablity = userIDs.count==1 ? GPSStatus : @"YES";
-                //TODO:
-                detail.reachablity = @"YES";
                 [memberList addObject:detail];
                 
             }
         }
         
-        NSLog(@"Not Grouping");
+//        NSLog(@"Not Grouping");
         
 //        for (NSDictionary *member in jsonMemberList)
 //        {

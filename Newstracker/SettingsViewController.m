@@ -11,6 +11,7 @@
 #import "GroupMessageViewController.h"
 #import "MapAreaViewController.h"
 #import "UIColor+myColors.h"
+#import "Settings.h"
 #import <POP.h>
 
 @interface SettingsViewController ()
@@ -18,7 +19,9 @@
     NSMutableArray *settingsTitles, *settingsImages;
     NSString *gpsTime, *logoutTime, *incidentDeleteTime;
     NSIndexPath *selectedIndexPath;
-    BOOL isAutomaticLogoutEnabled, isAutomaticIncidentDeletionEnabled;
+    BOOL isAutomaticIncidentDeletionEnabled;
+    BOOL isVisibleToOtherUsers;
+    Settings *initialSettings;
 }
 @end
 
@@ -26,11 +29,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.settingsTableView.hidden = YES;
     self.datePickerBottomConstraint.constant = -self.datePopupView.frame.size.height;
-    
     [self navigationBarSetup];
+ 
     [self loadInitialSettings];
-    [self addDatasource];
 }
 
 - (void)navigationBarSetup
@@ -45,12 +48,20 @@
 
 - (void)loadInitialSettings
 {
-    NSString *min = [[UserDefaults getGPSTime] intValue]==1 ? @"min":@"mins";
-    gpsTime = [NSString stringWithFormat:@"%@ %@", [UserDefaults getGPSTime], min];
-    logoutTime = @"12:00 AM";
-    incidentDeleteTime = @"12:00 AM";
-    isAutomaticIncidentDeletionEnabled = NO;
-    isAutomaticLogoutEnabled = NO;
+    [[WebServiceHandler sharedInstance] getSettingsWithSuccess:^(Settings *settings) {
+        self.settingsTableView.hidden = NO;
+        gpsTime = settings.gpsTime;
+        logoutTime = settings.logoutTime;
+        incidentDeleteTime = settings.incidentDeletionTime;
+        isAutomaticIncidentDeletionEnabled = settings.isAutomaticDeletionEnabled;
+        isVisibleToOtherUsers = settings.isVisibleToOtherUsers;
+        initialSettings = settings;
+        [self addDatasource];
+
+    } WithError:^(NSString *error) {
+        [[CodeSnip sharedInstance] showAlert:@"News Crew Tracker" withMessage:error withTarget:self];
+    }];
+    
 }
 
 - (void)addDatasource
@@ -60,29 +71,31 @@
                                                              @"GPS settings",
                                                              @"Automatic logout time",
                                                              @"Auto delete incidents",
-                                                             @"Incident deletion time"]];
+                                                             @"Incident deletion time",
+                                                             @"Visible to other users"]];
     
     settingsImages = [[NSMutableArray alloc] initWithArray:@[@"groupmessage.png",
                                                              @"maparea.png",
                                                              @"gps.png",
                                                              @"automaticlogout.png",
                                                              @"incidentdeletion.png",
+                                                             @"incidentdeletion.png",
                                                              @"incidentdeletion.png"]];
     
-//    if (!isAutomaticIncidentDeletionEnabled&&!isAutomaticLogoutEnabled) {
-//        [settingsTitles removeObjectAtIndex:6];
-//        [settingsImages removeObjectAtIndex:6];
-//        [settingsTitles removeObjectAtIndex:4];
-//        [settingsImages removeObjectAtIndex:4];
-//    }
-    if (!isAutomaticIncidentDeletionEnabled) {
+    if (!isAutomaticIncidentDeletionEnabled&&![UserDefaults isManager]) {
+        [settingsTitles removeObjectAtIndex:6];
+        [settingsImages removeObjectAtIndex:6];
         [settingsTitles removeObjectAtIndex:5];
         [settingsImages removeObjectAtIndex:5];
     }
-//    else if (!isAutomaticLogoutEnabled) {
-//        [settingsTitles removeObjectAtIndex:4];
-//        [settingsImages removeObjectAtIndex:4];
-//    }
+    else if (!isAutomaticIncidentDeletionEnabled) {
+        [settingsTitles removeObjectAtIndex:5];
+        [settingsImages removeObjectAtIndex:5];
+    }
+    else if (![UserDefaults isManager]) {
+        [settingsTitles removeObjectAtIndex:6];
+        [settingsImages removeObjectAtIndex:6];
+    }
     
     [self.settingsTableView reloadData];
 }
@@ -111,7 +124,23 @@
 
 - (void)saveSettings
 {
-    [[WebServiceHandler sharedInstance] saveSettings];
+    [[WebServiceHandler sharedInstance] saveSettings:[self getFinalSettings]];
+}
+
+- (Settings *)getFinalSettings
+{
+    NSString *mapLatitude = [NSString stringWithFormat:@"%f", [UserDefaults getMapLocation].latitude];
+    NSString *mapLongitude = [NSString stringWithFormat:@"%f", [UserDefaults getMapLocation].longitude];
+    
+    Settings *saveSettings = [Settings new];
+    saveSettings.mapCoordinate = CLLocationCoordinate2DMake([mapLatitude doubleValue], [mapLongitude doubleValue]);
+    saveSettings.mapLocation = [UserDefaults getMapAddress];
+    saveSettings.isVisibleToOtherUsers = NO;
+    saveSettings.isAutomaticDeletionEnabled = isAutomaticIncidentDeletionEnabled;
+    saveSettings.incidentDeletionTime = incidentDeleteTime;
+    saveSettings.logoutTime = logoutTime;
+    
+    return saveSettings;
 }
 
 - (IBAction)OnOffSwitch:(UISwitch *)sender
@@ -123,27 +152,16 @@
     UITableViewCell *selectedCell = [self.settingsTableView cellForRowAtIndexPath:indexPath];
     UILabel *title = (UILabel *)[selectedCell viewWithTag:2];
   
-//    if ([title.text isEqualToString:@"Automatic logout"])
-//    {
-//        [self showOrHideLogoutTime:sender AtIndexPath:insertIndexPath];
-//    }
-    if ([title.text isEqualToString:@"Auto delete incidents"])
+    if ([title.text isEqualToString:@"Visible to other users"])
+    {
+        isVisibleToOtherUsers = sender.on;
+        [self addDatasource];
+    }
+    else if ([title.text isEqualToString:@"Auto delete incidents"])
     {
         [self showOrHideIncidentTime:sender AtIndexPath:insertIndexPath];
     }
 }
-
-//- (void)showOrHideLogoutTime:(UISwitch *)sender AtIndexPath:(NSIndexPath *)indexPath
-//{
-//    if (sender.on) {
-//        isAutomaticLogoutEnabled = YES;
-//        [self addDatasource];
-//    }
-//    else {
-//        isAutomaticLogoutEnabled = NO;
-//        [self addDatasource];
-//    }
-//}
 
 - (void)showOrHideIncidentTime:(UISwitch *)sender AtIndexPath:(NSIndexPath *)indexPath
 {
@@ -194,6 +212,7 @@
 {
     NSString *MyIdentifier;
     UITableViewCell *cell;
+    
     if (indexPath.row<=1) {
         MyIdentifier = @"Cell";
         cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier forIndexPath:indexPath];
@@ -217,49 +236,41 @@
         settingsTitleLabel.text = [settingsTitles objectAtIndex:indexPath.row];
         settingsValueLabel.text = gpsTime;
     }
+    
     else if (indexPath.row==3) {
         MyIdentifier = @"Cell2";
         cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier forIndexPath:indexPath];
         [self configureTimeCell:cell AtIndexPath:indexPath];
     }
-//    else if (isAutomaticIncidentDeletionEnabled&&isAutomaticLogoutEnabled)
-//    {
-//        if (indexPath.row==3||indexPath.row==5)
-//        {
-//            MyIdentifier = @"Cell3";
-//            cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier forIndexPath:indexPath];
-//            [self configureSwitchCell:cell AtIndexPath:indexPath WithEnabledStatus:YES];
-//        }
-//        else
-//        {
-//            MyIdentifier = @"Cell2";
-//            cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier forIndexPath:indexPath];
-//            [self configureTimeCell:cell AtIndexPath:indexPath];
-//        }
-//    }
-//    else if (isAutomaticLogoutEnabled) {
-//        if (indexPath.row==3||indexPath.row==5)
-//        {
-//            MyIdentifier = @"Cell3";
-//            cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier forIndexPath:indexPath];
-//            BOOL isEnabled = indexPath.row==3?YES:NO;
-//            [self configureSwitchCell:cell AtIndexPath:indexPath WithEnabledStatus:isEnabled];
-//        }
-//        else
-//        {
-//            MyIdentifier = @"Cell2";
-//            cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier forIndexPath:indexPath];
-//            [self configureTimeCell:cell AtIndexPath:indexPath];
-//        }
-//    }
-    else if (isAutomaticIncidentDeletionEnabled) {
-        
-        if (indexPath.row==3||indexPath.row==4)
+    
+    else if (isAutomaticIncidentDeletionEnabled&&[UserDefaults isManager])
+    {
+        if (indexPath.row==4)
         {
             MyIdentifier = @"Cell3";
             cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier forIndexPath:indexPath];
-            BOOL isEnabled = indexPath.row==3?NO:YES;
-            [self configureSwitchCell:cell AtIndexPath:indexPath WithEnabledStatus:isEnabled];
+            [self configureSwitchCell:cell AtIndexPath:indexPath WithEnabledStatus:YES];
+        }
+        else if (indexPath.row==6)
+        {
+            MyIdentifier = @"Cell3";
+            cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier forIndexPath:indexPath];
+            [self configureSwitchCell:cell AtIndexPath:indexPath WithEnabledStatus:isVisibleToOtherUsers];
+        }
+        else
+        {
+            MyIdentifier = @"Cell2";
+            cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier forIndexPath:indexPath];
+            [self configureTimeCell:cell AtIndexPath:indexPath];
+        }
+    }
+    else if (isAutomaticIncidentDeletionEnabled) {
+        
+        if (indexPath.row==4)
+        {
+            MyIdentifier = @"Cell3";
+            cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier forIndexPath:indexPath];
+            [self configureSwitchCell:cell AtIndexPath:indexPath WithEnabledStatus:isAutomaticIncidentDeletionEnabled];
         }
         else
         {
@@ -371,20 +382,30 @@
     [alert addAction:[UIAlertAction actionWithTitle:@"1 min" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         gpsTime = @"1 min";
         [UserDefaults setGPSTime:@"1"];
+        [self resetTimer];
         [self.settingsTableView reloadData];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:@"5 mins" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         gpsTime = @"5 mins";
         [UserDefaults setGPSTime:@"5"];
+        [self resetTimer];
         [self.settingsTableView reloadData];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:@"15 mins" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         gpsTime = @"15 mins";
         [UserDefaults setGPSTime:@"15"];
+        [self resetTimer];
         [self.settingsTableView reloadData];
     }]];
     
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)resetTimer
+{
+    AppDelegate *appdel = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [appdel.locationUpdateTimer invalidate];
+    [appdel backgroundLocationUpdate];
 }
 
 @end

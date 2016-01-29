@@ -65,6 +65,23 @@
     return [[NSUserDefaults standardUserDefaults] valueForKey:@"deviceToken"];
 }
 
++ (void)setUserTypeWithValue:(id)value
+{
+    [[NSUserDefaults standardUserDefaults] setValue:value forKey:@"userType"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++ (BOOL)isManager
+{
+    if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"userType"] isEqualToString:@"Manager"]) {
+        return YES;
+    }
+    else {
+        return NO;
+    }
+}
+
+
 #pragma mark - Settings Page
 
 + (void)setGPSTime:(id)value

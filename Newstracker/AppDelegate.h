@@ -23,7 +23,7 @@
 
 @property LocationTracker *locationTracker;
 @property (nonatomic) NSTimer* locationUpdateTimer;
-
+- (void)backgroundLocationUpdate;
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;

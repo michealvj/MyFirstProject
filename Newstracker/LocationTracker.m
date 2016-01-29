@@ -112,7 +112,9 @@
     if(IS_OS_8_OR_LATER) {
         [locationManager requestAlwaysAuthorization];
     }
-    [locationManager startUpdatingLocation];
+    NSLog(@"Location Manager stops Updating Location");
+   
+    [locationManager stopUpdatingLocation];
     
     //Use the BackgroundTaskManager to manage all the background Task
     self.shareModel.bgTask = [BackgroundTaskManager sharedBackgroundTaskManager];
@@ -232,7 +234,7 @@
     self.shareModel.bgTask = [BackgroundTaskManager sharedBackgroundTaskManager];
     [self.shareModel.bgTask beginNewBackgroundTask];
     
-    //Restart the locationMaanger after 1 minute
+    //Restart the locationMaanger after n minutes
     int min = [[UserDefaults getGPSTime] intValue];
     int restartTime = min * 60;
     NSLog(@"locationManager restart Updating after %i seconds", restartTime);
@@ -322,19 +324,24 @@
         self.myLocation=self.myLastLocation;
         self.myLocationAccuracy=self.myLastLocationAccuracy;
         
+        CLLocationCoordinate2D currentLocation = CLLocationCoordinate2DMake(self.myLastLocation.latitude, self.myLastLocation.longitude);
+        [[WebServiceHandler sharedInstance] updateCurrentLocation:currentLocation WithGPSStatus:@"0"];
+
     }else{
         CLLocationCoordinate2D theBestLocation;
         theBestLocation.latitude =[[myBestLocation objectForKey:LATITUDE]floatValue];
         theBestLocation.longitude =[[myBestLocation objectForKey:LONGITUDE]floatValue];
         self.myLocation=theBestLocation;
         self.myLocationAccuracy =[[myBestLocation objectForKey:ACCURACY]floatValue];
+        
+        CLLocationCoordinate2D currentLocation = CLLocationCoordinate2DMake(self.myLocation.latitude, self.myLocation.longitude);
+        [[WebServiceHandler sharedInstance] updateCurrentLocation:currentLocation WithGPSStatus:@"1"];
     }
     
     NSLog(@"Send to Server: Latitude(%f) Longitude(%f) Accuracy(%f)",self.myLocation.latitude, self.myLocation.longitude,self.myLocationAccuracy);
     
     //TODO: Your code to send the self.myLocation and self.myLocationAccuracy to your server
-    CLLocationCoordinate2D currentLocation = CLLocationCoordinate2DMake(self.myLastLocation.latitude, self.myLastLocation.longitude);
-    [[WebServiceHandler sharedInstance] updateCurrentLocation:currentLocation];
+    
     
     //After sending the location to the server successful, remember to clear the current array with the following code. It is to make sure that you clear up old location in the array and add the new locations from locationManager
     [self.shareModel.myLocationArray removeAllObjects];

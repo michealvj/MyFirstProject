@@ -30,6 +30,7 @@
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
+    [SVProgressHUD dismiss];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -133,6 +134,7 @@
             [_delegate didSelectAddress:[searchPlaceIDs objectAtIndex:indexPath.row]];
         }
     }
+    [SVProgressHUD dismiss];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

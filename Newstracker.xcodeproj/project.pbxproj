@@ -13,7 +13,7 @@
 		04227F8A1C452FBC00166C7A /* LocationTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 04227F851C452FBC00166C7A /* LocationTracker.m */; };
 		04227F8B1C452FBC00166C7A /* BackgroundTaskManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 04227F871C452FBC00166C7A /* BackgroundTaskManager.m */; };
 		04227F8C1C452FBC00166C7A /* LocationShareModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04227F891C452FBC00166C7A /* LocationShareModel.m */; };
-		042538B31C58E328004FE875 /* CREATE.png in Resources */ = {isa = PBXBuildFile; fileRef = 042538B11C58E328004FE875 /* CREATE.png */; };
+		042538B31C58E328004FE875 /* createIncident.png in Resources */ = {isa = PBXBuildFile; fileRef = 042538B11C58E328004FE875 /* createIncident.png */; };
 		042538B41C58E328004FE875 /* deleteIncident.png in Resources */ = {isa = PBXBuildFile; fileRef = 042538B21C58E328004FE875 /* deleteIncident.png */; };
 		042538B61C58E350004FE875 /* map-pointer.png in Resources */ = {isa = PBXBuildFile; fileRef = 042538B51C58E350004FE875 /* map-pointer.png */; };
 		042AF56B1C1FDDF2004291EE /* email.png in Resources */ = {isa = PBXBuildFile; fileRef = 042AF5681C1FDDF2004291EE /* email.png */; };
@@ -45,6 +45,8 @@
 		042C3C2C1C56085E001EE815 /* UIColor+myColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 042C3C2B1C56085E001EE815 /* UIColor+myColors.m */; };
 		042CE4D61C1AE8C300503F62 /* redot.png in Resources */ = {isa = PBXBuildFile; fileRef = 042CE4D51C1AE8C300503F62 /* redot.png */; };
 		042CE4D91C1AFE5E00503F62 /* sideclose.png in Resources */ = {isa = PBXBuildFile; fileRef = 042CE4D71C1AFE5E00503F62 /* sideclose.png */; };
+		043372CA1C5A51510061DBA6 /* UIBarButtonItem+utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 043372C91C5A51510061DBA6 /* UIBarButtonItem+utils.m */; };
+		043372CD1C5B594C0061DBA6 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 043372CC1C5B594C0061DBA6 /* Settings.m */; };
 		043C17F91C23D41100FB242E /* UserAssignTableButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 043C17F81C23D41100FB242E /* UserAssignTableButton.m */; };
 		043C17FD1C23DA2800FB242E /* greecircle.png in Resources */ = {isa = PBXBuildFile; fileRef = 043C17FB1C23DA2800FB242E /* greecircle.png */; };
 		043C17FE1C23DA2800FB242E /* greycircle.png in Resources */ = {isa = PBXBuildFile; fileRef = 043C17FC1C23DA2800FB242E /* greycircle.png */; };
@@ -154,7 +156,7 @@
 		04227F871C452FBC00166C7A /* BackgroundTaskManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackgroundTaskManager.m; sourceTree = "<group>"; };
 		04227F881C452FBC00166C7A /* LocationShareModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationShareModel.h; sourceTree = "<group>"; };
 		04227F891C452FBC00166C7A /* LocationShareModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationShareModel.m; sourceTree = "<group>"; };
-		042538B11C58E328004FE875 /* CREATE.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CREATE.png; sourceTree = "<group>"; };
+		042538B11C58E328004FE875 /* createIncident.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = createIncident.png; sourceTree = "<group>"; };
 		042538B21C58E328004FE875 /* deleteIncident.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = deleteIncident.png; sourceTree = "<group>"; };
 		042538B51C58E350004FE875 /* map-pointer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map-pointer.png"; sourceTree = "<group>"; };
 		042AF5681C1FDDF2004291EE /* email.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = email.png; sourceTree = "<group>"; };
@@ -178,6 +180,10 @@
 		042C3C2B1C56085E001EE815 /* UIColor+myColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+myColors.m"; sourceTree = "<group>"; };
 		042CE4D51C1AE8C300503F62 /* redot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = redot.png; sourceTree = "<group>"; };
 		042CE4D71C1AFE5E00503F62 /* sideclose.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sideclose.png; sourceTree = "<group>"; };
+		043372C81C5A51510061DBA6 /* UIBarButtonItem+utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+utils.h"; sourceTree = "<group>"; };
+		043372C91C5A51510061DBA6 /* UIBarButtonItem+utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+utils.m"; sourceTree = "<group>"; };
+		043372CB1C5B594C0061DBA6 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
+		043372CC1C5B594C0061DBA6 /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
 		043C17F71C23D41100FB242E /* UserAssignTableButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserAssignTableButton.h; sourceTree = "<group>"; };
 		043C17F81C23D41100FB242E /* UserAssignTableButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserAssignTableButton.m; sourceTree = "<group>"; };
 		043C17FB1C23DA2800FB242E /* greecircle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = greecircle.png; sourceTree = "<group>"; };
@@ -384,7 +390,7 @@
 		042AF5891C204E63004291EE /* Incident List */ = {
 			isa = PBXGroup;
 			children = (
-				042538B11C58E328004FE875 /* CREATE.png */,
+				042538B11C58E328004FE875 /* createIncident.png */,
 				042538B21C58E328004FE875 /* deleteIncident.png */,
 				04B955AE1C34F9E10078C8CA /* edit.png */,
 				042AF5851C204E5E004291EE /* arrow.png */,
@@ -416,6 +422,17 @@
 				043C18021C23E72300FB242E /* sideuser.png */,
 			);
 			name = SideBar;
+			sourceTree = "<group>";
+		};
+		043372C71C5A512D0061DBA6 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				042C3C2A1C56085E001EE815 /* UIColor+myColors.h */,
+				042C3C2B1C56085E001EE815 /* UIColor+myColors.m */,
+				043372C81C5A51510061DBA6 /* UIBarButtonItem+utils.h */,
+				043372C91C5A51510061DBA6 /* UIBarButtonItem+utils.m */,
+			);
+			name = Category;
 			sourceTree = "<group>";
 		};
 		043C17FA1C23D42800FB242E /* Custom Button */ = {
@@ -480,6 +497,8 @@
 			isa = PBXGroup;
 			children = (
 				046138031C102DFC001F574D /* ModalObjects.h */,
+				043372CB1C5B594C0061DBA6 /* Settings.h */,
+				043372CC1C5B594C0061DBA6 /* Settings.m */,
 				040E0EDB1C281E6C000EDFD2 /* User.h */,
 				040E0EDC1C281E6D000EDFD2 /* User.m */,
 				046137FF1C1029B4001F574D /* GroupMember.h */,
@@ -646,6 +665,7 @@
 		04EF68731C0F0EE100EC8A06 /* Newstracker */ = {
 			isa = PBXGroup;
 			children = (
+				046138021C1029BB001F574D /* Modal Objects */,
 				04227F8D1C452FC200166C7A /* Background Location Update */,
 				04EF68AF1C0F244D00EC8A06 /* Utilities */,
 				04B5095C1C180E6500F10E8C /* MarkerIcon */,
@@ -707,15 +727,13 @@
 				041A38FC1C142F400060A61D /* Navigation */,
 				046137FD1C101A10001F574D /* Maps */,
 				046137FE1C1028B6001F574D /* Core Data */,
-				046138021C1029BB001F574D /* Modal Objects */,
 				041A38FB1C142F2E0060A61D /* Webservice */,
 				046137E41C101662001F574D /* CodeSnip.h */,
 				046137E51C101662001F574D /* CodeSnip.m */,
 				046869091C33C96000719AE0 /* UserDefaults.h */,
 				0468690A1C33C96000719AE0 /* UserDefaults.m */,
 				046137F41C101662001F574D /* utils.h */,
-				042C3C2A1C56085E001EE815 /* UIColor+myColors.h */,
-				042C3C2B1C56085E001EE815 /* UIColor+myColors.m */,
+				043372C71C5A512D0061DBA6 /* Category */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -877,7 +895,7 @@
 				04E6BB8C1C27E3CF00EE3AB6 /* ltarrow.png in Resources */,
 				04EF68871C0F0EE100EC8A06 /* LaunchScreen.storyboard in Resources */,
 				042CE4D61C1AE8C300503F62 /* redot.png in Resources */,
-				042538B31C58E328004FE875 /* CREATE.png in Resources */,
+				042538B31C58E328004FE875 /* createIncident.png in Resources */,
 				04EF68841C0F0EE100EC8A06 /* Assets.xcassets in Resources */,
 				042538B41C58E328004FE875 /* deleteIncident.png in Resources */,
 				048C26351C3D19C300E95215 /* usericon.png in Resources */,
@@ -999,6 +1017,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				043372CA1C5A51510061DBA6 /* UIBarButtonItem+utils.m in Sources */,
 				046138011C1029B4001F574D /* GroupMember.m in Sources */,
 				048C26401C3D2A8D00E95215 /* ForgotViewController.m in Sources */,
 				04B5095F1C180E9E00F10E8C /* MemberIcon.m in Sources */,
@@ -1020,6 +1039,7 @@
 				04EF68821C0F0EE100EC8A06 /* Newstracker.xcdatamodeld in Sources */,
 				04650B461C1733F000007047 /* Menu.m in Sources */,
 				04B509621C18693C00F10E8C /* TimeDistance.m in Sources */,
+				043372CD1C5B594C0061DBA6 /* Settings.m in Sources */,
 				046137F61C101662001F574D /* CoreData.m in Sources */,
 				047D5EDF1C31034800807552 /* MapAreaViewController.m in Sources */,
 				046137F71C101662001F574D /* CurrentLocation.m in Sources */,

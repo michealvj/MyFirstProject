@@ -70,6 +70,17 @@
     isNotificationForMorePeople = NO;
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [[LocationTracker sharedInstance] startLocationTracking];
+    NSLog(@"start location tracking");
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [[LocationTracker sharedInstance] stopLocationTracking];
+    NSLog(@"stop location tracking");
+}
 
 - (IBAction)MyLocation:(id)sender {
 
@@ -90,8 +101,8 @@
     [[SideBar sharedInstance] setUpSearchBarWithTarget:self];
     
     UIBarButtonItem *createButton = self.navigationItem.rightBarButtonItems[0];
+    [createButton setTarget:self];
     [createButton setAction:@selector(createNewIncident)];
-    
     
     firstNavigationItems = self.navigationItem.rightBarButtonItems;
 }
@@ -377,6 +388,7 @@
     
     if ([clickedSearch isEqualToString:@"searchBar"])
     {
+        [gmapView animateToZoom:15];
         [gmapView animateToLocation:model.coordinate];
     }
     else if([clickedSearch isEqualToString:@"newAddress"])
@@ -468,6 +480,10 @@
 
 - (void)didCreateNewIncident:(Incident *)incident
 {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [SVProgressHUD showSuccessWithStatus:@"Incident Created"];
+    });
+
     [self.incidentDetailTitle resignFirstResponder];
     [self.incidentDetailAddress resignFirstResponder];
     [self.incidentDetailDescription resignFirstResponder];
@@ -484,7 +500,7 @@
     [self loadViewIncidentViewForMarker:incidentMarker];
     [self showViewIncidentView];
     
-    [[CodeSnip sharedInstance] showAlert:incident.incidentName withMessage:@"Incident Created Successfully" withTarget:self];
+//    [[CodeSnip sharedInstance] showAlert:incident.incidentName withMessage:@"Incident Created Successfully" withTarget:self];
 }
 
 - (void)didDeleteIncident
@@ -523,6 +539,7 @@
 
 - (void)didGetIncidentNearUser:(id)data
 {
+    
     if (isAddNewUser)
     {
         self.addNewUserArray = data;
@@ -533,13 +550,19 @@
     else
     {
         self.viewIncidentUsersArray = [[NSMutableArray alloc] init];
-        for (User *user in data)
-        {
-            if (user.isAssigned)
+           for (User *user in data)
             {
-                [self.viewIncidentUsersArray addObject:user];
+                if (user.isAssigned)
+                {
+                    [self.viewIncidentUsersArray addObject:user];
+                }
             }
+        if (self.viewIncidentUsersArray.count==0) {
+            User *newUser = [User new];
+            newUser.userName = @"No user assigned";
+            [self.viewIncidentUsersArray addObject:newUser];
         }
+        
         [self.viewIncidentTableView reloadData];
         self.viewIncidentTableHeight.constant = self.viewIncidentTableView.contentSize.height+10;
     }
@@ -582,6 +605,11 @@
         
         [CATransaction setCompletionBlock: ^{
             // Code to be executed upon completion
+            if (self.viewIncidentUsersArray.count==0) {
+                User *newUser = [User new];
+                newUser.userName = @"No user assigned";
+                [self.viewIncidentUsersArray addObject:newUser];
+            }
             [self.viewIncidentTableView reloadData];
             self.viewIncidentTableHeight.constant = self.viewIncidentTableView.contentSize.height+8;
         }];
@@ -1053,7 +1081,6 @@
     self.editDescriptionImage.hidden = YES;
     
     clickedSearch = @"newAddress";
-    [self sizeToFitNewIncident];
     [self showIncidentDetailView];
     
 }
@@ -1085,6 +1112,7 @@
 
 - (IBAction)saveIncident:(id)sender
 {
+    [self resignIncidentDetail];
     [self.incidentDetailScrollView setContentOffset:CGPointMake(0, 0)];
     if (self.incidentDetailTitle.text.length==0||self.incidentDetailAddress.text.length==0||self.incidentDetailDescription.text.length==0)
     {
@@ -1173,8 +1201,20 @@
 
 - (IBAction)closeCreateIncidentView:(id)sender
 {
+    [self resignIncidentDetail];
     [self resetAllIncidentMarkers];
     [self hideIncidentDetailView];
+}
+
+- (void)resignIncidentDetail
+{
+    self.incidentTitleEditButton.selected = NO;
+    self.incidentAddressEditButton.selected = NO;
+    self.incidentDescriptionEditButton.selected = NO;
+    
+    [self.incidentDetailTitle resignFirstResponder];
+    [self.incidentDetailAddress resignFirstResponder];
+    [self.incidentDetailDescription resignFirstResponder];
 }
 
 - (void)sizeToFitNewIncident
@@ -1321,6 +1361,7 @@
 
 - (IBAction)updateIncident:(id)sender
 {
+    [self resignViewIncident];
     [self updateIncident];
 }
 
@@ -1386,7 +1427,6 @@
 
 - (void)loadAssignedUser
 {
-
     isAddNewUser = NO;
     NSString *incidentID = selectedIncidentMarker.userData[@"incidentID"];
     [[WebServiceHandler sharedInstance] getIncidentNearUser:incidentID];
@@ -1418,8 +1458,20 @@
     }]];
 }
 
+- (void)resignViewIncident
+{
+    self.editViewIncidentTitleButton.selected = NO;
+    self.editViewIncidentAddressButton.selected = NO;
+    self.editViewIncidentDescriptionButton.selected = NO;
+    
+    [self.viewIncidentTitle resignFirstResponder];
+    [self.viewIncidentAddress resignFirstResponder];
+    [self.viewIncidentDescription resignFirstResponder];
+}
+
 - (IBAction)closeViewIncidentView:(id)sender
 {
+    [self resignViewIncident];
     if (isUpdatedIncident)
     {
         [self resetAllIncidentMarkers];
@@ -1456,7 +1508,7 @@
     }
     if ([textView isEqual:self.incidentDetailTitle])
     {
-        [self.incidentDetailScrollView setContentOffset:CGPointMake(0, 0)];
+//        [self.incidentDetailScrollView setContentOffset:CGPointMake(0, 0)];
         
         self.incidentTitleEditButton.hidden = NO;
         self.editTitleImage.hidden = NO;
@@ -1466,8 +1518,8 @@
     }
     else if ([textView isEqual:self.incidentDetailAddress])
     {
-        CGPoint scrollPosition = [self.incidentDetailAddress superview].frame.origin;
-        [self.incidentDetailScrollView setContentOffset:CGPointMake(0, scrollPosition.y-20)];
+//        CGPoint scrollPosition = [self.incidentDetailAddress superview].frame.origin;
+//        [self.incidentDetailScrollView setContentOffset:CGPointMake(0, scrollPosition.y-20)];
 
         self.incidentAddressEditButton.hidden = NO;
         self.editAddressImage.hidden = NO;
@@ -1480,8 +1532,8 @@
     }
     else if ([textView isEqual:self.incidentDetailDescription])
     {
-        CGPoint scrollPosition = [self.incidentDetailDescription superview].frame.origin;
-        [self.incidentDetailScrollView setContentOffset:CGPointMake(0, scrollPosition.y-20)];
+//        CGPoint scrollPosition = [self.incidentDetailDescription superview].frame.origin;
+//        [self.incidentDetailScrollView setContentOffset:CGPointMake(0, scrollPosition.y-20)];
         
         self.incidentDescriptionEditButton.hidden = NO;
         self.editDescriptionImage.hidden = NO;
@@ -1493,16 +1545,15 @@
     //View Incident
     if ([textView isEqual:self.viewIncidentTitle])
     {
-        
-        [self.viewIncidentScrollView setContentOffset:CGPointMake(0, 0)];
+//        [self.viewIncidentScrollView setContentOffset:CGPointMake(0, 0)];
         
         self.editViewIncidentTitleButton.selected = YES;
         self.viewIncidentTitle.userInteractionEnabled = YES;
     }
     else if ([textView isEqual:self.viewIncidentAddress])
     {
-        CGPoint scrollPosition = [self.viewIncidentAddress superview].frame.origin;
-        [self.viewIncidentScrollView setContentOffset:scrollPosition];
+//        CGPoint scrollPosition = [self.viewIncidentAddress superview].frame.origin;
+//        [self.viewIncidentScrollView setContentOffset:scrollPosition];
         
         clickedSearch = @"updateAddress";
         [[MapViewHelper sharedInstance] showGoogleSearchBaronTarget:self];
@@ -1512,8 +1563,9 @@
     }
     else if ([textView isEqual:self.viewIncidentDescription])
     {
-        CGPoint scrollPosition = [self.viewIncidentDescription superview].frame.origin;
-        [self.viewIncidentScrollView setContentOffset:CGPointMake(0, scrollPosition.y)];
+//        CGPoint scrollPosition = [self.viewIncidentDescription superview].frame.origin;
+//        [self.viewIncidentScrollView setContentOffset:CGPointMake(0, scrollPosition.y-20)];
+        
         
         self.editViewIncidentDescriptionButton.selected = YES;
         self.viewIncidentDescription.userInteractionEnabled = YES;
@@ -1563,37 +1615,46 @@
     float diff = newSize.height - textFrame.size.height;
     if (textFrame.size.height!=newSize.height)
     {
-        [textView setFrame:CGRectMake(CGRectGetMinX(textFrame), CGRectGetMinY(textFrame), CGRectGetWidth(textFrame), newSize.height)];
-        
         if ([textView isEqual:self.incidentDetailTitle]) {
+            [textView setFrame:CGRectMake(CGRectGetMinX(textFrame), CGRectGetMinY(textFrame), CGRectGetWidth(textFrame), newSize.height)];
             self.incidentTitleHeight.constant = newSize.height;
             [self.incidentDetailTitle updateConstraints];
         }
         else if ([textView isEqual:self.incidentDetailAddress])
         {
+            [textView setFrame:CGRectMake(CGRectGetMinX(textFrame), CGRectGetMinY(textFrame), CGRectGetWidth(textFrame), newSize.height)];
             self.incidentAddressHeight.constant = newSize.height;
             [self.incidentDetailAddress updateConstraints];
         }
         else if ([textView isEqual:self.incidentDetailDescription])
         {
-            CGPoint scrollPosition = [self.incidentDetailScrollView contentOffset];
-            self.incidentDescriptionHeight.constant = newSize.height;
-            [self.incidentDetailScrollView setContentOffset:CGPointMake(0, scrollPosition.y+20)];
-            
-            NSLog(@"%f:%f", scrollPosition.x, scrollPosition.y);
-//            [self.incidentDetailScrollView setContentOffset:CGPointMake(scrollPosition.x, scrollPosition.y+diff+30)];
+            [textView setFrame:CGRectMake(CGRectGetMinX(textFrame), CGRectGetMinY(textFrame), CGRectGetWidth(textFrame), newSize.height)];
+             self.incidentDescriptionHeight.constant = newSize.height;
             [self.incidentDetailDescription updateConstraints];
+
+            CGPoint scrollPosition = [self.incidentDetailScrollView contentOffset];
+            [self.incidentDetailScrollView setContentOffset:CGPointMake(scrollPosition.x, scrollPosition.y+diff+30)];
         }
         else if ([textView isEqual:self.viewIncidentTitle])
         {
+            [textView setFrame:CGRectMake(CGRectGetMinX(textFrame), CGRectGetMinY(textFrame), CGRectGetWidth(textFrame), newSize.height)];
             self.viewIncidentTitleHeightConstraint.constant = newSize.height;
+            [self.viewIncidentTitle updateConstraints];
         }
         else if ([textView isEqual:self.viewIncidentAddress])
         {
+            [textView setFrame:CGRectMake(CGRectGetMinX(textFrame), CGRectGetMinY(textFrame), CGRectGetWidth(textFrame), newSize.height)];
             self.viewIncidentAddressHeightConstraint.constant = newSize.height;
+            [self.viewIncidentAddress updateConstraints];
         }
         else if ([textView isEqual:self.viewIncidentDescription])
         {
+            [textView setFrame:CGRectMake(CGRectGetMinX(textFrame), CGRectGetMinY(textFrame), CGRectGetWidth(textFrame), newSize.height)];
+            CGPoint scrollPosition = [self.viewIncidentScrollView contentOffset];
+            self.viewIncidentDescriptionHeightConstraint.constant = newSize.height;
+            [self.viewIncidentScrollView setContentOffset:CGPointMake(0, scrollPosition.y+20)];
+            [self.viewIncidentDescription updateConstraints];
+            
 //            [self sizeToFitViewIncident];
 //            CGPoint scrollPosition = [self.viewIncidentScrollView contentOffset];
 //            self.viewIncidentDescriptionHeightConstraint.constant = newSize.height;
@@ -1762,8 +1823,7 @@
     NSIndexPath *clickedButtonIndexPath = [self.userDetailTableView indexPathForRowAtPoint:buttonPosition];
     
     NSLog(@"indexpath: %ld",(long)clickedButtonIndexPath.row);
-    [self sizeToFitViewIncident];
-
+ 
     Incident *selectedIncident = [self.userDetailIncidentsArray objectAtIndex:clickedButtonIndexPath.row];
     [self loadIncidentDetailForIncident:selectedIncident];
 }
@@ -1894,7 +1954,16 @@
     {
         User *user = [self.viewIncidentUsersArray objectAtIndex:indexPath.row];
         UILabel *morePeopleName = (UILabel *)[cell viewWithTag:1];
+        UIButton *unAssignButton = (UIButton *)[cell viewWithTag:2];
+        
         morePeopleName.text = user.userName;
+        
+        if ([user.userName isEqualToString:@"No user assigned"]) {
+            unAssignButton.hidden = YES;
+        }
+        else {
+            unAssignButton.hidden = NO;
+        }
     }
     
     //Notification More assign Tableview

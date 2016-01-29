@@ -51,7 +51,10 @@
 
 - (IBAction)sendMessage:(id)sender
 {
+    [self animateConstraint:self.viewBottomConstraint WithValue:@(0)];
+    [self.messageTextView resignFirstResponder];
     NSLog(@"Message: %@", self.messageTextView.text);
+    [[WebServiceHandler sharedInstance] sendGroupMessage:self.messageTextView.text];
 }
 
 #pragma mark - TextView Delegate Methods

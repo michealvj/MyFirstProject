@@ -10,6 +10,7 @@
 #import "SVProgressHUD.h"
 #import "AFNetworking.h"
 #import "Incident.h"
+#import "ModalObjects.h"
 
 @protocol WebServiceHandlerDelegate <NSObject>
 
@@ -45,8 +46,7 @@
 @property (nonatomic,retain) id<WebServiceHandlerDelegate> delegate;
 
 +(WebServiceHandler *)sharedInstance;
-- (void)saveSettings;
-- (void)updateCurrentLocation:(CLLocationCoordinate2D)currentCoordinate;
+- (void)updateCurrentLocation:(CLLocationCoordinate2D)currentCoordinate WithGPSStatus:(NSString *)gpsStatus;
 
 - (void)getGeocodeForURL:(NSString *)URL;
 - (void)getTimeDistanceForURL:(NSString *)URL;
@@ -69,4 +69,9 @@
 - (void)assignIncident:(NSString *)incidentID forUserID:(NSString *)userID;
 - (void)unassignIncident:(NSString *)incidentID forUserID:(NSString *)userID;
 - (void)checkIfAssigedForUserID:(NSString *)userID AndIncidentID:(NSString *)incidentID;
+
+- (void)saveSettings:(Settings *)settings;
+- (void)getSettingsWithSuccess:(void (^)(Settings *settings))success WithError:(void (^)(NSString *error))failure;
+
+- (void)sendGroupMessage:(NSString *)message;
 @end

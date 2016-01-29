@@ -94,10 +94,13 @@
         NSString *userID = data[@"Message"][@"UserId"];
         NSString *groupID = data[@"Message"][@"GroupId"];
         NSString *groupName = data[@"Message"][@"GroupName"];
+        NSString *userType = data[@"Message"][@"UserType"];
        
         [UserDefaults setUserIDWithValue:userID];
         [UserDefaults setGroupIDWithValue:groupID];
         [UserDefaults setGroupNameWithValue:groupName];
+        [UserDefaults setUserTypeWithValue:userType];
+        
         
         [[SideBar sharedInstance] setUpSideMenu];
     }
