@@ -33,8 +33,18 @@
     
     [self navigationBarSetup];
     [self gradientBackground];
+    
+    [self setPlaceHolderText:@"Enter your email" ForTextField:self.emailTextField];
+    [self setPlaceHolderText:@"Password" ForTextField:self.passwordTextField];
+    
  }
 
+- (void)setPlaceHolderText:(NSString *)placeHolder ForTextField:(UITextField *)textField
+{
+    NSAttributedString *str = [[NSAttributedString alloc] initWithString:placeHolder attributes:@{ NSForegroundColorAttributeName : [UIColor whiteColor] }];
+    
+    textField.attributedPlaceholder = str;
+}
 
 - (void)navigationBarSetup
 {
@@ -52,6 +62,8 @@
 
 - (IBAction)loginClicked:(id)sender
 {
+    [self.emailTextField resignFirstResponder];
+    [self.passwordTextField resignFirstResponder];
     [WebServiceHandler sharedInstance].delegate = self;
     [[WebServiceHandler sharedInstance] getCurrentUserDetailsForEmailID:self.emailTextField.text AndPassword:self.passwordTextField.text];
 }
@@ -137,8 +149,17 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    [textField resignFirstResponder];
-    [self.scrollView setContentOffset:CGPointMake(0, 0)];
+    if ([textField isEqual:self.emailTextField]) {
+        [textField resignFirstResponder];
+        [self.passwordTextField becomeFirstResponder];
+        CGRect textFieldFrame = self.emailTextField.frame;
+        [self.scrollView setContentOffset:CGPointMake(0, CGRectGetMinY(textFieldFrame)-40)];
+
+    }
+    else {
+        [textField resignFirstResponder];
+        [self.scrollView setContentOffset:CGPointMake(0, 0)];
+    }
     return YES;
 }
 @end

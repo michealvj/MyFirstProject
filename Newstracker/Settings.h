@@ -12,6 +12,7 @@
 @interface Settings : NSObject
 
 + (Settings *)sharedInstance;
+- (BOOL)isSettingsChanged:(Settings *)finalSettings WithInitialSettings:(Settings *)initialSettings;
 
 @property (nonatomic,retain) NSString *mapLocation;
 @property (nonatomic,assign) CLLocationCoordinate2D mapCoordinate;

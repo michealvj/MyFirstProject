@@ -758,6 +758,9 @@
     else if ([errorStatus isEqualToString:@"Success"])
     {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if ([self.delegate respondsToSelector:@selector(didSaveSettings)]) {
+                [self.delegate didSaveSettings];
+            }
             [SVProgressHUD showSuccessWithStatus:@"Saved"];
         });
     }
@@ -899,10 +902,9 @@
     
     if ([errorStatus isEqualToString:@"Failed"])
     {
-        if ([self.delegate respondsToSelector:@selector(showErrorAlertWithTitle:WithMessage:)]) {
-            [self.delegate showErrorAlertWithTitle:@"News Crew Tracker" WithMessage:data[@"Message"]];
+        if ([self.delegate respondsToSelector:@selector(didNotGetIncidentNearUser:)]) {
+            [self.delegate didNotGetIncidentNearUser:data[@"Message"]];
         }
-
     }
     else if ([errorStatus isEqualToString:@"Success"])
     {

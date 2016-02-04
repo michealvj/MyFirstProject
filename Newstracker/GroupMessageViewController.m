@@ -76,6 +76,13 @@
 
 }
 
+- (void)setPlaceHolderText:(NSString *)placeHolder ForTextField:(UITextField *)textField
+{
+    NSAttributedString *str = [[NSAttributedString alloc] initWithString:placeHolder attributes:@{ NSForegroundColorAttributeName : textField.textColor, NSFontAttributeName : textField.font }];
+    
+    textField.attributedPlaceholder = str;
+}
+
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     if ([text isEqualToString:@"\n"]) {
@@ -86,6 +93,7 @@
     }
     else if (textView.text.length==1&&[text isEqualToString:@""])
     {
+        [self animateConstraint:self.viewBottomConstraint WithValue:@(0)];
         [textView resignFirstResponder];
         textView.text = @"Enter Message here...";
         return NO;

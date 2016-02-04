@@ -8,13 +8,14 @@
 
 
 #import "AppDelegate.h"
+#import "NZAlertView.h"
 
 @interface AppDelegate ()
 
 @end
 
 @implementation AppDelegate
-
+@synthesize pushView, pushLabel;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
@@ -37,16 +38,26 @@
 
 - (void)backgroundLocationUpdate
 {
+    UIAlertAction *moveToSettings = [UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [[UIApplication sharedApplication] openURL:[NSURL  URLWithString:UIApplicationOpenSettingsURLString]];
+    }];
     
     //We have to make sure that the Background App Refresh is enable for the Location updates to work in the background.
-    UIViewController *vc = [(UINavigationController *)[[AppDelegate alloc] init].window.rootViewController visibleViewController];
     if([[UIApplication sharedApplication] backgroundRefreshStatus] == UIBackgroundRefreshStatusDenied){
         
-        [[CodeSnip sharedInstance] showAlert:@"" withMessage:@"The app doesn't work without the Background App Refresh enabled. To turn it on, go to Settings > General > Background App Refresh" withTarget:vc];
+        UIAlertController *alert = [[CodeSnip sharedInstance] createAlertWithAction:@"Enable Background App Refresh" withMessage:@"The app doesn't work without the Background App Refresh enabled. To turn it on, go to Settings > General > Background App Refresh" withCancelButton:@"Cancel" withTarget:self.window.rootViewController];
         
-    }else if([[UIApplication sharedApplication] backgroundRefreshStatus] == UIBackgroundRefreshStatusRestricted){
-        [[CodeSnip sharedInstance] showAlert:@"" withMessage:@"The functions of this app are limited because the Background App Refresh is disable." withTarget:vc];
-    } else{
+        [alert addAction:moveToSettings];
+
+    }
+    else if([[UIApplication sharedApplication] backgroundRefreshStatus] == UIBackgroundRefreshStatusRestricted){
+        
+        UIAlertController *alert = [[CodeSnip sharedInstance] createAlertWithAction:@"Enable Background App Refresh" withMessage:@"The functions of this app are limited because the Background App Refresh is disable." withCancelButton:@"Cancel" withTarget:self.window.rootViewController];
+        
+        [alert addAction:moveToSettings];
+     }
+    
+    else{
         
         self.locationTracker = [[LocationTracker alloc]init];
         [self.locationTracker startLocationTracking];
@@ -107,8 +118,53 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    NSLog(@"%@", userInfo[@"aps"][@"alert"]);
+    NSString *pushMessage = userInfo[@"aps"][@"alert"];
+    NSString *pushTitle = [NSString stringWithFormat:@"Message from\n%@", userInfo[@"SendBy"]];
+    NSLog(@"Push Message: %@", userInfo);
+    
+    [[CodeSnip sharedInstance] showAlert:pushTitle withMessage:pushMessage withTarget:self.window.rootViewController];
+    
+//    UIApplicationState state = [application applicationState];
+//    if (state == UIApplicationStateActive) {
+//        
+//        [self createPushView:pushTitle];
+//        [self animatePushView];
+//    }
 }
+
+- (void)createPushView:(NSString *)message
+{
+    pushView = [[UIView alloc]init];
+    pushView.frame = CGRectMake(0, -70, self.window.frame.size.width, 70);
+    pushView.backgroundColor = [UIColor colorWithRed:(229/255.0) green:(70/255.0) blue:(27/255.0) alpha:1];
+    
+    [self.window addSubview:pushView];
+    
+    
+    UIImageView * logoimage = [[UIImageView alloc]initWithFrame:CGRectMake(10,20 ,40,40)];
+    logoimage.image = [UIImage imageNamed:@"placeholder.png"];
+    [pushView addSubview:logoimage];
+    
+    pushLabel = [[UILabel alloc]initWithFrame:CGRectMake(logoimage.frame.size.width+20,10 , pushView.frame.size.width, pushView.frame.size.height-5)];
+    pushLabel.text = message;
+    [pushLabel setFont:[UIFont fontWithName:@"Roboto-Regular" size:14.0]];
+    pushLabel.textColor = [UIColor whiteColor];
+    pushLabel.numberOfLines= 8;
+    [pushView addSubview:pushLabel];
+
+}
+
+- (void)animatePushView
+{
+    [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        pushView.frame = CGRectMake(self.window.frame.origin.x, self.window.frame.origin.y, self.window.frame.size.width, 70);
+    }
+                     completion:^(BOOL finished)
+     {
+         
+     }];
+}
+
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
 {
     //register to receive notifications

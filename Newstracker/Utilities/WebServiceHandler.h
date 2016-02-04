@@ -30,8 +30,10 @@
 - (void)didAssignIncident;
 - (void)didUnassignIncident;
 - (void)didGetIncidentNearUser:(id)data;
+- (void)didNotGetIncidentNearUser:(NSString *)errorMessage;
 - (void)didReceiveUserIncidents:(id)data;
 - (void)isUserAssignedToIncident:(NSArray *)isAssignedArray;
+- (void)didSaveSettings;
 
 @required
 - (void)requestFailedWithError:(NSError*)error;

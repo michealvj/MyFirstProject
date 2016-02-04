@@ -147,8 +147,9 @@
 
 	if ([CLLocationManager locationServicesEnabled] == NO) {
         NSLog(@"locationServicesEnabled false");
-        UIViewController *vc = [(UINavigationController *)[[AppDelegate alloc] init].window.rootViewController visibleViewController];
-        [[CodeSnip sharedInstance] showAlert:@"Location Services Disabled" withMessage:@"You currently have all location services for this device disabled" withTarget:vc];
+        AppDelegate *appdel = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        
+        [[CodeSnip sharedInstance] showAlert:@"Location Services Disabled" withMessage:@"You currently have all location services for this device disabled" withTarget:appdel.window.rootViewController];
         
 //		UIAlertView *servicesDisabledAlert = [[UIAlertView alloc] initWithTitle:@"Location Services Disabled" message:@"You currently have all location services for this device disabled" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 //		[servicesDisabledAlert show];
@@ -271,17 +272,21 @@
 - (void)locationManager: (CLLocationManager *)manager didFailWithError: (NSError *)error
 {
    // NSLog(@"locationManager error:%@",error);
-    UIViewController *vc = [(UINavigationController *)[[AppDelegate alloc] init].window.rootViewController visibleViewController];
+    AppDelegate *appdel = (AppDelegate *)[UIApplication sharedApplication].delegate;
     
     switch([error code])
     {
         case kCLErrorNetwork: // general, network-related error
         {
-            [[CodeSnip sharedInstance] showAlert:@"Network Error" withMessage:@"Please check your network connection." withTarget:vc];
+            [[CodeSnip sharedInstance] showAlert:@"Network Error" withMessage:@"Please check your network connection." withTarget:appdel.window.rootViewController];
         }
             break;
         case kCLErrorDenied:{
-            [[CodeSnip sharedInstance] showAlert:@"Enable Location Service" withMessage:@"You have to enable the Location Service to use this App. To enable, please go to Settings->Privacy->Location Services" withTarget:vc];
+            UIAlertController *alert = [[CodeSnip sharedInstance] createAlertWithAction:@"Enable Location Service" withMessage:@"You have to enable the Location Service to use this App. To enable, please go to Settings->Privacy->Location Services" withCancelButton:@"Cancel" withTarget:appdel.window.rootViewController];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [[UIApplication sharedApplication] openURL:[NSURL  URLWithString:UIApplicationOpenSettingsURLString]];
+            }]];
             
         }
             break;

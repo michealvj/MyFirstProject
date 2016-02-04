@@ -22,8 +22,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.compassImage.hidden=YES;
-    self.titleLabel.alpha=0;
+    self.compassImage.alpha = 0;
+    self.titleLabel.alpha = 0;
     [self navigationBarSetup];
     [self gradientBackground];
 }
@@ -36,19 +36,47 @@
 {
     self.compassImage.hidden = NO;
     
-    POPSpringAnimation *scale = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
-    scale.springBounciness = 8.0f;
-    scale.springSpeed = 10.0f;
-    scale.fromValue = [NSValue valueWithCGSize:CGSizeMake(0, 0)];
-    scale.toValue = [NSValue valueWithCGSize:CGSizeMake(1, 1)];
-    scale.name = @"size";
-    [self.compassImage.layer pop_addAnimation:scale forKey:@"pop"];
+//    POPSpringAnimation *scale = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
+//    scale.beginTime = CACurrentMediaTime()+1.0;
+//    scale.springBounciness = 8.0f;
+//    scale.springSpeed = 10.0f;
+//    scale.fromValue = [NSValue valueWithCGSize:CGSizeMake(0, 0)];
+//    scale.toValue = [NSValue valueWithCGSize:CGSizeMake(1, 1)];
+//    scale.name = @"size";
+//    [self.compassImage.layer pop_addAnimation:scale forKey:@"pop"];
+    POPBasicAnimation *alpha = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerOpacity];
+    alpha.beginTime = CACurrentMediaTime();
+    alpha.delegate = self;
+    alpha.duration = 0.5;
+    alpha.fromValue = @(0);
+    alpha.toValue = @(1);
+    alpha.name = @"appearImage";
+    [self.compassImage.layer pop_addAnimation:alpha forKey:@"appearImage"];
     
-    POPDecayAnimation *rotationAnim = [POPDecayAnimation animationWithPropertyNamed:kPOPLayerRotation];
-    rotationAnim.velocity = @(104);
-    rotationAnim.name = @"rotation";
-    rotationAnim.delegate = self;
-    [self.compassImage.layer pop_addAnimation:rotationAnim forKey:@"rotationAnim"];
+    
+    POPDecayAnimation *rotationRight = [POPDecayAnimation animationWithPropertyNamed:kPOPLayerRotation];
+    rotationRight.beginTime = CACurrentMediaTime();
+    rotationRight.velocity = @(-5);
+    rotationRight.name = @"rotationRight";
+    rotationRight.delegate = self;
+    [self.compassImage.layer pop_addAnimation:rotationRight forKey:@"rotationRight"];
+
+    POPDecayAnimation *rotation = [POPDecayAnimation animationWithPropertyNamed:kPOPLayerRotation];
+    rotation.beginTime = CACurrentMediaTime()+1.0;
+    rotation.velocity = @(288);
+    rotation.name = @"rotation";
+    rotation.delegate = self;
+    [self.compassImage.layer pop_addAnimation:rotation forKey:@"rotation"];
+
+    POPBasicAnimation *opacity = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerOpacity];
+    opacity.beginTime = CACurrentMediaTime()+3.5;
+    opacity.delegate = self;
+    opacity.duration = 1.0;
+    opacity.fromValue = @(0);
+    opacity.toValue = @(1);
+    opacity.name = @"appear";
+    [self.titleLabel.layer pop_addAnimation:opacity forKey:@"appear"];
+
  
 }
 
@@ -68,14 +96,6 @@
 - (void)pop_animationDidStop:(POPAnimation *)anim finished:(BOOL)finished
 {
     if ([anim.name isEqualToString:@"rotation"]) {
-        
-        POPBasicAnimation *opacity = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerOpacity];
-        opacity.delegate = self;
-        opacity.duration = 1.0;
-        opacity.fromValue = @(0);
-        opacity.toValue = @(1);
-        opacity.name = @"appear";
-        [self.titleLabel.layer pop_addAnimation:opacity forKey:@"appear"];
      }
     else if ([anim.name isEqualToString:@"appear"])
     {

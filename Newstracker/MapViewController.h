@@ -91,7 +91,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *addNewUserTopConstraint;
 @property (weak, nonatomic) IBOutlet UILabel *addNewUserIncidentTitle;
 @property (weak, nonatomic) IBOutlet UITableView *addNewUserTableView;
-@property (retain, nonatomic) NSArray *addNewUserArray;
+@property (retain, nonatomic) NSMutableArray *addNewUserArray;
 
 
 //Delegate Incident

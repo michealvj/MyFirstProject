@@ -99,6 +99,7 @@
     
     User *currentUser = [dataArray objectAtIndex:indexPath.row];
     
+    UIImageView *userIconImage = (UIImageView *)[cell viewWithTag:1];
     UIImageView *imageView = (UIImageView *)[cell viewWithTag:3];
     UILabel *titleLabel = (UILabel *)[cell viewWithTag:2];
     
@@ -106,10 +107,12 @@
     
     if ([currentUser.status isEqualToString:@"Online"]) {
         imageView.image = [UIImage imageNamed:@"greecircle.png"];
+        userIconImage.alpha = 1.0;
         titleLabel.textColor = [UIColor blackColor];
     }
     else {
         imageView.image = [UIImage imageNamed:@"greycircle.png"];
+        userIconImage.alpha = 0.5;
         titleLabel.textColor = GREYTEXTCOLOR;
     }
     

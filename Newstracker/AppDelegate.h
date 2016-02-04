@@ -19,7 +19,12 @@
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
+@property (strong, nonatomic) UIView *pushView;
+@property (strong, nonatomic) UILabel *pushLabel;
+
+
 @property (strong, nonatomic) UIWindow *window;
+
 
 @property LocationTracker *locationTracker;
 @property (nonatomic) NSTimer* locationUpdateTimer;

@@ -14,6 +14,7 @@
 {
     NSMutableArray *searchLocation, *searchAddress, *searchFullAddress, *searchPlaceIDs;
     NSDate *currentDate;
+    UILabel *noLabel;
 }
 @end
 
@@ -30,7 +31,7 @@
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
-    [SVProgressHUD dismiss];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -55,7 +56,7 @@
     NSString *browserKey = GOOGLE_SERVER_KEY1;
     NSString *urlString = [NSString stringWithFormat:
                            @"https://maps.googleapis.com/maps/api/place/autocomplete/json?input=%@&key=%@",searchText,browserKey];
-    [SVProgressHUD show];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     
 
@@ -96,14 +97,29 @@
              }
              [self.searchTableView reloadData];
          }
-         [SVProgressHUD dismiss];
+         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
      }
          failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
          [[CodeSnip sharedInstance] showAlert:@"Error" withMessage:[error localizedDescription] withTarget:self];
-         [SVProgressHUD dismiss];
+         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
      }];
     
+}
+
+- (void)centerLabel:(NSString *)string InTableView:(UITableView *)tabView
+{
+    [noLabel removeFromSuperview];
+    tabView.scrollEnabled = NO;
+    
+    float assumedCellHeight = 44;
+    float hh = tabView.bounds.size.height;
+    float yy = (hh/2)-assumedCellHeight/2;
+    
+    noLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, yy, self.view.bounds.size.width, assumedCellHeight)];
+    noLabel.textAlignment = NSTextAlignmentCenter;
+    noLabel.text=string;
+    [tabView addSubview:noLabel];
 }
 
 #pragma mark - Tableview delegate and datasource
@@ -120,7 +136,15 @@
     
     UILabel *location = (UILabel *)[cell viewWithTag:1];
     UILabel *address = (UILabel *)[cell viewWithTag:2];
-    
+    if ([[searchLocation objectAtIndex:indexPath.row] isEqualToString:@"No results found"]) {
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        tableView.scrollEnabled = NO;
+    }
+    else
+    {
+        cell.selectionStyle = UITableViewCellSelectionStyleGray;
+        tableView.scrollEnabled = YES;
+    }
     location.text = [searchLocation objectAtIndex:indexPath.row];
     address.text = [searchFullAddress objectAtIndex:indexPath.row];
     
@@ -129,13 +153,13 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row<searchPlaceIDs.count) {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (indexPath.row<searchPlaceIDs.count&&![[searchLocation objectAtIndex:indexPath.row] isEqualToString:@"No results found"]) {
         if ([_delegate respondsToSelector:@selector(didSelectAddress:)]) {
             [_delegate didSelectAddress:[searchPlaceIDs objectAtIndex:indexPath.row]];
         }
+        [self dismissViewControllerAnimated:YES completion:nil];
     }
-    [SVProgressHUD dismiss];
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

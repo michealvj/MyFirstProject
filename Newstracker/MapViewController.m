@@ -40,6 +40,7 @@
     
     BOOL showAlert, isAddNewUser, isUnassignFromViewIncident, isUpdatedIncident, isNotificationForMorePeople;
     int selectedUserIndex;
+    UILabel *noLabel;
 }
 
 @property (weak, nonatomic) IBOutlet UIButton *myLocationButton;
@@ -98,11 +99,13 @@
     self.navigationController.navigationBar.barTintColor =[UIColor whiteColor];
     self.navigationController.navigationBarHidden = NO;
     [[SideBar sharedInstance] setUpImage:@"menu.png" WithTarget:self];
-    [[SideBar sharedInstance] setUpSearchBarWithTarget:self];
-    
-    UIBarButtonItem *createButton = self.navigationItem.rightBarButtonItems[0];
-    [createButton setTarget:self];
-    [createButton setAction:@selector(createNewIncident)];
+    [[SideBar sharedInstance] setUpSearchBarWithTarget:self WithCreateButtonAction:^{
+        [self createNewIncident];
+    }];
+//
+//    UIBarButtonItem *createButton =(UIBarButtonItem*) self.navigationItem.rightBarButtonItems[0];
+//    [createButton setTarget:self];
+//    [createButton setAction:@selector(createNewIncident)];
     
     firstNavigationItems = self.navigationItem.rightBarButtonItems;
 }
@@ -112,19 +115,18 @@
     UIBarButtonItem *createButton = self.navigationItem.rightBarButtonItems[0];
     createButton.tintColor = [UIColor myBlueColor];
     self.navigationItem.rightBarButtonItems = nil;
-    self.navigationItem.rightBarButtonItem = createButton;
     self.navigationItem.title = @"Create Incident";
 }
 
 - (void)viewIncidentNavigationBar:(NSString *)navTitle
 {
-    UIBarButtonItem *deleteButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteIncident:)];
-    deleteButton.tintColor = [UIColor myBlueColor];
+    UIBarButtonItem *deleteButton = [[navBar sharedInstance] setDeleteIncidentWithScale:0.7 WithPadding:1.0 isLeftSide:NO WithAction:^{
+        [self deleteIncident:deleteButton];
+    }];
     self.navigationItem.rightBarButtonItems = nil;
     self.navigationItem.rightBarButtonItem = deleteButton;
     self.navigationItem.title = navTitle;
 }
-
 
 - (void)userIncidentNavigationBar:(NSString *)userName
 {
@@ -141,6 +143,21 @@
 }
 
 #pragma mark - Helper Methods
+
+- (void)centerLabel:(NSString *)string InTableView:(UITableView *)tabView
+{
+    [noLabel removeFromSuperview];
+    tabView.scrollEnabled = NO;
+
+    float assumedCellHeight = 44;
+    float hh = tabView.bounds.size.height;
+    float yy = (hh/2)-assumedCellHeight/2;
+    
+    noLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, yy, self.view.bounds.size.width, assumedCellHeight)];
+    noLabel.textAlignment = NSTextAlignmentCenter;
+    noLabel.text=string;
+    [tabView addSubview:noLabel];
+}
 
 - (void)animateMarkerToBottom:(GMSMarker *)marker
 {
@@ -251,7 +268,7 @@
     [self resetAllMemberMarkers];
     [self resetCurrentUserMarker];
     [self resetAllIncidentMarkers];
-    [self hideOtherViews:nil];
+    [self hideOtherViewsForMapTouch];
 }
 
 - (BOOL)mapView:(GMSMapView *)mapView didTapMarker:(GMSMarker *)marker
@@ -542,7 +559,7 @@
     
     if (isAddNewUser)
     {
-        self.addNewUserArray = data;
+        self.addNewUserArray = [[NSMutableArray alloc] initWithArray:data];
         [self.addNewUserTableView reloadData];
         [self loadAddNewUserViewForMarker];
         [self showAddNewUserView];
@@ -565,15 +582,37 @@
         
         [self.viewIncidentTableView reloadData];
         self.viewIncidentTableHeight.constant = self.viewIncidentTableView.contentSize.height+10;
-    }
+        
+        [self sizeToFitViewIncident];
+}
 }
 
+- (void)didNotGetIncidentNearUser:(NSString *)errorMessage
+{
+    [[CodeSnip sharedInstance] showAlert:@"News Crew Tracker" withMessage:errorMessage withTarget:self];
+    
+    self.viewIncidentUsersArray = [[NSMutableArray alloc] init];
+    User *newUser = [User new];
+    newUser.userName = @"No user nearby incident";
+    [self.viewIncidentUsersArray addObject:newUser];
+    
+    [self.viewIncidentTableView reloadData];
+    self.viewIncidentTableHeight.constant = self.viewIncidentTableView.contentSize.height+10;
+
+    [self sizeToFitViewIncident];
+    
+}
 - (void)didAssignIncident
 {
     //Assign Incident
     selectedAssignButton.selected = !selectedAssignButton.selected;
     [selectedAssignButton setBackgroundColor:[UIColor colorWithRed:21.0f/255.0f green:88.0f/255.0f blue:200.0f/255.0f alpha:1.0f]];
     [self popAnimationForButton:selectedAssignButton];
+    
+    User *user = [self.addNewUserArray objectAtIndex:selectedIndexPath.row];
+    user.isAssigned = YES;
+    [self.addNewUserArray replaceObjectAtIndex:selectedIndexPath.row withObject:user];
+    [self.addNewUserTableView reloadData];
 }
 
 - (void)didUnassignIncident
@@ -587,6 +626,14 @@
         //Deleting TableCell
         [self.userDetailIncidentsArray removeObjectAtIndex:clickedButtonIndexPath.row];
         [self.userDetailTableView deleteRowsAtIndexPaths:@[clickedButtonIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        
+        if (self.userDetailIncidentsArray.count==0) {
+            [self centerLabel:@"No incident assigned" InTableView:self.userDetailTableView];
+            [self.userDetailTableView reloadData];
+        } else {
+            self.userDetailTableView.scrollEnabled = YES;
+            [noLabel removeFromSuperview];
+        }
 
     }
     //Is clicked from View Incident
@@ -624,10 +671,19 @@
     //Is clicked from notification view|user assign view
     else
     {
+        if ([self.addNewUserArray respondsToSelector:@selector(replaceObjectAtIndex:withObject:)])
+        {
+            User *user = [self.addNewUserArray objectAtIndex:selectedIndexPath.row];
+            user.isAssigned = NO;
+            [self.addNewUserArray replaceObjectAtIndex:selectedIndexPath.row withObject:user];
+            [self.addNewUserTableView reloadData];
+
+        }
         selectedAssignButton.selected = !selectedAssignButton.selected;
         [selectedAssignButton setBackgroundColor:[UIColor whiteColor]];
     }
 }
+
 
 - (void)didReceiveUserIncidents:(id)data
 {
@@ -996,8 +1052,9 @@
     isUnassignFromViewIncident = NO;
     selectedAssignButton = sender;
     
-    UITableViewCell *selectedCell = (UITableViewCell *)[[sender superview] superview];
-    selectedIndexPath = [self.addNewUserTableView indexPathForCell:selectedCell];
+    CGPoint buttonPosition = [sender convertPoint:CGPointZero
+                                           toView:self.addNewUserTableView];
+    selectedIndexPath = [self.addNewUserTableView indexPathForRowAtPoint:buttonPosition];
     
     User *user = [self.addNewUserArray objectAtIndex:selectedIndexPath.row];
     
@@ -1080,6 +1137,7 @@
     self.editAddressImage.hidden = YES;
     self.editDescriptionImage.hidden = YES;
     
+    [self openSizeNewIncident];
     clickedSearch = @"newAddress";
     [self showIncidentDetailView];
     
@@ -1111,6 +1169,11 @@
 }
 
 - (IBAction)saveIncident:(id)sender
+{
+    [self saveIncident];
+}
+
+- (void)saveIncident
 {
     [self resignIncidentDetail];
     [self.incidentDetailScrollView setContentOffset:CGPointMake(0, 0)];
@@ -1201,9 +1264,32 @@
 
 - (IBAction)closeCreateIncidentView:(id)sender
 {
-    [self resignIncidentDetail];
-    [self resetAllIncidentMarkers];
-    [self hideIncidentDetailView];
+    if ([self.incidentDetailTitle.text isEqualToString:INCIDENT_TITLE]&&
+        [self.incidentDetailAddress.text isEqualToString:INCIDENT_ADDRESS]&&
+        [self.incidentDetailDescription.text isEqualToString:INCIDENT_DESCRIPTION])
+    {
+        [self resignIncidentDetail];
+        [self resetAllIncidentMarkers];
+        [self hideIncidentDetailView];
+
+    }
+    else
+    {
+        UIAlertController *alert = [[CodeSnip sharedInstance] createAlertWithAction:@"New Incident" withMessage:@"This Incident is not saved. Do you want to close it anyway?" withCancelButton:nil withTarget:self];
+        
+        [alert addAction:[UIAlertAction actionWithTitle:@"Close" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+                          {
+                              [self resignIncidentDetail];
+                              [self resetAllIncidentMarkers];
+                              [self hideIncidentDetailView];
+
+                          }]];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Save Incident" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action)
+                          {
+                              [self saveIncident];
+                          }]];
+        
+    }
 }
 
 - (void)resignIncidentDetail
@@ -1220,6 +1306,20 @@
 - (void)sizeToFitNewIncident
 {
     //Size to Fit
+//    [self.incidentDetailTitle sizeToFit];
+//    self.incidentTitleHeight.constant = self.incidentDetailTitle.frame.size.height;
+    
+    [self.incidentDetailAddress sizeToFit];
+    self.incidentAddressHeight.constant = self.incidentDetailAddress.frame.size.height;
+    
+//    [self.incidentDetailDescription sizeToFit];
+//    self.incidentDescriptionHeight.constant = self.incidentDetailDescription.frame.size.height;
+    
+}
+
+- (void)openSizeNewIncident
+{
+    //Size to Fit
     [self.incidentDetailTitle sizeToFit];
     self.incidentTitleHeight.constant = self.incidentDetailTitle.frame.size.height;
     
@@ -1227,9 +1327,10 @@
     self.incidentAddressHeight.constant = self.incidentDetailAddress.frame.size.height;
     
     [self.incidentDetailDescription sizeToFit];
-    self.incidentDescriptionHeight.constant = self.incidentDetailDescription.frame.size.height;
+    self.incidentDescriptionHeight.constant = self.incidentDetailDescription.frame.size.height+50;
     
 }
+
 
 #pragma mark - View Incident View
 
@@ -1281,11 +1382,12 @@
     
     [self.viewIncidentScrollView setContentOffset:CGPointMake(0, 0)];
     
-    [self sizeToFitViewIncident];
     [self animateMarkerToBottom:incidentMarker];
     
+    [self sizeToFitViewIncident];
     //Load Array
     [self loadAssignedUser];
+    [self showViewIncidentView];
 //    [self.viewIncidentScrollView addObserver:self forKeyPath:NSStringFromSelector(@selector(contentOffset)) options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];
 }
 
@@ -1306,15 +1408,11 @@
 - (void)sizeToFitViewIncident
 {
     //Size to Fit
-    [self.viewIncidentTitle sizeToFit];
-    self.viewIncidentTitleHeightConstraint.constant = self.viewIncidentTitle.frame.size.height;
+    self.viewIncidentTitleHeightConstraint.constant = [self.viewIncidentTitle contentSize].height;
    
-   [self.viewIncidentDescription sizeToFit];
-    self.viewIncidentDescriptionHeightConstraint.constant = self.viewIncidentDescription.frame.size.height;
-    
-   [self.viewIncidentAddress sizeToFit];
-   self.viewIncidentAddressHeightConstraint.constant = self.viewIncidentAddress.frame.size.height;
-    
+   self.viewIncidentAddressHeightConstraint.constant = [self.viewIncidentAddress contentSize].height;
+
+    self.viewIncidentDescriptionHeightConstraint.constant = [self.viewIncidentDescription contentSize].height;
 }
 
 - (void)loadIncidentDetailForIncident:(Incident *)incident
@@ -1327,7 +1425,6 @@
             selectedIncidentMarker = incidentMarker;
             [gmapView setSelectedMarker:incidentMarker];
             [self loadViewIncidentViewForMarker:selectedIncidentMarker];
-            [self showViewIncidentView];
         }
     }
 }
@@ -1335,6 +1432,7 @@
 - (void)updateIncident
 {
     //Set to be updated
+    [self resignViewIncident];
     updatedIncidentMarker = selectedIncidentMarker;
     updatedIncidentMarker.position = searchedLocation;
     NSDictionary *updatedInfo = @{@"incidentID": selectedIncidentMarker.userData[@"incidentID"],
@@ -1361,7 +1459,6 @@
 
 - (IBAction)updateIncident:(id)sender
 {
-    [self resignViewIncident];
     [self updateIncident];
 }
 
@@ -1471,7 +1568,6 @@
 
 - (IBAction)closeViewIncidentView:(id)sender
 {
-    [self resignViewIncident];
     if (isUpdatedIncident)
     {
         [self resetAllIncidentMarkers];
@@ -1574,7 +1670,44 @@
 
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
-    CGSize newSize = textView.contentSize;
+    if ([textView isEqual:self.incidentDetailTitle])
+    {
+        self.incidentTitleEditButton.selected = NO;
+        [self.incidentTitleEditButton resignFirstResponder];
+        self.incidentDetailTitle.userInteractionEnabled = NO;
+    }
+    else if ([textView isEqual:self.incidentDetailAddress])
+    {
+        self.incidentAddressEditButton.selected = NO;
+        [self.incidentAddressEditButton resignFirstResponder];
+        self.incidentDetailAddress.userInteractionEnabled = NO;
+    }
+    else if ([textView isEqual:self.incidentDetailDescription])
+    {
+        self.incidentDescriptionEditButton.selected = NO;
+        [self.incidentDetailDescription resignFirstResponder];
+        self.incidentDetailDescription.userInteractionEnabled = NO;
+    }
+    else if ([textView isEqual:self.viewIncidentTitle])
+    {
+        self.editViewIncidentTitleButton.selected = NO;
+        [self.viewIncidentTitle resignFirstResponder];
+        self.viewIncidentTitle.userInteractionEnabled = NO;
+    }
+    else if ([textView isEqual:self.viewIncidentAddress])
+    {
+        [self.viewIncidentAddress resignFirstResponder];
+        self.editViewIncidentAddressButton.selected = NO;
+        self.viewIncidentAddress.userInteractionEnabled = NO;
+    }
+    else if ([textView isEqual:self.viewIncidentDescription])
+    {
+        [self.viewIncidentDescription resignFirstResponder];
+        self.editViewIncidentDescriptionButton.selected = NO;
+        self.viewIncidentDescription.userInteractionEnabled = NO;
+    }
+    
+
     if ([textView.text isEqualToString:@""])
     {
         if ([textView isEqual:self.incidentDetailTitle])
@@ -1588,18 +1721,6 @@
         else if ([textView isEqual:self.incidentDetailDescription])
         {
             textView.text = INCIDENT_DESCRIPTION;
-        }
-        else if ([textView isEqual:self.viewIncidentTitle])
-        {
-            self.viewIncidentTitleHeightConstraint.constant = newSize.height;
-        }
-        else if ([textView isEqual:self.viewIncidentAddress])
-        {
-            self.viewIncidentAddressHeightConstraint.constant = newSize.height;
-        }
-        else if ([textView isEqual:self.viewIncidentDescription])
-        {
-            self.viewIncidentDescriptionHeightConstraint.constant = newSize.height;
         }
 
     }
@@ -1628,12 +1749,14 @@
         }
         else if ([textView isEqual:self.incidentDetailDescription])
         {
-            [textView setFrame:CGRectMake(CGRectGetMinX(textFrame), CGRectGetMinY(textFrame), CGRectGetWidth(textFrame), newSize.height)];
-             self.incidentDescriptionHeight.constant = newSize.height;
-            [self.incidentDetailDescription updateConstraints];
-
-            CGPoint scrollPosition = [self.incidentDetailScrollView contentOffset];
-            [self.incidentDetailScrollView setContentOffset:CGPointMake(scrollPosition.x, scrollPosition.y+diff+30)];
+            if (newSize.height>100) {
+                [textView setFrame:CGRectMake(CGRectGetMinX(textFrame), CGRectGetMinY(textFrame), CGRectGetWidth(textFrame), newSize.height)];
+                self.incidentDescriptionHeight.constant = newSize.height;
+                [self.incidentDetailDescription updateConstraints];
+                
+                CGPoint scrollPosition = [self.incidentDetailScrollView contentOffset];
+                [self.incidentDetailScrollView setContentOffset:CGPointMake(scrollPosition.x, scrollPosition.y+diff+30)];
+            }
         }
         else if ([textView isEqual:self.viewIncidentTitle])
         {
@@ -1668,7 +1791,6 @@
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    CGSize newSize = textView.contentSize;
     if ([text isEqualToString:@"\n"])
     {
         if ([textView isEqual:self.incidentDetailTitle])
@@ -1746,24 +1868,6 @@
     }
 }
 
-- (void)loadUserDetailViewForMarker:(GMSMarker *)marker
-{
-    [self animateMarkerToBottom:marker];
-    NSArray *allUsers = [[User sharedInstance] getUserDetails];
-    for (User *user in allUsers)
-    {
-        NSString *userId = [[marker.userData valueForKey:@"userID"] firstObject];
-        if ([user.userID isEqualToString:userId])
-        {
-            self.userDetailUserName.text = [NSString stringWithFormat:@"Username: %@", user.userName];
-            self.userDetailIncidentsArray = [[NSMutableArray alloc] initWithArray:user.incidentsAssigned];
-            [self.userDetailTableView setDataSource:self];
-            [self.userDetailTableView setDelegate:self];
-            [self.userDetailTableView reloadData];
-        }
-    }
-}
-
 - (void)loadUserDetailViewForIncidents:(NSArray *)incidents
 {
     if ([selectedUserMarker.snippet isEqualToString:@"GroupMemberSelected"]||
@@ -1779,34 +1883,17 @@
     }
     [self animateMarkerToBottom:selectedUserMarker];
     self.userDetailIncidentsArray = [[NSMutableArray alloc] initWithArray:incidents];
+    if (self.userDetailIncidentsArray.count==0) {
+        
+        [self centerLabel:@"No incident assigned" InTableView:self.userDetailTableView];
+    }
+    else {
+        self.userDetailTableView.scrollEnabled = YES;
+        [noLabel removeFromSuperview];
+    }
     [self.userDetailTableView setDataSource:self];
     [self.userDetailTableView setDelegate:self];
     [self.userDetailTableView reloadData];
-}
-
-
-- (void)loadUserDetailViewAtIndexPath:(NSIndexPath *)indexPath
-{
-    
-    NSArray *allUsers = [[User sharedInstance] getUserDetails];
-    NSString *userId = [[allDetailMorePeople valueForKey:@"userID"] objectAtIndex:indexPath.row];
-    
-    for (User *user in allUsers)
-    {
-        if ([user.userID isEqualToString:userId])
-        {
-            
-            self.userDetailUserName.text = [NSString stringWithFormat:@"Username: %@", user.userName];
-            self.navigationItem.title = [NSString stringWithFormat:@"%@'s Incidents", user.userName];
-            self.navigationItem.rightBarButtonItem = nil;
-            [[SideBar sharedInstance] setUpCustomViewWithTarget:self];
-            
-            self.userDetailIncidentsArray = [[NSMutableArray alloc] initWithArray:user.incidentsAssigned];
-            [self.userDetailTableView setDataSource:self];
-            [self.userDetailTableView setDelegate:self];
-            [self.userDetailTableView reloadData];
-        }
-    }
 }
 
 - (IBAction)closeUserDetailView:(id)sender
@@ -1958,7 +2045,7 @@
         
         morePeopleName.text = user.userName;
         
-        if ([user.userName isEqualToString:@"No user assigned"]) {
+        if ([user.userName isEqualToString:@"No user assigned"]||[user.userName isEqualToString:@"No user nearby incident"]) {
             unAssignButton.hidden = YES;
         }
         else {
@@ -2043,6 +2130,20 @@
     }
 }
 
+- (void)hideOtherViewsForMapTouch
+{
+    if (!self.morePeopleViewLeftConstraint.constant) {
+        [self hideMorePeopleView];
+    }
+    if (!self.notificationMoreBottomConstraint.constant) {
+        [self hideNotificationMoreView];
+    }
+    if (!self.notificationBottomConstraint.constant) {
+        [self hideNotificationView];
+    }
+}
+
+
 - (void)popAnimationForButton:(UIButton *)button
 {
     POPSpringAnimation *scale = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
@@ -2062,7 +2163,7 @@
     
     POPSpringAnimation *layoutAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayoutConstraintConstant];
     layoutAnimation.springSpeed = 10.0f;
-    layoutAnimation.springBounciness = 5.0f;
+    layoutAnimation.springBounciness = 0.0f;
     layoutAnimation.toValue = @(0);
     [self.notificationMoreBottomConstraint pop_addAnimation:layoutAnimation forKey:@"notification"];
 }
@@ -2133,7 +2234,7 @@
     [self userIncidentNavigationBar:userName];
     POPSpringAnimation *layoutAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayoutConstraintConstant];
     layoutAnimation.springSpeed = 10.0f;
-    layoutAnimation.springBounciness = 5.0f;
+    layoutAnimation.springBounciness = 0.0f;
     layoutAnimation.toValue = @(0);
     [self.userDetailTopConstraint pop_addAnimation:layoutAnimation forKey:@"morepeople"];
 }
@@ -2167,7 +2268,7 @@
     
     POPSpringAnimation *layoutAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayoutConstraintConstant];
     layoutAnimation.springSpeed = 10.0f;
-    layoutAnimation.springBounciness = 5.0f;
+    layoutAnimation.springBounciness = 0.0f;
     layoutAnimation.toValue = @(0);
     [self.incidentDetailTopConstraint pop_addAnimation:layoutAnimation forKey:@"morepeople"];
 }
@@ -2196,9 +2297,12 @@
     
     POPSpringAnimation *layoutAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayoutConstraintConstant];
     layoutAnimation.springSpeed = 10.0f;
-    layoutAnimation.springBounciness = 5.0f;
+    layoutAnimation.springBounciness = 0.0f;
     layoutAnimation.toValue = @(0);
-    [self.viewIncidentTopConstraint pop_addAnimation:layoutAnimation forKey:@"morepeople"];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.viewIncidentTopConstraint pop_addAnimation:layoutAnimation forKey:@"morepeople"];
+    });
 }
 
 - (void)hideViewIncidentView
@@ -2221,7 +2325,7 @@
     
     POPSpringAnimation *layoutAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayoutConstraintConstant];
     layoutAnimation.springSpeed = 10.0f;
-    layoutAnimation.springBounciness = 5.0f;
+    layoutAnimation.springBounciness = 0.0f;
     layoutAnimation.toValue = @(0);
     [self.addNewUserTopConstraint pop_addAnimation:layoutAnimation forKey:@"morepeople"];
 }

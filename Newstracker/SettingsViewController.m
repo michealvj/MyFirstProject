@@ -8,9 +8,12 @@
 
 #import "SettingsViewController.h"
 #import "SideBar.h"
+#import "MFSideMenuContainerViewController.h"
+#import "MFSideMenu.h"
 #import "GroupMessageViewController.h"
 #import "MapAreaViewController.h"
 #import "UIColor+myColors.h"
+#import "UIBarButtonItem+utils.h"
 #import "Settings.h"
 #import <POP.h>
 
@@ -22,6 +25,7 @@
     BOOL isAutomaticIncidentDeletionEnabled;
     BOOL isVisibleToOtherUsers;
     Settings *initialSettings;
+    UIBarButtonItem *saveButton;
 }
 @end
 
@@ -31,6 +35,7 @@
     [super viewDidLoad];
     self.settingsTableView.hidden = YES;
     self.datePickerBottomConstraint.constant = -self.datePopupView.frame.size.height;
+    
     [self navigationBarSetup];
  
     [self loadInitialSettings];
@@ -40,10 +45,39 @@
 {
     self.navigationController.navigationBarHidden = NO;
     self.navigationItem.title = @"Settings";
-    [[SideBar sharedInstance] setUpImage:@"menu.png" WithTarget:self];
-    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveSettings)];
-    saveButton.tintColor = [UIColor myBlueColor];
+    
+    saveButton = [[navBar sharedInstance] setSaveImageWithScale:0.7 WithPadding:1.0 isLeftSide:YES WithAction:^{
+        [self saveFinalSettings];
+    }];
+    saveButton.enabled = NO;
     self.navigationItem.rightBarButtonItem = saveButton;
+    
+    UIBarButtonItem *menuBar = [[navBar sharedInstance] setMenuImageWithScale:0.7 WithPadding:1.0 isLeftSide:YES WithAction:^{
+        if (![[Settings sharedInstance] isSettingsChanged:[self getFinalSettings] WithInitialSettings:initialSettings]) {
+            [self.menuContainerViewController toggleLeftSideMenuCompletion:nil];
+        }
+        else {
+            UIAlertAction *saveAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self saveFinalSettings];
+                
+            }];
+            
+            UIAlertAction *unsaveAction = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self resetUnSavedSettings];
+                
+            }];
+            
+            UIAlertController *alert = [[CodeSnip sharedInstance] createAlertWithAction:@"Settings not saved" withMessage:@"Do you want to save the changes?" withCancelButton:nil withTarget:self];
+            [alert addAction:saveAction];
+            [alert addAction:unsaveAction];
+        }
+    }];
+    self.navigationItem.leftBarButtonItem = menuBar;
+
+    
+//    saveButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks target:self action:@selector(saveFinalSettings)];
+    
+
 }
 
 - (void)loadInitialSettings
@@ -64,6 +98,15 @@
     
 }
 
+- (void)resetUnSavedSettings
+{
+    logoutTime = initialSettings.logoutTime;
+    incidentDeleteTime = initialSettings.incidentDeletionTime;
+    isAutomaticIncidentDeletionEnabled = initialSettings.isAutomaticDeletionEnabled;
+    isVisibleToOtherUsers = initialSettings.isVisibleToOtherUsers;
+    [self addDatasource];
+}
+
 - (void)addDatasource
 {
     settingsTitles = [[NSMutableArray alloc] initWithArray:@[@"Send groupwide message",
@@ -72,7 +115,7 @@
                                                              @"Automatic logout time",
                                                              @"Auto delete incidents",
                                                              @"Incident deletion time",
-                                                             @"Visible to other users"]];
+                                                             @"All users can see each other"]];
     
     settingsImages = [[NSMutableArray alloc] initWithArray:@[@"groupmessage.png",
                                                              @"maparea.png",
@@ -98,6 +141,7 @@
     }
     
     [self.settingsTableView reloadData];
+    [self setSaveButton];
 }
 
 #pragma mark - Pop animation Methods
@@ -122,9 +166,37 @@
 
 #pragma mark - IBActions
 
-- (void)saveSettings
+- (void)saveFinalSettings
 {
+    [WebServiceHandler sharedInstance].delegate = self;
     [[WebServiceHandler sharedInstance] saveSettings:[self getFinalSettings]];
+}
+
+- (void)didSaveSettings
+{
+    initialSettings = [self getFinalSettings];
+    [self setSaveButton];
+}
+
+- (void)requestFailedWithError:(NSError *)error
+{
+    [[CodeSnip sharedInstance] showAlert:@"Network Error" withMessage:[error localizedDescription] withTarget:self];
+}
+
+- (void)showErrorAlertWithTitle:(NSString *)title WithMessage:(NSString *)message
+{
+    [[CodeSnip sharedInstance] showAlert:title withMessage:message withTarget:self];
+}
+
+- (void)setSaveButton
+{
+    if ([[Settings sharedInstance] isSettingsChanged:[self getFinalSettings] WithInitialSettings:initialSettings]) {
+        saveButton.enabled = YES;
+    }
+    else {
+        saveButton.enabled = NO;
+    }
+
 }
 
 - (Settings *)getFinalSettings
@@ -132,13 +204,18 @@
     NSString *mapLatitude = [NSString stringWithFormat:@"%f", [UserDefaults getMapLocation].latitude];
     NSString *mapLongitude = [NSString stringWithFormat:@"%f", [UserDefaults getMapLocation].longitude];
     
+    NSString *min = [[UserDefaults getGPSTime] intValue]==1 ? @"min":@"mins";
+    NSString *GPSTime = [NSString stringWithFormat:@"%@ %@", [UserDefaults getGPSTime], min];
+    
+    
     Settings *saveSettings = [Settings new];
     saveSettings.mapCoordinate = CLLocationCoordinate2DMake([mapLatitude doubleValue], [mapLongitude doubleValue]);
     saveSettings.mapLocation = [UserDefaults getMapAddress];
-    saveSettings.isVisibleToOtherUsers = NO;
+    saveSettings.isVisibleToOtherUsers = isVisibleToOtherUsers;
     saveSettings.isAutomaticDeletionEnabled = isAutomaticIncidentDeletionEnabled;
     saveSettings.incidentDeletionTime = incidentDeleteTime;
     saveSettings.logoutTime = logoutTime;
+    saveSettings.gpsTime = GPSTime;
     
     return saveSettings;
 }
@@ -152,7 +229,7 @@
     UITableViewCell *selectedCell = [self.settingsTableView cellForRowAtIndexPath:indexPath];
     UILabel *title = (UILabel *)[selectedCell viewWithTag:2];
   
-    if ([title.text isEqualToString:@"Visible to other users"])
+    if ([title.text isEqualToString:@"All users can see each other"])
     {
         isVisibleToOtherUsers = sender.on;
         [self addDatasource];
@@ -199,6 +276,7 @@
         incidentDeleteTime = [dateFormat stringFromDate:sdate];
     }
     [self.settingsTableView reloadData];
+    [self setSaveButton];
 }
 
 #pragma mark - Tableview delegate and datasource
@@ -264,6 +342,27 @@
             [self configureTimeCell:cell AtIndexPath:indexPath];
         }
     }
+    else if (!isAutomaticIncidentDeletionEnabled&&[UserDefaults isManager])
+    {
+        if (indexPath.row==4)
+        {
+            MyIdentifier = @"Cell3";
+            cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier forIndexPath:indexPath];
+            [self configureSwitchCell:cell AtIndexPath:indexPath WithEnabledStatus:NO];
+        }
+        else if (indexPath.row==5)
+        {
+            MyIdentifier = @"Cell3";
+            cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier forIndexPath:indexPath];
+            [self configureSwitchCell:cell AtIndexPath:indexPath WithEnabledStatus:isVisibleToOtherUsers];
+        }
+        else
+        {
+            MyIdentifier = @"Cell2";
+            cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier forIndexPath:indexPath];
+            [self configureTimeCell:cell AtIndexPath:indexPath];
+        }
+    }
     else if (isAutomaticIncidentDeletionEnabled) {
         
         if (indexPath.row==4)
@@ -301,14 +400,14 @@
     if (isEnabled)
     {
         [settingsSwitch setOn:YES];
-        settingsImageView.alpha = 1.0;
-        settingsTitleLabel.textColor = [UIColor blackColor];
+//        settingsImageView.alpha = 1.0;
+//        settingsTitleLabel.textColor = [UIColor blackColor];
     }
     else
     {
         [settingsSwitch setOn:NO];
-        settingsImageView.alpha = 0.5;
-        settingsTitleLabel.textColor = [UIColor lightGrayColor];
+//        settingsImageView.alpha = 0.5;
+//        settingsTitleLabel.textColor = [UIColor lightGrayColor];
     }
 }
 
@@ -342,17 +441,61 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     selectedIndexPath = indexPath;
     [self hideDatePopupView];
+    
+    
+    UIAlertAction *saveAction = [UIAlertAction actionWithTitle:@"Save" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self saveFinalSettings];
+
+    }];
+    
+    UIAlertAction *continueGroupAction = [UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        GroupMessageViewController *nav = [self.storyboard instantiateViewControllerWithIdentifier:@"GroupMessageViewController"];
+        [self resetUnSavedSettings];
+        [self.navigationController pushViewController:nav animated:YES];
+        
+    }];
+
+    UIAlertAction *continueMapAction = [UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        MapAreaViewController *nav = [self.storyboard instantiateViewControllerWithIdentifier:@"MapAreaViewController"];
+      [self resetUnSavedSettings];
+      [self.navigationController pushViewController:nav animated:YES];
+        
+    }];
+
     switch (indexPath.row) {
+            
         case 0:
         {
-            GroupMessageViewController *nav = [self.storyboard instantiateViewControllerWithIdentifier:@"GroupMessageViewController"];
-            [self.navigationController pushViewController:nav animated:YES];
+            if ([[Settings sharedInstance] isSettingsChanged:[self getFinalSettings] WithInitialSettings:initialSettings])
+            {
+                NSLog(@"Changes Made");
+                UIAlertController *alert = [[CodeSnip sharedInstance] createAlertWithAction:@"Settings not saved" withMessage:@"Do you want to continue without saving the changes?" withCancelButton:nil withTarget:self];
+               [alert addAction:saveAction];
+               [alert addAction:continueGroupAction];
+            }
+            else {
+                NSLog(@"No Changes");
+                GroupMessageViewController *nav = [self.storyboard instantiateViewControllerWithIdentifier:@"GroupMessageViewController"];
+                [self.navigationController pushViewController:nav animated:YES];
+            }
+            
             break;
         }
         case 1:
         {
-            MapAreaViewController *nav = [self.storyboard instantiateViewControllerWithIdentifier:@"MapAreaViewController"];
-            [self.navigationController pushViewController:nav animated:YES];
+            if ([[Settings sharedInstance] isSettingsChanged:[self getFinalSettings] WithInitialSettings:initialSettings])
+            {
+                NSLog(@"Changes Made");
+                UIAlertController *alert = [[CodeSnip sharedInstance] createAlertWithAction:@"Settings not saved" withMessage:@"Do you want to continue without saving the changes?" withCancelButton:nil withTarget:self];
+                [alert addAction:saveAction];
+                [alert addAction:continueMapAction];
+            }
+            else {
+                NSLog(@"No Changes");
+                MapAreaViewController *nav = [self.storyboard instantiateViewControllerWithIdentifier:@"MapAreaViewController"];
+                nav.settings = [self getFinalSettings];
+                [self.navigationController pushViewController:nav animated:YES];
+            }
             break;
         }
         case 2:
@@ -384,19 +527,22 @@
         [UserDefaults setGPSTime:@"1"];
         [self resetTimer];
         [self.settingsTableView reloadData];
+        [self setSaveButton];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:@"5 mins" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         gpsTime = @"5 mins";
         [UserDefaults setGPSTime:@"5"];
         [self resetTimer];
         [self.settingsTableView reloadData];
+        [self setSaveButton];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:@"15 mins" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         gpsTime = @"15 mins";
         [UserDefaults setGPSTime:@"15"];
         [self resetTimer];
         [self.settingsTableView reloadData];
-    }]];
+        [self setSaveButton];
+   }]];
     
     [self presentViewController:alert animated:YES completion:nil];
 }

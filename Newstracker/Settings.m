@@ -20,4 +20,21 @@
     return model;
 }
 
+- (BOOL)isSettingsChanged:(Settings *)finalSettings WithInitialSettings:(Settings *)initialSettings
+{
+    NSLog(@"%f,%f:%f,%f", initialSettings.mapCoordinate.latitude, initialSettings.mapCoordinate.longitude, finalSettings.mapCoordinate.latitude, finalSettings.mapCoordinate.longitude);
+    NSLog(@"%@:%@", initialSettings.mapLocation, finalSettings.mapLocation);
+    NSLog(@"%@:%@", initialSettings.gpsTime, finalSettings.gpsTime);
+    NSLog(@"%@:%@", initialSettings.logoutTime, finalSettings.logoutTime);
+    NSLog(@"%@:%@", initialSettings.incidentDeletionTime, finalSettings.incidentDeletionTime);
+    NSLog(@"%i:%i", initialSettings.isAutomaticDeletionEnabled, finalSettings.isAutomaticDeletionEnabled);
+    NSLog(@"%i:%i", initialSettings.isVisibleToOtherUsers, finalSettings.isVisibleToOtherUsers);
+    
+    return ![finalSettings.logoutTime isEqualToString:initialSettings.logoutTime]||
+    ![finalSettings.incidentDeletionTime isEqualToString:initialSettings.incidentDeletionTime]||
+    !finalSettings.isAutomaticDeletionEnabled == initialSettings.isAutomaticDeletionEnabled||
+    !finalSettings.isVisibleToOtherUsers == initialSettings.isVisibleToOtherUsers;
+}
+
+
 @end

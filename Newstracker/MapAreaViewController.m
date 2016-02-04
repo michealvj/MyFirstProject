@@ -43,7 +43,7 @@
     
     //Setting Mapview
     
-    CGRect mapViewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.mapParentView.frame.size.height+64);
+    CGRect mapViewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height+65);
     
     gmapView = [[MapViewHelper sharedInstance] createMapWithCoordinate:setLocation WithFrame:mapViewFrame onTarget:self];
     
@@ -75,17 +75,12 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    if ([textField.text isEqualToString:@"Search"]) {
-        textField.text = @"";
-    }
+    textField.text = @"";
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    self.searchTableView.hidden = YES;
-    if ([textField.text isEqualToString:@""]) {
-        textField.text = @"Search";
-    }
+    self.searchTextField.text = [UserDefaults getMapAddress];
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
@@ -118,7 +113,7 @@
     NSString *browserKey = GOOGLE_SERVER_KEY1;
     NSString *urlString = [NSString stringWithFormat:
                            @"https://maps.googleapis.com/maps/api/place/autocomplete/json?input=%@&key=%@",searchText,browserKey];
-    [SVProgressHUD show];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     
     
@@ -159,12 +154,12 @@
              }
              [self.searchTableView reloadData];
          }
-         [SVProgressHUD dismiss];
+         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
      }
          failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
          [[CodeSnip sharedInstance] showAlert:@"Error" withMessage:[error localizedDescription] withTarget:self];
-         [SVProgressHUD dismiss];
+         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
      }];
     
 }
@@ -187,19 +182,38 @@
     location.text = [searchLocation objectAtIndex:indexPath.row];
     address.text = [searchFullAddress objectAtIndex:indexPath.row];
     
+    if ([[searchLocation objectAtIndex:indexPath.row] isEqualToString:@"No results found"]) {
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        tableView.scrollEnabled = NO;
+    }
+    else
+    {
+        cell.selectionStyle = UITableViewCellSelectionStyleGray;
+        tableView.scrollEnabled = YES;
+    }
+
+    
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    self.searchTableView.hidden = YES;
-    [self.searchTextField resignFirstResponder];
     
-    NSString *placeID = [searchPlaceIDs objectAtIndex:indexPath.row];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (![[searchLocation objectAtIndex:indexPath.row] isEqualToString:@"No results found"]) {
+        
+        self.searchTableView.hidden = YES;
+        [self.searchTextField resignFirstResponder];
+        
+        NSString *placeID = [searchPlaceIDs objectAtIndex:indexPath.row];
+        
+        NSString *geocodeURL = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/details/json?placeid=%@&key=%@", placeID, GOOGLE_SERVER_KEY1];
+        
+        [[WebServiceHandler sharedInstance] getGeocodeForURL:geocodeURL];
 
-    NSString *geocodeURL = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/details/json?placeid=%@&key=%@", placeID, GOOGLE_SERVER_KEY1];
-    
-    [[WebServiceHandler sharedInstance] getGeocodeForURL:geocodeURL];
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -227,10 +241,15 @@
     gmarker = [[MapViewHelper sharedInstance] addSimpleMarkerWithTitle:@"My Location" WithSnippet:nil WithCoordinate:model.coordinate onMap:gmapView];
     [gmapView setSelectedMarker:gmarker];
     [self animateMarkerToBottom:gmarker];
-    [[CodeSnip sharedInstance] showAlert:@"News Crew Tracker" withMessage:@"New Location is updated" withTarget:self];
+
+    
     [UserDefaults setMapCoordinateWithValue:model.coordinate];
     [UserDefaults setMapAddressWithValue:model.address];
     self.searchTextField.text = model.address;
+    
+    self.settings.mapCoordinate = model.coordinate;
+    self.settings.mapLocation = model.address;
+    [[WebServiceHandler sharedInstance] saveSettings:self.settings];
 }
 
 - (void)animateMarkerToBottom:(GMSMarker *)marker

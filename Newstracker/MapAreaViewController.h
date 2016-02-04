@@ -14,4 +14,5 @@
 @property (weak, nonatomic) IBOutlet UITextField *searchTextField;
 @property (weak, nonatomic) IBOutlet UITableView *searchTableView;
 @property (weak, nonatomic) IBOutlet UIView *searchView;
+@property (nonatomic) Settings *settings;
 @end
