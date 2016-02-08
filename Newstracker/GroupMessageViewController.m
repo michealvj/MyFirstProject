@@ -54,7 +54,20 @@
     [self animateConstraint:self.viewBottomConstraint WithValue:@(0)];
     [self.messageTextView resignFirstResponder];
     NSLog(@"Message: %@", self.messageTextView.text);
-    [[WebServiceHandler sharedInstance] sendGroupMessage:self.messageTextView.text];
+    if ([self.messageTextView hasText]&&![self.messageTextView.text isEqualToString:@"Enter Message here..."]) {
+        [WebServiceHandler sharedInstance].delegate = self;
+        [[WebServiceHandler sharedInstance] sendGroupMessage:self.messageTextView.text];
+    }
+    else {
+        [[CodeSnip sharedInstance] showAlert:@"News Crew Tracker" withMessage:@"Enter your message and send" withTarget:self];
+    }
+    
+}
+
+- (void)didSentGroupMessages
+{
+    self.charactersLabel.text = @"";
+    self.messageTextView.text = @"Enter Message here...";
 }
 
 #pragma mark - TextView Delegate Methods
@@ -87,7 +100,11 @@
 {
     if ([text isEqualToString:@"\n"]) {
         [self resetView];
-        self.charactersLabel.text = @"";
+        if (textView.text.length==0)
+        {
+            self.charactersLabel.text = @"";
+            textView.text = @"Enter Message here...";
+        }
         [textView resignFirstResponder];
         return NO;
     }
@@ -95,13 +112,41 @@
     {
         [self animateConstraint:self.viewBottomConstraint WithValue:@(0)];
         [textView resignFirstResponder];
+        self.charactersLabel.text = @"";
         textView.text = @"Enter Message here...";
         return NO;
     }
-    else {
+    else
+    {
         [textView becomeFirstResponder];
+        return [self canEnterTextView:textView WithString:text];
+    }
+}
+
+- (BOOL)canEnterTextView:(UITextView *)textView WithString:(NSString *)string
+{
+    NSString *message = [NSString stringWithFormat:@"%@%@", textView.text, string];
+
+    NSUInteger bytes = [message lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"%lu bytes", (unsigned long)bytes);
+    int maxCount = 250;
+    if (bytes<maxCount)
+    {
+        unsigned long remainingLetters = maxCount - bytes;
+        self.charactersLabel.text = remainingLetters==1 ?
+        [NSString stringWithFormat:@"%lu Character remaining", remainingLetters]:
+        [NSString stringWithFormat:@"%lu Characters remaining", remainingLetters];
+        
+        [self.charactersLabel setTextColor:[UIColor colorWithRed:21.0f/255.0f green:88.0f/255.0f blue:200.0f/255.0f alpha:1.0f]];
         return YES;
     }
+    else
+    {
+        self.charactersLabel.text = [NSString stringWithFormat:@"Characters exceeded"];
+        [self.charactersLabel setTextColor:[UIColor redColor]];
+        return NO;
+    }
+    
 }
 
 - (void)textViewDidChange:(UITextView *)textView
@@ -112,15 +157,17 @@
     int maxCount = 250;
     if (bytes<maxCount)
     {
-        self.charactersLabel.text = [NSString stringWithFormat:@"%lu Characters remaining", maxCount - (unsigned long)bytes];
+        unsigned long remainingLetters = maxCount - bytes;
+        self.charactersLabel.text = remainingLetters==1 ?
+        [NSString stringWithFormat:@"%lu Character remaining", remainingLetters]:
+        [NSString stringWithFormat:@"%lu Characters remaining", remainingLetters];
+        
         [self.charactersLabel setTextColor:[UIColor colorWithRed:21.0f/255.0f green:88.0f/255.0f blue:200.0f/255.0f alpha:1.0f]];
-        self.sendButton.userInteractionEnabled = YES;
     }
     else
     {
         self.charactersLabel.text = [NSString stringWithFormat:@"Characters exceeded"];
         [self.charactersLabel setTextColor:[UIColor redColor]];
-        self.sendButton.userInteractionEnabled = NO;
     }
 }
 

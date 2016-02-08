@@ -94,7 +94,7 @@
         }
         case 4:
         {
-            SettingsViewController *nav = [self.storyboard instantiateViewControllerWithIdentifier:@"SettingsViewController"];
+            MessageViewController *nav = [self.storyboard instantiateViewControllerWithIdentifier:@"MessageViewController"];
             UINavigationController *navigationController = self.menuContainerViewController.centerViewController;
             NSArray *controllers = [NSArray arrayWithObject:nav];
             navigationController.viewControllers = controllers;
@@ -104,10 +104,16 @@
         case 5:
         {
             [self.menuContainerViewController setMenuState:MFSideMenuStateClosed];
+            NSLog(@"about page");
+            break;
+       }
+        case 6:
+        {
+            [self.menuContainerViewController setMenuState:MFSideMenuStateClosed];
             [WebServiceHandler sharedInstance].delegate = self;
             [[WebServiceHandler sharedInstance] logOffUser];
             break;
-       }
+        }
         default:
             break;
     }

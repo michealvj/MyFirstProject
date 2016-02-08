@@ -108,7 +108,9 @@
      {
          NSLog(@"Error in Background update: %@", [error localizedDescription]);
      }];
-    [[NSOperationQueue mainQueue] addOperation:operation];
+    [operation setQueuePriority:NSOperationQueuePriorityLow];
+    [operation setQualityOfService:NSOperationQualityOfServiceBackground];
+    [[NSOperationQueue new] addOperation:operation];
     
 }
 
@@ -151,6 +153,8 @@
          [SVProgressHUD dismiss];
          [[UIApplication sharedApplication] endIgnoringInteractionEvents];
      }];
+    [operation setQueuePriority:NSOperationQueuePriorityVeryHigh];
+    [operation setQualityOfService:NSOperationQualityOfServiceUserInteractive];
     [[NSOperationQueue mainQueue] addOperation:operation];
     
 }
@@ -345,9 +349,9 @@
          }
          [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
      }];
-    [[NSOperationQueue mainQueue] addOperation:operation];
-    
-
+    [operation setQueuePriority:NSOperationQueuePriorityLow];
+    [operation setQualityOfService:NSOperationQualityOfServiceBackground];
+    [[NSOperationQueue new] addOperation:operation];
 }
 
 - (void)getMemberAndIncidentDetails
@@ -499,6 +503,25 @@
     
     [self postSoapMessage:soapMessage WithContentType:@"application/soap+xml; charset=utf-8"];
 }
+
+- (void)getAllMessages
+{
+    self.progressStatus = @"Loading Messages";
+    NSString *userID = [UserDefaults getUserID];
+    
+    NSString *soapBeginTag = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">\n<soap12:Body>\n"];
+    NSString *soapEndTag = [NSString stringWithFormat:@"\n</soap12:Body>\n</soap12:Envelope>"];
+    
+    NSMutableString *soapMessage = [[NSMutableString alloc] init];
+    [soapMessage appendString:soapBeginTag];
+    [soapMessage appendString:[NSString stringWithFormat:@"<GetGroupMessages xmlns=\"http://tempuri.org/\">\n"]];
+    [soapMessage appendString:[NSString stringWithFormat:@"<UserId>%@</UserId>\n", userID]];
+    [soapMessage appendString:[NSString stringWithFormat:@"</GetGroupMessages>"]];
+    [soapMessage appendString:soapEndTag];
+    
+    [self postSoapMessage:soapMessage WithContentType:@"application/soap+xml; charset=utf-8"];
+}
+
 
 - (void)getIncidentNearUser:(NSString *)incidentID
 {
@@ -664,6 +687,7 @@
     
     else if ([currentElementName isEqualToString:@"GetMapResult"])
     {
+        //Run UI Updates
         if (isRefreshingMap)
         {
             [self parseMemberAndIncidentDetailsData:json];
@@ -741,6 +765,10 @@
     {
         [self parseGroupMessage:json];
     }
+    else if ([currentElementName isEqualToString:@"GetGroupMessagesResult"])
+    {
+        [self parseAllMessages:json];
+    }
 }
 
 #pragma mark - Parse Received Data
@@ -773,15 +801,47 @@
     if ([errorStatus isEqualToString:@"Failed"])
     {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [SVProgressHUD showErrorWithStatus:@"Message not sent"];
+            [SVProgressHUD showErrorWithStatus:data[@"Message"]];
         });
     }
     else if ([errorStatus isEqualToString:@"Success"])
     {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if ([self.delegate respondsToSelector:@selector(didSentGroupMessages)]) {
+                [self.delegate didSentGroupMessages];
+            }
             [SVProgressHUD showSuccessWithStatus:@"Message sent"];
         });
+        
+    }
+}
 
+- (void)parseAllMessages:(id)data
+{
+    NSString *errorStatus = data[@"Status"];
+    
+    if ([errorStatus isEqualToString:@"Failed"])
+    {
+        if ([self.delegate respondsToSelector:@selector(showErrorAlertWithTitle:WithMessage:)]) {
+            [self.delegate showErrorAlertWithTitle:@"News Crew Tracker" WithMessage:data[@"Message"]];
+        }
+    }
+    else if ([errorStatus isEqualToString:@"Success"])
+    {
+        NSMutableArray *messagesList = [[NSMutableArray alloc] init];
+        NSArray *allMessages = data[@"Message"];
+        for (NSDictionary *message in allMessages)
+        {
+            Message *newMessage = [Message new];
+            newMessage.senderID = message[@"UserId"];
+            newMessage.senderName = message[@"SenderName"];
+            newMessage.sentMessage = message[@"Message"];
+            newMessage.sentTime = message[@"Time"];
+            [messagesList addObject:newMessage];
+        }
+        if ([self.delegate respondsToSelector:@selector(didReceiveGroupMessages:)]) {
+            [self.delegate didReceiveGroupMessages:messagesList];
+        }
     }
 }
 

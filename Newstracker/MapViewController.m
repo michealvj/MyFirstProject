@@ -61,6 +61,7 @@
     [WebServiceHandler sharedInstance].delegate = self;
 
     //Adding Marker
+    
     [[WebServiceHandler sharedInstance] getMemberAndIncidentDetails];
     
     //setting Flags

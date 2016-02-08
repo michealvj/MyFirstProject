@@ -123,7 +123,7 @@
                                                              @"automaticlogout.png",
                                                              @"incidentdeletion.png",
                                                              @"incidentdeletion.png",
-                                                             @"incidentdeletion.png"]];
+                                                             @"eye.png"]];
     
     if (!isAutomaticIncidentDeletionEnabled&&![UserDefaults isManager]) {
         [settingsTitles removeObjectAtIndex:6];

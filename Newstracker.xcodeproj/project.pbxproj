@@ -47,6 +47,12 @@
 		042CE4D91C1AFE5E00503F62 /* sideclose.png in Resources */ = {isa = PBXBuildFile; fileRef = 042CE4D71C1AFE5E00503F62 /* sideclose.png */; };
 		043372CA1C5A51510061DBA6 /* UIBarButtonItem+utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 043372C91C5A51510061DBA6 /* UIBarButtonItem+utils.m */; };
 		043372CD1C5B594C0061DBA6 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 043372CC1C5B594C0061DBA6 /* Settings.m */; };
+		043897711C688D430054A3BC /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 043897701C688D430054A3BC /* Message.m */; };
+		043897741C6891380054A3BC /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 043897731C6891380054A3BC /* MessageViewController.m */; };
+		043897791C68B3540054A3BC /* clock-black.png in Resources */ = {isa = PBXBuildFile; fileRef = 043897761C68B3540054A3BC /* clock-black.png */; };
+		0438977A1C68B3540054A3BC /* clock-blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 043897771C68B3540054A3BC /* clock-blue.png */; };
+		0438977B1C68B3540054A3BC /* new.png in Resources */ = {isa = PBXBuildFile; fileRef = 043897781C68B3540054A3BC /* new.png */; };
+		0438977E1C68CCA80054A3BC /* timeblack.png in Resources */ = {isa = PBXBuildFile; fileRef = 0438977D1C68CCA80054A3BC /* timeblack.png */; };
 		043C17F91C23D41100FB242E /* UserAssignTableButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 043C17F81C23D41100FB242E /* UserAssignTableButton.m */; };
 		043C17FD1C23DA2800FB242E /* greecircle.png in Resources */ = {isa = PBXBuildFile; fileRef = 043C17FB1C23DA2800FB242E /* greecircle.png */; };
 		043C17FE1C23DA2800FB242E /* greycircle.png in Resources */ = {isa = PBXBuildFile; fileRef = 043C17FC1C23DA2800FB242E /* greycircle.png */; };
@@ -69,6 +75,10 @@
 		04650B501C173D7100007047 /* search.png in Resources */ = {isa = PBXBuildFile; fileRef = 04650B4B1C173D7100007047 /* search.png */; };
 		0468690B1C33C96000719AE0 /* UserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 0468690A1C33C96000719AE0 /* UserDefaults.m */; };
 		047D5EDF1C31034800807552 /* MapAreaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 047D5EDE1C31034800807552 /* MapAreaViewController.m */; };
+		0482CC901C648108001C94A7 /* pushIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 0482CC8F1C648108001C94A7 /* pushIcon.png */; };
+		0482CC931C64C7EA001C94A7 /* MyPushView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0482CC921C64C7EA001C94A7 /* MyPushView.m */; };
+		0482CC961C64D738001C94A7 /* eye.png in Resources */ = {isa = PBXBuildFile; fileRef = 0482CC951C64D738001C94A7 /* eye.png */; };
+		0482CC981C64D754001C94A7 /* message.png in Resources */ = {isa = PBXBuildFile; fileRef = 0482CC971C64D754001C94A7 /* message.png */; };
 		048C26351C3D19C300E95215 /* usericon.png in Resources */ = {isa = PBXBuildFile; fileRef = 048C26341C3D19C300E95215 /* usericon.png */; };
 		048C26371C3D19DE00E95215 /* menu.png in Resources */ = {isa = PBXBuildFile; fileRef = 048C26361C3D19DE00E95215 /* menu.png */; };
 		048C263D1C3D284E00E95215 /* question.png in Resources */ = {isa = PBXBuildFile; fileRef = 048C263C1C3D284E00E95215 /* question.png */; };
@@ -184,6 +194,14 @@
 		043372C91C5A51510061DBA6 /* UIBarButtonItem+utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+utils.m"; sourceTree = "<group>"; };
 		043372CB1C5B594C0061DBA6 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
 		043372CC1C5B594C0061DBA6 /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
+		0438976F1C688D430054A3BC /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
+		043897701C688D430054A3BC /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
+		043897721C6891380054A3BC /* MessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageViewController.h; sourceTree = "<group>"; };
+		043897731C6891380054A3BC /* MessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageViewController.m; sourceTree = "<group>"; };
+		043897761C68B3540054A3BC /* clock-black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clock-black.png"; sourceTree = "<group>"; };
+		043897771C68B3540054A3BC /* clock-blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clock-blue.png"; sourceTree = "<group>"; };
+		043897781C68B3540054A3BC /* new.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = new.png; sourceTree = "<group>"; };
+		0438977D1C68CCA80054A3BC /* timeblack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = timeblack.png; sourceTree = "<group>"; };
 		043C17F71C23D41100FB242E /* UserAssignTableButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserAssignTableButton.h; sourceTree = "<group>"; };
 		043C17F81C23D41100FB242E /* UserAssignTableButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserAssignTableButton.m; sourceTree = "<group>"; };
 		043C17FB1C23DA2800FB242E /* greecircle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = greecircle.png; sourceTree = "<group>"; };
@@ -224,6 +242,11 @@
 		0468690A1C33C96000719AE0 /* UserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDefaults.m; sourceTree = "<group>"; };
 		047D5EDD1C31034800807552 /* MapAreaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapAreaViewController.h; sourceTree = "<group>"; };
 		047D5EDE1C31034800807552 /* MapAreaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MapAreaViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		0482CC8F1C648108001C94A7 /* pushIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pushIcon.png; sourceTree = "<group>"; };
+		0482CC911C64C7EA001C94A7 /* MyPushView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPushView.h; sourceTree = "<group>"; };
+		0482CC921C64C7EA001C94A7 /* MyPushView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPushView.m; sourceTree = "<group>"; };
+		0482CC951C64D738001C94A7 /* eye.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = eye.png; sourceTree = "<group>"; };
+		0482CC971C64D754001C94A7 /* message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = message.png; sourceTree = "<group>"; };
 		048C26341C3D19C300E95215 /* usericon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = usericon.png; sourceTree = "<group>"; };
 		048C26361C3D19DE00E95215 /* menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu.png; sourceTree = "<group>"; };
 		048C263C1C3D284E00E95215 /* question.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = question.png; sourceTree = "<group>"; };
@@ -435,6 +458,26 @@
 			name = Category;
 			sourceTree = "<group>";
 		};
+		043897751C68914F0054A3BC /* Message View Controller */ = {
+			isa = PBXGroup;
+			children = (
+				043897721C6891380054A3BC /* MessageViewController.h */,
+				043897731C6891380054A3BC /* MessageViewController.m */,
+			);
+			name = "Message View Controller";
+			sourceTree = "<group>";
+		};
+		0438977C1C68B3590054A3BC /* Message */ = {
+			isa = PBXGroup;
+			children = (
+				0438977D1C68CCA80054A3BC /* timeblack.png */,
+				043897761C68B3540054A3BC /* clock-black.png */,
+				043897771C68B3540054A3BC /* clock-blue.png */,
+				043897781C68B3540054A3BC /* new.png */,
+			);
+			name = Message;
+			sourceTree = "<group>";
+		};
 		043C17FA1C23D42800FB242E /* Custom Button */ = {
 			isa = PBXGroup;
 			children = (
@@ -497,6 +540,8 @@
 			isa = PBXGroup;
 			children = (
 				046138031C102DFC001F574D /* ModalObjects.h */,
+				0438976F1C688D430054A3BC /* Message.h */,
+				043897701C688D430054A3BC /* Message.m */,
 				043372CB1C5B594C0061DBA6 /* Settings.h */,
 				043372CC1C5B594C0061DBA6 /* Settings.m */,
 				040E0EDB1C281E6C000EDFD2 /* User.h */,
@@ -529,6 +574,8 @@
 		04650B421C172CC500007047 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				0438977C1C68B3590054A3BC /* Message */,
+				0482CC8F1C648108001C94A7 /* pushIcon.png */,
 				043C17FF1C23DA2D00FB242E /* Online/Offline User */,
 				042AF5941C205C8C004291EE /* Splash */,
 				042CE4DB1C1AFE6400503F62 /* SideBar */,
@@ -546,6 +593,7 @@
 		04650B431C172CE900007047 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
+				0482CC971C64D754001C94A7 /* message.png */,
 				048C26361C3D19DE00E95215 /* menu.png */,
 				04BD0FB61C1EE2A400B37ACB /* aboutus.png */,
 				04BD0FB71C1EE2A400B37ACB /* incident.png */,
@@ -579,6 +627,15 @@
 			name = "Map Area View Controller";
 			sourceTree = "<group>";
 		};
+		0482CC941C64C7EF001C94A7 /* MyPushView */ = {
+			isa = PBXGroup;
+			children = (
+				0482CC911C64C7EA001C94A7 /* MyPushView.h */,
+				0482CC921C64C7EA001C94A7 /* MyPushView.m */,
+			);
+			name = MyPushView;
+			sourceTree = "<group>";
+		};
 		048C263B1C3D27F000E95215 /* Forgot View Controller */ = {
 			isa = PBXGroup;
 			children = (
@@ -602,6 +659,7 @@
 			isa = PBXGroup;
 			children = (
 				04E6BB741C27CA4300EE3AB6 /* automaticlogout.png */,
+				0482CC951C64D738001C94A7 /* eye.png */,
 				04E6BB751C27CA4300EE3AB6 /* gps.png */,
 				04E6BB761C27CA4300EE3AB6 /* groupmessage.png */,
 				04E6BB771C27CA4300EE3AB6 /* incidentdeletion.png */,
@@ -665,9 +723,11 @@
 		04EF68731C0F0EE100EC8A06 /* Newstracker */ = {
 			isa = PBXGroup;
 			children = (
+				0482CC941C64C7EF001C94A7 /* MyPushView */,
 				046138021C1029BB001F574D /* Modal Objects */,
 				04227F8D1C452FC200166C7A /* Background Location Update */,
 				041A38FB1C142F2E0060A61D /* Webservice */,
+				041A38FC1C142F400060A61D /* Navigation */,
 				04EF68AF1C0F244D00EC8A06 /* Utilities */,
 				04B5095C1C180E6500F10E8C /* MarkerIcon */,
 				043C17FA1C23D42800FB242E /* Custom Button */,
@@ -683,6 +743,7 @@
 				04E6BB841C27CAE500EE3AB6 /* Settings List View Controller */,
 				04E6BB881C27E1C000EE3AB6 /* Group Message View Controller */,
 				047D5EE01C31035300807552 /* Map Area View Controller */,
+				043897751C68914F0054A3BC /* Message View Controller */,
 				04EF687D1C0F0EE100EC8A06 /* Main.storyboard */,
 				04F2B5411C3A36EC0010162B /* MyProtocolMethod.h */,
 				04EF68831C0F0EE100EC8A06 /* Assets.xcassets */,
@@ -725,7 +786,6 @@
 			children = (
 				042AF5731C1FF3F7004291EE /* Fonts */,
 				04650B421C172CC500007047 /* Images */,
-				041A38FC1C142F400060A61D /* Navigation */,
 				046137FD1C101A10001F574D /* Maps */,
 				046137FE1C1028B6001F574D /* Core Data */,
 				046137E41C101662001F574D /* CodeSnip.h */,
@@ -890,6 +950,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0438977A1C68B3540054A3BC /* clock-blue.png in Resources */,
 				04E6BB8B1C27E3CF00EE3AB6 /* home.png in Resources */,
 				04B955AF1C34F9E10078C8CA /* edit.png in Resources */,
 				04E6BB8C1C27E3CF00EE3AB6 /* ltarrow.png in Resources */,
@@ -904,6 +965,8 @@
 				04650B501C173D7100007047 /* search.png in Resources */,
 				042AF5911C205C87004291EE /* splashicon.png in Resources */,
 				04EF687F1C0F0EE100EC8A06 /* Main.storyboard in Resources */,
+				0482CC961C64D738001C94A7 /* eye.png in Resources */,
+				0438977B1C68B3540054A3BC /* new.png in Resources */,
 				043C17FD1C23DA2800FB242E /* greecircle.png in Resources */,
 				04BD0FBC1C1EE2A400B37ACB /* aboutus.png in Resources */,
 				042AF5701C1FF3F2004291EE /* AllerDisplay.ttf in Resources */,
@@ -914,6 +977,7 @@
 				042AF5861C204E5E004291EE /* arrow.png in Resources */,
 				04BD0FB11C1EC55200B37ACB /* blackpin.png in Resources */,
 				042AF56D1C1FDDF2004291EE /* password.png in Resources */,
+				0482CC901C648108001C94A7 /* pushIcon.png in Resources */,
 				045E573B1C293B3E00CA4462 /* searchbluepin.png in Resources */,
 				042C23681C15E50D0006C6D6 /* MemberIcon.xib in Resources */,
 				04BD0FBD1C1EE2A400B37ACB /* incident.png in Resources */,
@@ -923,6 +987,8 @@
 				043C17FE1C23DA2800FB242E /* greycircle.png in Resources */,
 				04AEE4651C299E08001D536A /* Roboto-Medium.ttf in Resources */,
 				04E6BB7C1C27CA4300EE3AB6 /* groupmessage.png in Resources */,
+				0482CC981C64D754001C94A7 /* message.png in Resources */,
+				043897791C68B3540054A3BC /* clock-black.png in Resources */,
 				04E6BB7A1C27CA4300EE3AB6 /* automaticlogout.png in Resources */,
 				04BD0FC01C1EE2A400B37ACB /* settings.png in Resources */,
 				048C26441C3E45BE00E95215 /* whitepin.png in Resources */,
@@ -931,6 +997,7 @@
 				048C26431C3E45BE00E95215 /* searchwhite.png in Resources */,
 				042AF56B1C1FDDF2004291EE /* email.png in Resources */,
 				04650B4D1C173D7100007047 /* greenpin.png in Resources */,
+				0438977E1C68CCA80054A3BC /* timeblack.png in Resources */,
 				048C26371C3D19DE00E95215 /* menu.png in Resources */,
 				04AEE4681C299E08001D536A /* Roboto-Regular.ttf in Resources */,
 				042CE4D91C1AFE5E00503F62 /* sideclose.png in Resources */,
@@ -1034,6 +1101,7 @@
 				042C3C2C1C56085E001EE815 /* UIColor+myColors.m in Sources */,
 				042AF5811C203F42004291EE /* IncidentListViewController.m in Sources */,
 				04EF687C1C0F0EE100EC8A06 /* MapViewController.m in Sources */,
+				043897711C688D430054A3BC /* Message.m in Sources */,
 				046137FB1C101662001F574D /* WebServiceHandler.m in Sources */,
 				04E6BB871C27E1B900EE3AB6 /* GroupMessageViewController.m in Sources */,
 				04EF68821C0F0EE100EC8A06 /* Newstracker.xcdatamodeld in Sources */,
@@ -1044,6 +1112,7 @@
 				047D5EDF1C31034800807552 /* MapAreaViewController.m in Sources */,
 				046137F71C101662001F574D /* CurrentLocation.m in Sources */,
 				04EF68791C0F0EE100EC8A06 /* AppDelegate.m in Sources */,
+				0482CC931C64C7EA001C94A7 /* MyPushView.m in Sources */,
 				04EF68761C0F0EE100EC8A06 /* main.m in Sources */,
 				042AF57C1C202E2F004291EE /* OnOffUsers.m in Sources */,
 				0468690B1C33C96000719AE0 /* UserDefaults.m in Sources */,
@@ -1054,6 +1123,7 @@
 				041A5E931C11D1A600B2B7AB /* SideBar.m in Sources */,
 				046137FA1C101662001F574D /* navBar.m in Sources */,
 				04227F8C1C452FBC00166C7A /* LocationShareModel.m in Sources */,
+				043897741C6891380054A3BC /* MessageViewController.m in Sources */,
 				04E6BB831C27CAD500EE3AB6 /* SettingsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

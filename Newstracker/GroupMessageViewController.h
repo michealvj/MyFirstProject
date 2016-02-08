@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "WebServiceHandler.h"
 
-@interface GroupMessageViewController : UIViewController <UITextViewDelegate>
+@interface GroupMessageViewController : UIViewController <UITextViewDelegate, WebServiceHandlerDelegate>
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *viewBottomConstraint;
 @property (weak, nonatomic) IBOutlet UILabel *charactersLabel;
 @property (weak, nonatomic) IBOutlet UIButton *sendButton;

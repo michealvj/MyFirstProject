@@ -34,6 +34,10 @@
 - (void)didReceiveUserIncidents:(id)data;
 - (void)isUserAssignedToIncident:(NSArray *)isAssignedArray;
 - (void)didSaveSettings;
+- (void)didReceiveGroupMessages:(id)data;
+- (void)didSentGroupMessages;
+
+
 
 @required
 - (void)requestFailedWithError:(NSError*)error;
@@ -76,4 +80,5 @@
 - (void)getSettingsWithSuccess:(void (^)(Settings *settings))success WithError:(void (^)(NSString *error))failure;
 
 - (void)sendGroupMessage:(NSString *)message;
+- (void)getAllMessages;
 @end

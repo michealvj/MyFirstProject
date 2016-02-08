@@ -29,11 +29,17 @@
     NSLog(@"%@:%@", initialSettings.incidentDeletionTime, finalSettings.incidentDeletionTime);
     NSLog(@"%i:%i", initialSettings.isAutomaticDeletionEnabled, finalSettings.isAutomaticDeletionEnabled);
     NSLog(@"%i:%i", initialSettings.isVisibleToOtherUsers, finalSettings.isVisibleToOtherUsers);
+    BOOL isChanged;
+    if (initialSettings.incidentDeletionTime&&initialSettings.isVisibleToOtherUsers&&initialSettings.isAutomaticDeletionEnabled) {
+        isChanged = ![finalSettings.incidentDeletionTime isEqualToString:initialSettings.incidentDeletionTime]||
+        !finalSettings.isAutomaticDeletionEnabled == initialSettings.isAutomaticDeletionEnabled||
+        !finalSettings.isVisibleToOtherUsers == initialSettings.isVisibleToOtherUsers;
+    }
+    else {
+        isChanged = NO;
+    }
     
-    return ![finalSettings.logoutTime isEqualToString:initialSettings.logoutTime]||
-    ![finalSettings.incidentDeletionTime isEqualToString:initialSettings.incidentDeletionTime]||
-    !finalSettings.isAutomaticDeletionEnabled == initialSettings.isAutomaticDeletionEnabled||
-    !finalSettings.isVisibleToOtherUsers == initialSettings.isVisibleToOtherUsers;
+    return isChanged;
 }
 
 

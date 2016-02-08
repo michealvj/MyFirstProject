@@ -8,7 +8,7 @@
 
 
 #import "AppDelegate.h"
-#import "NZAlertView.h"
+#import "MyPushView.h"
 
 @interface AppDelegate ()
 
@@ -32,7 +32,7 @@
     [application registerUserNotificationSettings:settings];
     
     [self backgroundLocationUpdate];
-   
+    
     return YES;
 }
 
@@ -119,51 +119,26 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     NSString *pushMessage = userInfo[@"aps"][@"alert"];
-    NSString *pushTitle = [NSString stringWithFormat:@"Message from\n%@", userInfo[@"SendBy"]];
+    NSString *userName = userInfo[@"SendBy"];
+    NSString *time = userInfo[@"sent"];
+    NSString *pushTitle = [NSString stringWithFormat:@"%@ sent a message!!", userName];
+    NSString *alertTitle = [NSString stringWithFormat:@"%@\n%@", userName, time];
+    
     NSLog(@"Push Message: %@", userInfo);
     
-    [[CodeSnip sharedInstance] showAlert:pushTitle withMessage:pushMessage withTarget:self.window.rootViewController];
+//    [[CodeSnip sharedInstance] showAlert:pushTitle withMessage:pushMessage withTarget:self.window.rootViewController];
     
-//    UIApplicationState state = [application applicationState];
-//    if (state == UIApplicationStateActive) {
-//        
-//        [self createPushView:pushTitle];
-//        [self animatePushView];
-//    }
-}
-
-- (void)createPushView:(NSString *)message
-{
-    pushView = [[UIView alloc]init];
-    pushView.frame = CGRectMake(0, -70, self.window.frame.size.width, 70);
-    pushView.backgroundColor = [UIColor colorWithRed:(229/255.0) green:(70/255.0) blue:(27/255.0) alpha:1];
-    
-    [self.window addSubview:pushView];
-    
-    
-    UIImageView * logoimage = [[UIImageView alloc]initWithFrame:CGRectMake(10,20 ,40,40)];
-    logoimage.image = [UIImage imageNamed:@"placeholder.png"];
-    [pushView addSubview:logoimage];
-    
-    pushLabel = [[UILabel alloc]initWithFrame:CGRectMake(logoimage.frame.size.width+20,10 , pushView.frame.size.width, pushView.frame.size.height-5)];
-    pushLabel.text = message;
-    [pushLabel setFont:[UIFont fontWithName:@"Roboto-Regular" size:14.0]];
-    pushLabel.textColor = [UIColor whiteColor];
-    pushLabel.numberOfLines= 8;
-    [pushView addSubview:pushLabel];
-
-}
-
-- (void)animatePushView
-{
-    [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-        pushView.frame = CGRectMake(self.window.frame.origin.x, self.window.frame.origin.y, self.window.frame.size.width, 70);
+    UIApplicationState state = [application applicationState];
+    if (state == UIApplicationStateActive) {
+       MyPushView *push = [[MyPushView alloc] initWithTitle:pushTitle WithMessage:pushMessage];
+       [push show];
     }
-                     completion:^(BOOL finished)
-     {
-         
-     }];
+    else {
+        [[CodeSnip sharedInstance] showAlert:alertTitle withMessage:pushMessage withTarget:self.window.rootViewController];
+    }
 }
+
+
 
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
 {
