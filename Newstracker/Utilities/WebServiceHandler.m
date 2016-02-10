@@ -62,19 +62,17 @@
     
     [manager GET:URL parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
+         [self parseTimeDistanceData:responseObject];
          [SVProgressHUD dismiss];
          [[UIApplication sharedApplication] endIgnoringInteractionEvents];
-         [self parseTimeDistanceData:responseObject];
-         
      }
          failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
-         [SVProgressHUD dismiss];
-         [[UIApplication sharedApplication] endIgnoringInteractionEvents];
          if ([self.delegate respondsToSelector:@selector(requestFailedWithError:)]) {
              [self.delegate requestFailedWithError:error];
          }
-         
+         [SVProgressHUD dismiss];
+         [[UIApplication sharedApplication] endIgnoringInteractionEvents];
      }];
     
 }
@@ -231,7 +229,7 @@
     CLLocationCoordinate2D currentCoordinate = [[LocationTracker sharedInstance] getCurrentLocation].location.coordinate;
     
     NSString *osVersion = [[UIDevice currentDevice] systemVersion];
-    NSString *osType = @"iOS";
+    NSString *osType = [[UIDevice currentDevice] systemName];
     NSString *deviceName = [[UIDevice currentDevice] model];
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     NSString *latitude = [NSString stringWithFormat:@"%f", currentCoordinate.latitude];
@@ -662,7 +660,7 @@
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(nullable NSString *)namespaceURI qualifiedName:(nullable NSString *)qName attributes:(NSDictionary<NSString *, NSString *> *)attributeDict
 {
     currentElementName = elementName;
-    NSLog(@"currentElementName: %@", elementName);
+//    NSLog(@"currentElementName: %@", elementName);
 }
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
@@ -672,7 +670,7 @@
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:objectData
                                                          options:NSJSONReadingMutableContainers
                                                            error:&jsonError];
-    NSLog(@"Parsed Json: %@", json);
+//    NSLog(@"Parsed Json: %@", json);
     
     if ([currentElementName isEqualToString:@"UserLoginResult"])
     {
@@ -755,6 +753,7 @@
         if ([json[@"Status"] isEqualToString:@"Success"])
         {
             [[LocationTracker sharedLocationManager] stopUpdatingLocation];
+            NSLog(@"Current Location Updated");
         }
     }
     else if ([currentElementName isEqualToString:@"GetSettingsResult"])
@@ -1212,7 +1211,7 @@
         NSMutableArray *memberList = [[NSMutableArray alloc] init];
         NSArray *jsonMemberList = data[@"Message"][@"lstUsers"];
         
-        NSLog(@"Grouping");
+        
         int range = 500;
         //grouping
         NSMutableArray *usersAdded = [[NSMutableArray alloc] init];
@@ -1260,12 +1259,6 @@
             }
             if (userNames.count>0)
             {
-             
-                NSLog(@"%@", userNames);
-                NSLog(@"%@", userIDs);
-                NSLog(@"%f:%f", firstCoordinate.latitude, firstCoordinate.longitude);
-                NSLog(@"YES");
-
                 GroupMember *detail = [GroupMember new];
                 detail.userNames = userNames;
                 detail.userID = userIDs;
@@ -1297,6 +1290,7 @@
 //        }
         
         if ([self.delegate respondsToSelector:@selector(didReceiveMemberDetails:)]) {
+             NSLog(@"members loaded");
              [self.delegate didReceiveMemberDetails:memberList];
         }
     
@@ -1321,6 +1315,7 @@
             [incidentList addObject:detail];
         }
         if ([self.delegate respondsToSelector:@selector(didReceiveIncidentDetails:)]) {
+            NSLog(@"incidents loaded");
             [self.delegate didReceiveIncidentDetails:incidentList];
         }
         
@@ -1330,7 +1325,6 @@
 - (void)parseGeocodeData:(id)data
 {
     NSString *geocodeStatus = data[@"status"];
-    NSLog(@"geocode: %@", data);
     
     if ([geocodeStatus isEqualToString:@"OK"]) {
         NSString *latitude = data[@"result"][@"geometry"][@"location"][@"lat"];
@@ -1340,7 +1334,11 @@
         
         Geocode *model = [Geocode sharedInstance];
         model.coordinate = CLLocationCoordinate2DMake([latitude doubleValue], [longitude doubleValue]);
-        model.address = [NSString stringWithFormat:@"%@, %@", placeName, formattedAddress];
+        if ([formattedAddress containsString:placeName]) {
+            model.address = [NSString stringWithFormat:@"%@", formattedAddress];
+        } else {
+             model.address = [NSString stringWithFormat:@"%@, %@", placeName, formattedAddress];
+        }
         
         if ([self.delegate respondsToSelector:@selector(requestLoadedWithGeocodeData:)]) {
             [self.delegate requestLoadedWithGeocodeData:model];
@@ -1373,7 +1371,7 @@
     else
     {
         if ([self.delegate respondsToSelector:@selector(showErrorAlertWithTitle:WithMessage:)]) {
-            [self.delegate showErrorAlertWithTitle:@"Error" WithMessage:@"Cannot reach that Location"];
+            [self.delegate showErrorAlertWithTitle:@"Error" WithMessage:@"Cannot find duration"];
         }
     }
 }

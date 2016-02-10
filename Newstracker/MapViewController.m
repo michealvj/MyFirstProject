@@ -16,9 +16,9 @@
 #define TOPCOLOR [UIColor colorWithRed:36.0f/255.0f green:198.0f/255.0f blue:220.0f/255.0f alpha:1.0f]
 #define BOTCOLOR [UIColor colorWithRed:18.0f/255.0f green:82.0f/255.0f blue:190.0f/255.0f alpha:1.0f]
 
-#define INCIDENT_TITLE @"Type incident title here..."
-#define INCIDENT_ADDRESS @"Tap to search incident location..."
-#define INCIDENT_DESCRIPTION @"Type incident description here..."
+#define INCIDENT_TITLE @"Enter incident title"
+#define INCIDENT_ADDRESS @"Enter incident location"
+#define INCIDENT_DESCRIPTION @"Enter incident description"
 
 
 @import GoogleMaps;
@@ -61,7 +61,6 @@
     [WebServiceHandler sharedInstance].delegate = self;
 
     //Adding Marker
-    
     [[WebServiceHandler sharedInstance] getMemberAndIncidentDetails];
     
     //setting Flags
@@ -75,13 +74,11 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [[LocationTracker sharedInstance] startLocationTracking];
-    NSLog(@"start location tracking");
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [[LocationTracker sharedInstance] stopLocationTracking];
-    NSLog(@"stop location tracking");
 }
 
 - (IBAction)MyLocation:(id)sender {
@@ -91,6 +88,15 @@
     {
         [gmapView animateToLocation:location.location.coordinate];
     }
+}
+
+- (void)loadOfflineData
+{
+    NSArray *memberArray = [UserDefaults getMemberData];
+    NSArray *incidentArray = [UserDefaults getIncidentData];
+
+    [self loadMemberMarkersWithData:memberArray];
+    [self loadIncidentMarkersWithData:incidentArray];
 }
 
 #pragma mark - Navigation Setup
@@ -286,8 +292,6 @@
     }
     else if ([marker.snippet isEqualToString:@"MemberSelected"])
     {
-        
-        NSLog(@"username: %@",marker.title);
         //Show User Details
         NSString *userID = [[marker.userData valueForKey:@"userID"] firstObject];
         selectedUserMarker = marker;
@@ -306,7 +310,6 @@
     else if ([marker.snippet isEqualToString:@"UnreachMemberSelected"])
     {
         
-        NSLog(@"Unreached username: %@",marker.title);
         //Show unreach username Details
         NSString *userID = [[marker.userData valueForKey:@"userID"] firstObject];
         selectedUserMarker = marker;
@@ -327,7 +330,6 @@
     }
     else if ([marker.snippet isEqualToString:@"GroupMemberSelected"])
     {
-        NSLog(@"groupmembers: %@",marker.userData);
         //Show Side Bar With Group Member Details
         [self loadMorePeopleViewForMarker:marker];
         [self showMorePeopleView];
@@ -343,7 +345,8 @@
     }
     else if ([marker.snippet isEqualToString:@"IncidentSelected"])
     {
-        NSLog(@"Incident: %@",marker.title);
+        //Show Incident Details
+
     }
     if ([marker.snippet isEqualToString:@"Currentuser"])
     {
@@ -355,7 +358,6 @@
     }
     else if ([marker.snippet isEqualToString:@"CurrentuserSelected"])
     {
-        NSLog(@"current user: %@",marker.title);
         //Show Current user details
         NSString *userID = [[marker.userData valueForKey:@"userID"] firstObject];
         selectedUserMarker = marker;
@@ -372,8 +374,6 @@
     //Show Incident Details
     selectedIncidentMarker = marker;
     [self loadViewIncidentViewForMarker:marker];
-    
-    [self showViewIncidentView];
 }
 
 - (void)showPath:(NSString *)polyLinePath
@@ -436,7 +436,6 @@
     }
     else if (isNotificationForMorePeople)
     {
-        NSLog(@"%@", userNamesFromNotification);
         self.notificationMoreTimeLabel.attributedText = time;
         [self loadAndShowMorePeopleView];
     
@@ -458,13 +457,11 @@
         self.notificationAssignButton.hidden = NO;
         if ([isAssigned isEqualToString:@"Assign"])
         {
-            NSLog(@"%@", isAssigned);
             self.notificationAssignButton.selected = NO;
             [self.notificationAssignButton setBackgroundColor:[UIColor whiteColor]];
         }
         else if ([isAssigned isEqualToString:@"Unassign"])
         {
-            NSLog(@"%@", isAssigned);
             self.notificationAssignButton.selected = YES;
             [self.notificationAssignButton setBackgroundColor:[UIColor colorWithRed:21.0f/255.0f green:88.0f/255.0f blue:200.0f/255.0f alpha:1.0f]];
         }
@@ -475,6 +472,7 @@
     else
     {
         isAssignedArray = assignedArray;
+        self.notificationMoreTableView.alwaysBounceVertical = NO;
         [self.notificationMoreTableView reloadData];
         [self showNotificationMoreView];
     }
@@ -516,7 +514,6 @@
     //show view Incident view
     selectedIncidentMarker = incidentMarker;
     [self loadViewIncidentViewForMarker:incidentMarker];
-    [self showViewIncidentView];
     
 //    [[CodeSnip sharedInstance] showAlert:incident.incidentName withMessage:@"Incident Created Successfully" withTarget:self];
 }
@@ -561,6 +558,7 @@
     if (isAddNewUser)
     {
         self.addNewUserArray = [[NSMutableArray alloc] initWithArray:data];
+        self.addNewUserTableView.alwaysBounceVertical = NO;
         [self.addNewUserTableView reloadData];
         [self loadAddNewUserViewForMarker];
         [self showAddNewUserView];
@@ -584,12 +582,14 @@
         [self.viewIncidentTableView reloadData];
         self.viewIncidentTableHeight.constant = self.viewIncidentTableView.contentSize.height+10;
         
-        [self sizeToFitViewIncident];
+        [self showViewIncidentView];
+        self.incidentDetailScrollView.hidden = NO;
 }
 }
 
 - (void)didNotGetIncidentNearUser:(NSString *)errorMessage
 {
+    self.incidentDetailScrollView.hidden = NO;
     [[CodeSnip sharedInstance] showAlert:@"News Crew Tracker" withMessage:errorMessage withTarget:self];
     
     self.viewIncidentUsersArray = [[NSMutableArray alloc] init];
@@ -600,7 +600,7 @@
     [self.viewIncidentTableView reloadData];
     self.viewIncidentTableHeight.constant = self.viewIncidentTableView.contentSize.height+10;
 
-    [self sizeToFitViewIncident];
+    [self showViewIncidentView];
     
 }
 - (void)didAssignIncident
@@ -692,7 +692,6 @@
     if (!incidentsArray.count==0)
     {
         Incident *incident = data[0];
-        NSLog(@"%@", incident.incidentID);
         if ([incident.incidentID isEqualToString:@"00000000-0000-0000-0000-000000000000"])
         {
             data = nil;
@@ -739,13 +738,19 @@
 
 - (void)didReceiveIncidentDetails:(NSArray *)data
 {
+    [self loadIncidentMarkersWithData:data];
+    [UserDefaults saveIncidentData:data];
+}
+
+- (void)loadIncidentMarkersWithData:(NSArray *)data
+{
     allIncidentMarkers = [[NSMutableArray alloc] init];
-   for (Incident *incident in data)
+    for (Incident *incident in data)
     {
         gmarker = [[MapViewHelper sharedInstance] addIncidentMarkerWithTitle:incident WithSnippet:nil WithCoordinate:incident.coordinate onMap:gmapView];
         [allIncidentMarkers addObject:gmarker];
     }
-   
+    
     //If Selected from Incidents List
     if (self.selectedIncident!=nil)
     {
@@ -759,9 +764,18 @@
                                    selector:@selector(refreshMap)
                                    userInfo:nil
                                     repeats:YES];
+   
+    NSLog(@"Will refresh map after %.00f seconds", self.mapRefreshingTimer.fireDate.timeIntervalSinceNow);
 }
 
 - (void)didReceiveMemberDetails:(NSArray *)data
+{
+    [self loadMemberMarkersWithData:data];
+    [UserDefaults saveMemberData:data];
+}
+
+
+- (void)loadMemberMarkersWithData:(NSArray *)data
 {
     [gmapView clear];
     allMemberMarkers = [[NSMutableArray alloc] init];
@@ -777,17 +791,20 @@
         }
         [allMemberMarkers addObject:gmarker];
     }
-   
+    
     //If Selected from Online/Offline List
     if (self.selectedUser!=nil)
     {
         [self loadUserDetailForUser:self.selectedUser];
         self.selectedUser = nil;
     }
+
 }
+
 - (void)requestFailedWithError:(NSError *)error
 {
     [[CodeSnip sharedInstance] showAlert:@"Network Error" withMessage:[error localizedDescription] withTarget:self];
+    [self loadOfflineData];
 }
 
 - (void)showErrorAlertWithTitle:(NSString *)title WithMessage:(NSString *)message
@@ -820,6 +837,7 @@
 {
     [self.mapRefreshingTimer invalidate];
     self.mapRefreshingTimer = nil;
+    NSLog(@"Stop refreshing map");
 }
 
 
@@ -1081,16 +1099,12 @@
     
     UITableViewCell *selectedCell = (UITableViewCell *)[[sender superview] superview];
     
-    NSLog(@"button clicked: %ld", (long)indexPath.row);
-    
     selectedAssignButton = (UIButton *)[selectedCell viewWithTag:2];
     
     selectedIndexPath = indexPath;
     User *selectedUser = [self.addNewUserArray objectAtIndex:indexPath.row];
     showAlert = YES;
     [self findDistanceFromLocation:selectedIncidentMarker.position ToLocation:selectedUser.coordinate];
-
-
 }
 
 
@@ -1098,7 +1112,6 @@
 {
     [self hideAddNewUserView];
     [self loadViewIncidentViewForMarker:selectedIncidentMarker];
-    [self showViewIncidentView];
 }
 
 
@@ -1115,6 +1128,7 @@
     NSArray *totalPeople = [allDetailMorePeople valueForKey:@"userName"];
     self.totalPeopleCount.text = [NSString stringWithFormat:@"%lu",(unsigned long)totalPeople.count];
     self.morePeoplesArray = totalPeople;
+    self.morePeopleTableView.alwaysBounceVertical = NO;
     [self.morePeopleTableView reloadData];
 }
 
@@ -1345,14 +1359,12 @@
     {
         [[WebServiceHandler sharedInstance] deleteIncidentWithID:incidentID];
         
-        NSLog(@"Delete Incident: %@", selectedIncidentMarker.userData[@"incidentID"]);
     }]];
     
 }
 
 - (void)loadViewIncidentViewForMarker:(GMSMarker *)incidentMarker
 {
-    
     self.updateIncidentButton.enabled = NO;
     self.updateIncidentButton.alpha = 0.5;
     isUpdatedIncident = YES;
@@ -1374,7 +1386,12 @@
     [self.viewIncidentAddress resignFirstResponder];
     [self.viewIncidentDescription resignFirstResponder];
 
+    //Set Size for not enlarging
+    [self.viewIncidentTitle setFrame:CGRectMake(CGRectGetMinX(self.viewIncidentTitle.frame), CGRectGetMinY(self.viewIncidentTitle.frame), CGRectGetWidth(self.view.frame)-44, CGRectGetHeight(self.viewIncidentTitle.frame))];
     
+    [self.viewIncidentAddress setFrame:CGRectMake(CGRectGetMinX(self.viewIncidentAddress.frame), CGRectGetMinY(self.viewIncidentAddress.frame), CGRectGetWidth(self.view.frame)-44, CGRectGetHeight(self.viewIncidentAddress.frame))];
+    
+    [self.viewIncidentDescription setFrame:CGRectMake(CGRectGetMinX(self.viewIncidentDescription.frame), CGRectGetMinY(self.viewIncidentDescription.frame), CGRectGetWidth(self.view.frame)-44, CGRectGetHeight(self.viewIncidentDescription.frame))];
     
     self.viewIncidentTitle.text = incidentMarker.title;
     self.viewIncidentAddress.text = incidentMarker.userData[@"incidentAddress"];
@@ -1388,32 +1405,19 @@
     [self sizeToFitViewIncident];
     //Load Array
     [self loadAssignedUser];
-    [self showViewIncidentView];
-//    [self.viewIncidentScrollView addObserver:self forKeyPath:NSStringFromSelector(@selector(contentOffset)) options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];
 }
-
-//- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-//    
-//    if (object == self.viewIncidentScrollView && [keyPath isEqualToString:NSStringFromSelector(@selector(contentOffset))]) {
-//        
-//        NSLog(@"%@", change[@"new"]);
-//        NSLog(@"%f:%f",self.viewIncidentScrollView.contentOffset.x, self.viewIncidentScrollView.contentOffset.y);
-//        //Note that you should track your page index
-////        self.viewIncidentScrollView.contentOffset = CGPointMake(self.viewIncidentScrollView.bounds.size.width, self.viewIncidentScrollView.contentOffset.y);
-//        
-//    } else {
-//        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-//    }
-//}
 
 - (void)sizeToFitViewIncident
 {
     //Size to Fit
+    
     self.viewIncidentTitleHeightConstraint.constant = [self.viewIncidentTitle contentSize].height;
    
    self.viewIncidentAddressHeightConstraint.constant = [self.viewIncidentAddress contentSize].height;
 
     self.viewIncidentDescriptionHeightConstraint.constant = [self.viewIncidentDescription contentSize].height;
+    NSLog(@"description height: %f", self.viewIncidentDescriptionHeightConstraint.constant);
+    NSLog(@"description width: %f", self.viewIncidentDescription.frame.size.width);
 }
 
 - (void)loadIncidentDetailForIncident:(Incident *)incident
@@ -1536,8 +1540,6 @@
 
     UITableViewCell *clickedCell = (UITableViewCell *)[[sender superview] superview];
     NSIndexPath *clickedButtonIndexPath = [self.viewIncidentTableView indexPathForCell:clickedCell];
-    
-    NSLog(@"indexpath: %ld",(long)clickedButtonIndexPath.row);
     
     User *selectedUser = [self.viewIncidentUsersArray objectAtIndex:clickedButtonIndexPath.row];
     NSString *userID = selectedUser.userID;
@@ -1892,6 +1894,7 @@
         self.userDetailTableView.scrollEnabled = YES;
         [noLabel removeFromSuperview];
     }
+    self.userDetailTableView.alwaysBounceVertical = NO;
     [self.userDetailTableView setDataSource:self];
     [self.userDetailTableView setDelegate:self];
     [self.userDetailTableView reloadData];
@@ -1909,8 +1912,6 @@
     CGPoint buttonPosition = [sender convertPoint:CGPointZero
                                            toView:self.userDetailTableView];
     NSIndexPath *clickedButtonIndexPath = [self.userDetailTableView indexPathForRowAtPoint:buttonPosition];
-    
-    NSLog(@"indexpath: %ld",(long)clickedButtonIndexPath.row);
  
     Incident *selectedIncident = [self.userDetailIncidentsArray objectAtIndex:clickedButtonIndexPath.row];
     [self loadIncidentDetailForIncident:selectedIncident];
@@ -1923,11 +1924,18 @@
     UITableViewCell *clickedCell = (UITableViewCell *)[[[sender superview] superview] superview];
     NSIndexPath *clickedButtonIndexPath = [self.userDetailTableView indexPathForCell:clickedCell];
     
-    NSLog(@"indexpath: %ld",(long)clickedButtonIndexPath.row);
-    
     Incident *selectedIncident = [self.userDetailIncidentsArray objectAtIndex:clickedButtonIndexPath.row];
     NSString *incidentID = selectedIncident.incidentID;
-    NSString *userID = [[selectedUserMarker.userData objectForKey:@"userID"] firstObject];
+    
+    NSString *userID;
+    
+    NSDictionary *userData = selectedUserMarker.userData;
+    NSArray *userIDs = userData[@"userID"];
+    if (userIDs.count==1) {
+        userID = [[selectedUserMarker.userData objectForKey:@"userID"] firstObject];
+    } else {
+        userID = [userIDs objectAtIndex:selectedUserIndex];
+    }
     
     
     UIAlertController *alert = [[CodeSnip sharedInstance] createAlertWithAction:selectedIncident.incidentName withMessage:@"Are you sure to unassign this incident?" withCancelButton:@"Cancel" withTarget:self];
@@ -2024,7 +2032,7 @@
         UILabel *userNameLabel = (UILabel *)[cell viewWithTag:1];
         UIButton *assignButton = (UIButton *)[cell viewWithTag:2];
         userNameLabel.text = user.userName;
-        NSLog(@"%f:%f", user.coordinate.latitude, user.coordinate.longitude);
+
         if (user.isAssigned)
         {
             assignButton.selected = YES;
@@ -2300,8 +2308,7 @@
     layoutAnimation.springSpeed = 10.0f;
     layoutAnimation.springBounciness = 0.0f;
     layoutAnimation.toValue = @(0);
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.viewIncidentTopConstraint pop_addAnimation:layoutAnimation forKey:@"morepeople"];
     });
 }

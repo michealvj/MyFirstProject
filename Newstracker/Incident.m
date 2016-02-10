@@ -10,6 +10,28 @@
 
 @implementation Incident
 
+- (void)encodeWithCoder:(NSCoder *)aCoder{
+    [aCoder encodeObject:self.incidentID forKey:@"incidentID"];
+    [aCoder encodeObject:self.incidentName forKey:@"incidentName"];
+    [aCoder encodeObject:self.incidentAddress forKey:@"incidentAddress"];
+    [aCoder encodeObject:self.incidentDescription forKey:@"incidentDescription"];
+    [aCoder encodeDouble:self.coordinate.latitude forKey:@"latitude"];
+    [aCoder encodeDouble:self.coordinate.longitude forKey:@"longitude"];
+}
+
+-(id)initWithCoder:(NSCoder *)aDecoder{
+    if(self = [super init]){
+        self.incidentID = [aDecoder decodeObjectForKey:@"incidentID"];
+        self.incidentName = [aDecoder decodeObjectForKey:@"incidentName"];
+        self.incidentAddress = [aDecoder decodeObjectForKey:@"incidentAddress"];
+        self.incidentDescription = [aDecoder decodeObjectForKey:@"incidentDescription"];
+        CLLocationDegrees latitude = [aDecoder decodeDoubleForKey:@"latitude"];
+        CLLocationDegrees longitude = [aDecoder decodeDoubleForKey:@"longitude"];
+        _coordinate = CLLocationCoordinate2DMake(latitude, longitude);
+    }
+    return self;
+}
+
 + (Incident *)sharedInstance
 {
     static Incident *model = nil;

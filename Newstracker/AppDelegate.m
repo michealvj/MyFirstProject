@@ -15,7 +15,6 @@
 @end
 
 @implementation AppDelegate
-@synthesize pushView, pushLabel;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
@@ -32,7 +31,7 @@
     [application registerUserNotificationSettings:settings];
     
     [self backgroundLocationUpdate];
-    
+
     return YES;
 }
 
@@ -116,35 +115,75 @@
     NSLog(@"Failed to get token, error: %@", error);
 }
 
+
+
+
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     NSString *pushMessage = userInfo[@"aps"][@"alert"];
     NSString *userName = userInfo[@"SendBy"];
-    NSString *time = userInfo[@"sent"];
-    NSString *pushTitle = [NSString stringWithFormat:@"%@ sent a message!!", userName];
+    NSString *time = [userInfo[@"sent"] stringByReplacingOccurrencesOfString:@"\"" withString:@""];
     NSString *alertTitle = [NSString stringWithFormat:@"%@\n%@", userName, time];
     
     NSLog(@"Push Message: %@", userInfo);
     
-//    [[CodeSnip sharedInstance] showAlert:pushTitle withMessage:pushMessage withTarget:self.window.rootViewController];
     
     UIApplicationState state = [application applicationState];
-    if (state == UIApplicationStateActive) {
-       MyPushView *push = [[MyPushView alloc] initWithTitle:pushTitle WithMessage:pushMessage];
-       [push show];
+    if (state == UIApplicationStateActive)
+    {
+       MyPushView *push = [[MyPushView alloc] initWithTitle:@"News Crew Tracker" WithMessage:pushMessage];
+       push.userInfo = @{@"SendBy": userName, @"sent": time};;
+       [push addTarget:self action:@selector(showMessage:)];
+        
+        UILocalNotification* localNotification = [[UILocalNotification alloc] init];
+        localNotification.fireDate = [NSDate date];
+        localNotification.userInfo = @{@"SendBy": userName, @"sent": time};
+        localNotification.alertTitle = @"News Crew Tracker";
+        localNotification.alertBody = pushMessage;
+        localNotification.timeZone = [NSTimeZone defaultTimeZone];
+        [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
     }
-    else {
+        
+    else
+    {
         [[CodeSnip sharedInstance] showAlert:alertTitle withMessage:pushMessage withTarget:self.window.rootViewController];
     }
 }
 
-
-
-- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
+- (void)showMessage:(id)tap
 {
-    //register to receive notifications
-    [application registerForRemoteNotifications];
+    MyPushView *pushView = (MyPushView *)[tap superview];
+    NSLog(@"hai");
+    NSDictionary *userInfo = pushView.userInfo;
+    NSString *userName = userInfo[@"SendBy"];
+    NSString *time = userInfo[@"sent"];
+    NSString *alertTitle = [NSString stringWithFormat:@"%@\n%@", userName, time];
+    
+    [[CodeSnip sharedInstance] showAlert:alertTitle withMessage:pushView.message withTarget:self.window.rootViewController];
+    [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        NSLog(@"hiding pushview");
+        pushView.frame = CGRectMake(0, -70, self.window.frame.size.width, 70);
+    }
+                     completion:^(BOOL finished)
+     {
+         
+     }];
+
 }
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(nonnull UILocalNotification *)notification
+{
+    if (application.applicationState != UIApplicationStateActive )
+    {
+        NSDictionary *userInfo = notification.userInfo;
+        NSString *userName = userInfo[@"SendBy"];
+        NSString *time = userInfo[@"sent"];
+        NSString *alertTitle = [NSString stringWithFormat:@"%@\n%@", userName, time];
+        
+        [[CodeSnip sharedInstance] showAlert:alertTitle withMessage:notification.alertBody withTarget:self.window.rootViewController];
+    }
+}
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

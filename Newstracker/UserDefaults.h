@@ -36,4 +36,12 @@
 + (void)clearUserID;
 + (void)clearGroupID;
 + (void)clearGroupName;
++ (void)clearMapAddress;
++ (void)clearMapLocation;
+
++ (void)saveIncidentData:(id)data;
++ (void)saveMemberData:(id)data;
+
++ (id)getIncidentData;
++ (id)getMemberData;
 @end

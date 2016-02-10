@@ -170,6 +170,18 @@
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"groupName"];
 }
 
++ (void)clearMapAddress
+{
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"mapAddress"];
+}
+
++ (void)clearMapLocation
+{
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"mapLatitude"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"mapLongitude"];
+}
+
+
 + (BOOL)isLogin
 {
     if ([[NSUserDefaults standardUserDefaults] valueForKey:@"userID"]) {
@@ -178,6 +190,34 @@
     else {
         return NO;
     }
+}
+
+#pragma mark - Offline Data storage
+
++ (void)saveIncidentData:(id)data
+{
+    NSData *incidentData = [NSKeyedArchiver archivedDataWithRootObject:data];
+    [[NSUserDefaults standardUserDefaults] setObject:incidentData forKey:@"allIncidentMarkers"];
+}
+
++ (void)saveMemberData:(id)data
+{
+    NSData *incidentData = [NSKeyedArchiver archivedDataWithRootObject:data];
+    [[NSUserDefaults standardUserDefaults] setObject:incidentData forKey:@"allMemberMarkers"];
+}
+
++ (id)getMemberData
+{
+    NSData *memberData = [[NSUserDefaults standardUserDefaults] objectForKey:@"allMemberMarkers"];
+    NSArray *memberArray = [NSKeyedUnarchiver unarchiveObjectWithData:memberData];
+    return memberArray;
+}
+
++ (id)getIncidentData
+{
+    NSData *incidentData = [[NSUserDefaults standardUserDefaults] objectForKey:@"allIncidentMarkers"];
+    NSArray *incidentArray = [NSKeyedUnarchiver unarchiveObjectWithData:incidentData];
+    return incidentArray;
 }
 
 

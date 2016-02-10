@@ -10,11 +10,14 @@
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 
-@interface MyPushView : NSObject <UIGestureRecognizerDelegate>
-@property (nonatomic, strong) UIView *pushView;
+@interface MyPushView : UIView <UIGestureRecognizerDelegate>
+@property (nonatomic, strong) MyPushView *pushView;
 @property (nonatomic, strong) UILabel *pushLabel;
 @property (nonatomic, strong) NSAttributedString *sentMessage;
+@property (nonatomic, strong) NSString *title;
+@property (nonatomic, strong) NSString *message;
+@property (nonatomic, strong) NSDictionary *userInfo;
 @property (nonatomic, strong) AppDelegate *appDel;
 - (id)initWithTitle:(NSString *)title WithMessage:(NSString *)message;
-- (void)show;
+- (void)addTarget:(id)target action:(SEL)selector;
 @end

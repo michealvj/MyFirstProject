@@ -23,6 +23,7 @@
     [WebServiceHandler sharedInstance].delegate = self;
     [[WebServiceHandler sharedInstance] getAllUsers];
     
+    self.tableView.alwaysBounceVertical = NO;
     self.tableView.hidden = YES;
 }
 

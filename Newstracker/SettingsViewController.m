@@ -34,6 +34,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.settingsTableView.hidden = YES;
+    self.settingsTableView.alwaysBounceVertical = NO;
+    
     self.datePickerBottomConstraint.constant = -self.datePopupView.frame.size.height;
     
     [self navigationBarSetup];
@@ -93,6 +95,7 @@
         [self addDatasource];
 
     } WithError:^(NSString *error) {
+        initialSettings=nil;
         [[CodeSnip sharedInstance] showAlert:@"News Crew Tracker" withMessage:error withTarget:self];
     }];
     
@@ -178,15 +181,6 @@
     [self setSaveButton];
 }
 
-- (void)requestFailedWithError:(NSError *)error
-{
-    [[CodeSnip sharedInstance] showAlert:@"Network Error" withMessage:[error localizedDescription] withTarget:self];
-}
-
-- (void)showErrorAlertWithTitle:(NSString *)title WithMessage:(NSString *)message
-{
-    [[CodeSnip sharedInstance] showAlert:title withMessage:message withTarget:self];
-}
 
 - (void)setSaveButton
 {
@@ -244,7 +238,6 @@
 {
     if (sender.on) {
         isAutomaticIncidentDeletionEnabled = YES;
-        
         [self addDatasource];
     }
     else {
@@ -277,6 +270,18 @@
     }
     [self.settingsTableView reloadData];
     [self setSaveButton];
+}
+
+#pragma mark - Webservice Handler Delegate
+
+- (void)requestFailedWithError:(NSError *)error
+{
+    [[CodeSnip sharedInstance] showAlert:@"Network Error" withMessage:[error localizedDescription] withTarget:self];
+}
+
+- (void)showErrorAlertWithTitle:(NSString *)title WithMessage:(NSString *)message
+{
+    [[CodeSnip sharedInstance] showAlert:title withMessage:message withTarget:self];
 }
 
 #pragma mark - Tableview delegate and datasource

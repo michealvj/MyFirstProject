@@ -22,7 +22,8 @@
     [self navigationBarSetup];
     [WebServiceHandler sharedInstance].delegate = self;
     [[WebServiceHandler sharedInstance] getAllIncidents];
-    
+    self.tableView.alwaysBounceVertical = NO;
+  
 }
 
 - (void)navigationBarSetup
@@ -42,6 +43,8 @@
 
 - (void)requestFailedWithError:(NSError *)error
 {
+    dataArray = [UserDefaults getIncidentData];
+    [self.tableView reloadData];
     [[CodeSnip sharedInstance] showAlert:@"Network Error" withMessage:[error localizedDescription] withTarget:self];
 }
 

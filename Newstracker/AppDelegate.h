@@ -20,9 +20,9 @@
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
-@property (strong, nonatomic) UIView *pushView;
-@property (strong, nonatomic) UILabel *pushLabel;
-
+@property (strong, nonatomic) NSString *gpushTitle;
+@property (strong, nonatomic) NSString *gpushMessage;
+- (void)showMessage:(id)tap;
 
 @property (strong, nonatomic) UIWindow *window;
 

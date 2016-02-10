@@ -23,7 +23,6 @@
     [self navigationBarSetup];
     self.charactersLabel.text = @"";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillChangeFrameNotification object:nil];
-    
 }
 
 - (void)navigationBarSetup
@@ -49,7 +48,7 @@
     keyBoardHeight = @([notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size.height);
 }
 
-- (IBAction)sendMessage:(id)sender
+- (void)sendMessage
 {
     [self animateConstraint:self.viewBottomConstraint WithValue:@(0)];
     [self.messageTextView resignFirstResponder];
@@ -61,7 +60,11 @@
     else {
         [[CodeSnip sharedInstance] showAlert:@"News Crew Tracker" withMessage:@"Enter your message and send" withTarget:self];
     }
-    
+}
+
+- (IBAction)sendMessage:(id)sender
+{
+    [self sendMessage];
 }
 
 - (void)didSentGroupMessages
@@ -99,13 +102,14 @@
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     if ([text isEqualToString:@"\n"]) {
-        [self resetView];
-        if (textView.text.length==0)
-        {
-            self.charactersLabel.text = @"";
-            textView.text = @"Enter Message here...";
-        }
+//        [self resetView];
+//        if (textView.text.length==0)
+//        {
+//            self.charactersLabel.text = @"";
+//            textView.text = @"Enter Message here...";
+//        }
         [textView resignFirstResponder];
+        [self sendMessage];
         return NO;
     }
     else if (textView.text.length==1&&[text isEqualToString:@""])
@@ -128,7 +132,6 @@
     NSString *message = [NSString stringWithFormat:@"%@%@", textView.text, string];
 
     NSUInteger bytes = [message lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
-    NSLog(@"%lu bytes", (unsigned long)bytes);
     int maxCount = 250;
     if (bytes<maxCount)
     {
@@ -149,26 +152,16 @@
     
 }
 
-- (void)textViewDidChange:(UITextView *)textView
+#pragma mark - Webservice Handler Delegate
+
+- (void)requestFailedWithError:(NSError *)error
 {
-    NSString *message = textView.text;
-    NSUInteger bytes = [message lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
-    NSLog(@"%lu bytes", (unsigned long)bytes);
-    int maxCount = 250;
-    if (bytes<maxCount)
-    {
-        unsigned long remainingLetters = maxCount - bytes;
-        self.charactersLabel.text = remainingLetters==1 ?
-        [NSString stringWithFormat:@"%lu Character remaining", remainingLetters]:
-        [NSString stringWithFormat:@"%lu Characters remaining", remainingLetters];
-        
-        [self.charactersLabel setTextColor:[UIColor colorWithRed:21.0f/255.0f green:88.0f/255.0f blue:200.0f/255.0f alpha:1.0f]];
-    }
-    else
-    {
-        self.charactersLabel.text = [NSString stringWithFormat:@"Characters exceeded"];
-        [self.charactersLabel setTextColor:[UIColor redColor]];
-    }
+    [[CodeSnip sharedInstance] showAlert:@"Network Error" withMessage:[error localizedDescription] withTarget:self];
+}
+
+- (void)showErrorAlertWithTitle:(NSString *)title WithMessage:(NSString *)message
+{
+    [[CodeSnip sharedInstance] showAlert:title withMessage:message withTarget:self];
 }
 
 @end

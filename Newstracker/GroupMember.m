@@ -10,6 +10,27 @@
 
 @implementation GroupMember
 
+- (void)encodeWithCoder:(NSCoder *)aCoder{
+    [aCoder encodeObject:self.userID forKey:@"userid"];
+    [aCoder encodeObject:self.userNames forKey:@"userNames"];
+    [aCoder encodeObject:self.reachablity forKey:@"reachablity"];
+    [aCoder encodeDouble:self.coordinate.latitude forKey:@"latitude"];
+    [aCoder encodeDouble:self.coordinate.longitude forKey:@"longitude"];
+}
+
+-(id)initWithCoder:(NSCoder *)aDecoder{
+    if(self = [super init]){
+        self.userID = [aDecoder decodeObjectForKey:@"userid"];
+        self.userNames = [aDecoder decodeObjectForKey:@"userNames"];
+        self.reachablity = [aDecoder decodeObjectForKey:@"reachablity"];
+        CLLocationDegrees latitude = [aDecoder decodeDoubleForKey:@"latitude"];
+        CLLocationDegrees longitude = [aDecoder decodeDoubleForKey:@"longitude"];
+        self.coordinate = CLLocationCoordinate2DMake(latitude, longitude);
+    }
+    return self;
+}
+
+
 + (GroupMember *)sharedInstance
 {
     static GroupMember *model = nil;

@@ -42,7 +42,6 @@
     CLLocationCoordinate2D setLocation = [UserDefaults getMapLocation];
     
     //Setting Mapview
-    
     CGRect mapViewFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height+65);
     
     gmapView = [[MapViewHelper sharedInstance] createMapWithCoordinate:setLocation WithFrame:mapViewFrame onTarget:self];

@@ -56,6 +56,8 @@
     NSString *browserKey = GOOGLE_SERVER_KEY1;
     NSString *urlString = [NSString stringWithFormat:
                            @"https://maps.googleapis.com/maps/api/place/autocomplete/json?input=%@&key=%@",searchText,browserKey];
+    
+    
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     

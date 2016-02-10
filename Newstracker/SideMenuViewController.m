@@ -62,6 +62,7 @@
             UINavigationController *navigationController = self.menuContainerViewController.centerViewController;
             NSArray *controllers = [NSArray arrayWithObject:nav];
             navigationController.viewControllers = controllers;
+            [navigationController popViewControllerAnimated:YES];
             [self.menuContainerViewController setMenuState:MFSideMenuStateClosed];
             break;
         }
@@ -141,6 +142,11 @@
     [[CodeSnip sharedInstance] showAlert:@"News Crew Tracker" withMessage:message withTarget:self];
     
     [UserDefaults clearUserID];
+    [UserDefaults clearGroupID];
+    [UserDefaults clearGroupName];
+    [UserDefaults clearMapAddress];
+    [UserDefaults clearMapLocation];
+    
     [[LocationTracker sharedLocationManager] stopUpdatingLocation];
 }
 

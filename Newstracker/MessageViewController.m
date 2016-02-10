@@ -21,6 +21,7 @@
     [self navigationBarSetup];
     [WebServiceHandler sharedInstance].delegate = self;
     [[WebServiceHandler sharedInstance] getAllMessages];
+    self.messageTableView.alwaysBounceVertical = NO;
 }
 
 - (void)navigationBarSetup
