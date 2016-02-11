@@ -996,23 +996,26 @@
 
 - (void)showDistanceDetailsForIncident:(GMSMarker *)incidentMarker
 {
-    for (GMSMarker *memberMarker in allMemberMarkers)
+    if ([currentMarker.snippet isEqualToString:@"CurrentuserSelected"])
     {
-        if ([memberMarker.snippet isEqualToString:@"MemberSelected"])
+        [self findDistanceFromMarker:currentMarker ToMarker:incidentMarker];
+    }
+    else
+    {
+        for (GMSMarker *memberMarker in allMemberMarkers)
         {
-            [self findDistanceFromMarker:memberMarker ToMarker:incidentMarker];
-        }
-        else if ([memberMarker.snippet isEqualToString:@"UnreachMemberSelected"])
-        {
-            [self findDistanceFromMarker:memberMarker ToMarker:incidentMarker];
-        }
-        else if ([memberMarker.snippet isEqualToString:@"GroupMemberSelected"])
-        {
-            [self findDistanceFromMarker:memberMarker ToMarker:incidentMarker];
-        }
-        else if ([currentMarker.snippet isEqualToString:@"CurrentuserSelected"])
-        {
-            [self findDistanceFromMarker:currentMarker ToMarker:incidentMarker];
+            if ([memberMarker.snippet isEqualToString:@"MemberSelected"])
+            {
+                [self findDistanceFromMarker:memberMarker ToMarker:incidentMarker];
+            }
+            else if ([memberMarker.snippet isEqualToString:@"UnreachMemberSelected"])
+            {
+                [self findDistanceFromMarker:memberMarker ToMarker:incidentMarker];
+            }
+            else if ([memberMarker.snippet isEqualToString:@"GroupMemberSelected"])
+            {
+                [self findDistanceFromMarker:memberMarker ToMarker:incidentMarker];
+            }
         }
     }
 }

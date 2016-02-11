@@ -7,8 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-@import GoogleMaps;
-#import "utils.h"
+#import <CoreLocation/CoreLocation.h>
+#import "LocationTracker.h"
 
 @interface UserDefaults : NSObject
 + (void)setUserIDWithValue:(id)value;

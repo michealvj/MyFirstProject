@@ -77,6 +77,31 @@
     
 }
 
+- (void)bgTimeDistanceForURL:(NSString *)URL
+{
+    [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    [manager GET:URL parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         NSArray *routeArray = responseObject[@"routes"];
+         if (routeArray.count>0)
+         {
+             NSString *distance = responseObject[@"routes"][0][@"legs"][0][@"distance"][@"text"];
+             NSString *duration = responseObject[@"routes"][0][@"legs"][0][@"duration"][@"text"];
+             
+             NSLog(@"Distance: %@", distance);
+             NSLog(@"Time: %@", duration);
+         }
+     }
+         failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         NSLog(@"error: %@", [error localizedDescription]);
+     }];
+    
+}
+
+
 #pragma mark - My Webservices
 
 - (void)postBackgroundSoapMessage:(NSString *)soapMessage WithContentType:(NSString *)contentType
