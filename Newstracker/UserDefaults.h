@@ -38,6 +38,7 @@
 + (void)clearGroupName;
 + (void)clearMapAddress;
 + (void)clearMapLocation;
++ (void)clearOfflineDatas;
 
 + (void)saveIncidentData:(id)data;
 + (void)saveMemberData:(id)data;

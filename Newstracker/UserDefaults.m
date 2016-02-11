@@ -220,5 +220,10 @@
     return incidentArray;
 }
 
++ (void)clearOfflineDatas
+{
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"allIncidentMarkers"];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"allMemberMarkers"];
+}
 
 @end

@@ -146,6 +146,7 @@
     [UserDefaults clearGroupName];
     [UserDefaults clearMapAddress];
     [UserDefaults clearMapLocation];
+    [UserDefaults clearOfflineDatas];
     
     [[LocationTracker sharedLocationManager] stopUpdatingLocation];
 }
