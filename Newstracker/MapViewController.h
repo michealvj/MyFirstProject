@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "utils.h"
 #import "MyProtocolMethod.h"
+#import "TutorialScreen.h"
 #import "IncidentListViewController.h"
 #import <GoogleMaps/GoogleMaps.h>
 

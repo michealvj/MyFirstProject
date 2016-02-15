@@ -41,6 +41,7 @@
     BOOL showAlert, isAddNewUser, isUnassignFromViewIncident, isUpdatedIncident, isNotificationForMorePeople;
     int selectedUserIndex;
     UILabel *noLabel;
+    TutorialScreen *tutorialScreen;
 }
 
 @property (weak, nonatomic) IBOutlet UIButton *myLocationButton;
@@ -51,24 +52,25 @@
 #pragma mark - View Life Cycle
 - (void)viewDidLoad
 {
-    [SVProgressHUD showInfoWithStatus:@"Loading Map"];
     [super viewDidLoad];
     
-    [self initialiseMapview];
-    [self navigationBarSetup];
-    
-    //setting delegates
-    [WebServiceHandler sharedInstance].delegate = self;
+    if ([UserDefaults isFirstTime])
+    {
+        self.navigationController.navigationBar.barTintColor =[UIColor whiteColor];
+        self.navigationController.navigationBarHidden = YES;
 
-    //Adding Marker
-    [[WebServiceHandler sharedInstance] getMemberAndIncidentDetails];
-    
-    //setting Flags
-    showAlert = NO;
-    isAddNewUser = NO;
-    isUnassignFromViewIncident = NO;
-    isUpdatedIncident = YES;
-    isNotificationForMorePeople = NO;
+        tutorialScreen = [[TutorialScreen alloc] init];
+        [tutorialScreen buildIntroOnView:self.view WithCompletionHandler:^{
+          NSLog(@"hai");
+         [UserDefaults tutorialsSeen];
+          [self loadInitialView];
+        }];
+        
+    }
+    else
+    {
+        [self loadInitialView];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -79,6 +81,28 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
     [[LocationTracker sharedInstance] stopLocationTracking];
+}
+
+- (void)loadInitialView
+{
+    [SVProgressHUD showInfoWithStatus:@"Loading Map"];
+    [self initialiseMapview];
+    [self navigationBarSetup];
+    
+    //setting delegates
+    [WebServiceHandler sharedInstance].delegate = self;
+    
+    //Adding Marker
+    //[self checkAppSettings];
+    [[WebServiceHandler sharedInstance] getMemberAndIncidentDetails];
+    
+    //setting Flags
+    showAlert = NO;
+    isAddNewUser = NO;
+    isUnassignFromViewIncident = NO;
+    isUpdatedIncident = YES;
+    isNotificationForMorePeople = NO;
+
 }
 
 - (IBAction)MyLocation:(id)sender {
@@ -813,6 +837,31 @@
 }
 
 #pragma mark - Refreshing Map
+
+- (void)checkAppSettings
+{
+        UIAlertAction *moveToSettings = [UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [[UIApplication sharedApplication] openURL:[NSURL  URLWithString:UIApplicationOpenSettingsURLString]];
+        }];
+        
+        if([[UIApplication sharedApplication] backgroundRefreshStatus] == UIBackgroundRefreshStatusDenied){
+            
+            UIAlertController *alert = [[CodeSnip sharedInstance] createAlertWithAction:@"Enable Background App Refresh" withMessage:@"The app doesn't work without the Background App Refresh enabled. To turn it on, go to Settings > General > Background App Refresh" withCancelButton:@"Cancel" withTarget:self];
+            
+            [alert addAction:moveToSettings];
+            
+        }
+        else if([[UIApplication sharedApplication] backgroundRefreshStatus] == UIBackgroundRefreshStatusRestricted){
+            
+            UIAlertController *alert = [[CodeSnip sharedInstance] createAlertWithAction:@"Enable Background App Refresh" withMessage:@"The functions of this app are limited because the Background App Refresh is disable." withCancelButton:@"Cancel" withTarget:self];
+            
+            [alert addAction:moveToSettings];
+        }
+        else {
+            return;
+        }
+    
+}
 
 - (NSTimeInterval)getSettingsTime
 {

@@ -14,6 +14,7 @@
 #import "SVProgressHUD.h"
 #import "WebServiceHandler.h"
 #import "LocationTracker.h"
+#import "UserDefaults.h"
 #import <POP.h>
 
 @import GoogleMaps;

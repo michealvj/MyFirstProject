@@ -30,8 +30,9 @@
                                                                                          | UIUserNotificationTypeSound) categories:nil];
     [application registerUserNotificationSettings:settings];
     
-    [self backgroundLocationUpdate];
-
+    if ([UserDefaults isLogin]) {
+        [self backgroundLocationUpdate];
+    }
     return YES;
 }
 
@@ -40,7 +41,6 @@
     UIAlertAction *moveToSettings = [UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [[UIApplication sharedApplication] openURL:[NSURL  URLWithString:UIApplicationOpenSettingsURLString]];
     }];
-    
     //We have to make sure that the Background App Refresh is enable for the Location updates to work in the background.
     if([[UIApplication sharedApplication] backgroundRefreshStatus] == UIBackgroundRefreshStatusDenied){
         
@@ -196,9 +196,14 @@
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     NSLog(@"app enter background");
 
-    NSTimeInterval remainingTime = self.locationUpdateTimer.fireDate.timeIntervalSinceNow;
-    NSString *time = remainingTime>60 ? [NSString stringWithFormat:@"%.f minutes", remainingTime/60] : [NSString stringWithFormat:@"%.f seconds", remainingTime];
-    NSLog(@"Will Update Location after %@", time);
+    if ([self.locationUpdateTimer isValid]) {
+        NSTimeInterval remainingTime = self.locationUpdateTimer.fireDate.timeIntervalSinceNow;
+        NSString *time = remainingTime>60 ? [NSString stringWithFormat:@"%.f minutes", remainingTime/60] : [NSString stringWithFormat:@"%.f seconds", remainingTime];
+        NSLog(@"Will Update Location after %@", time);
+    }
+    else {
+        NSLog(@"Location is not tracking");
+    }
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
@@ -210,9 +215,14 @@
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     NSLog(@"app become active");
    
-    NSTimeInterval remainingTime = self.locationUpdateTimer.fireDate.timeIntervalSinceNow;
-    NSString *time = remainingTime>60 ? [NSString stringWithFormat:@"%.f minutes", remainingTime/60] : [NSString stringWithFormat:@"%.f seconds", remainingTime];
-    NSLog(@"Will Update Location after %@", time);
+    if ([self.locationUpdateTimer isValid]) {
+        NSTimeInterval remainingTime = self.locationUpdateTimer.fireDate.timeIntervalSinceNow;
+        NSString *time = remainingTime>60 ? [NSString stringWithFormat:@"%.f minutes", remainingTime/60] : [NSString stringWithFormat:@"%.f seconds", remainingTime];
+        NSLog(@"Will Update Location after %@", time);
+    }
+    else {
+        NSLog(@"Location is not tracking");
+    }
 
 }
 

@@ -7,7 +7,7 @@
 		<key>BackgroundWidget.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>6</integer>
+			<integer>9</integer>
 		</dict>
 		<key>Newstracker.xcscheme</key>
 		<dict>
@@ -17,7 +17,7 @@
 		<key>Newstracker_Release.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>7</integer>
+			<integer>1</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
@@ -28,6 +28,21 @@
 			<true/>
 		</dict>
 		<key>04469FA01C2C263400E965BF</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>04A5625E1C6C9BE100F1FF87</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>04A562721C6CA1D500F1FF87</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>04D166F41C6DACA500EE4FC5</key>
 		<dict>
 			<key>primary</key>
 			<true/>

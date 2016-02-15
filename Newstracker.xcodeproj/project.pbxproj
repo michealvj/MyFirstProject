@@ -101,6 +101,10 @@
 		04BD0FBF1C1EE2A400B37ACB /* map.png in Resources */ = {isa = PBXBuildFile; fileRef = 04BD0FB91C1EE2A400B37ACB /* map.png */; };
 		04BD0FC01C1EE2A400B37ACB /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 04BD0FBA1C1EE2A400B37ACB /* settings.png */; };
 		04BD0FC11C1EE2A400B37ACB /* user.png in Resources */ = {isa = PBXBuildFile; fileRef = 04BD0FBB1C1EE2A400B37ACB /* user.png */; };
+		04D166F61C6DACA500EE4FC5 /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04469FA21C2C263400E965BF /* NotificationCenter.framework */; };
+		04D166FA1C6DACA500EE4FC5 /* TodayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D166F91C6DACA500EE4FC5 /* TodayViewController.m */; };
+		04D166FD1C6DACA500EE4FC5 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 04D166FB1C6DACA500EE4FC5 /* MainInterface.storyboard */; };
+		04D167011C6DACA500EE4FC5 /* BackgroundWidget.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 04D166F51C6DACA500EE4FC5 /* BackgroundWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		04E6BB7A1C27CA4300EE3AB6 /* automaticlogout.png in Resources */ = {isa = PBXBuildFile; fileRef = 04E6BB741C27CA4300EE3AB6 /* automaticlogout.png */; };
 		04E6BB7B1C27CA4300EE3AB6 /* gps.png in Resources */ = {isa = PBXBuildFile; fileRef = 04E6BB751C27CA4300EE3AB6 /* gps.png */; };
 		04E6BB7C1C27CA4300EE3AB6 /* groupmessage.png in Resources */ = {isa = PBXBuildFile; fileRef = 04E6BB761C27CA4300EE3AB6 /* groupmessage.png */; };
@@ -120,10 +124,24 @@
 		04EF68871C0F0EE100EC8A06 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 04EF68851C0F0EE100EC8A06 /* LaunchScreen.storyboard */; };
 		04EF68921C0F0EE100EC8A06 /* NewstrackerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EF68911C0F0EE100EC8A06 /* NewstrackerTests.m */; };
 		04EF689D1C0F0EE100EC8A06 /* NewstrackerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EF689C1C0F0EE100EC8A06 /* NewstrackerUITests.m */; };
+		04F1CC691C71BC7C00ECA9E9 /* TutorialScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F1CC681C71BC7C00ECA9E9 /* TutorialScreen.m */; };
+		04F1CC701C71C26400ECA9E9 /* five-min.png in Resources */ = {isa = PBXBuildFile; fileRef = 04F1CC6B1C71C26400ECA9E9 /* five-min.png */; };
+		04F1CC711C71C26400ECA9E9 /* four-min.png in Resources */ = {isa = PBXBuildFile; fileRef = 04F1CC6C1C71C26400ECA9E9 /* four-min.png */; };
+		04F1CC721C71C26400ECA9E9 /* one-min.png in Resources */ = {isa = PBXBuildFile; fileRef = 04F1CC6D1C71C26400ECA9E9 /* one-min.png */; };
+		04F1CC731C71C26400ECA9E9 /* three-min.png in Resources */ = {isa = PBXBuildFile; fileRef = 04F1CC6E1C71C26400ECA9E9 /* three-min.png */; };
+		04F1CC741C71C26400ECA9E9 /* two-min.png in Resources */ = {isa = PBXBuildFile; fileRef = 04F1CC6F1C71C26400ECA9E9 /* two-min.png */; };
+		04F1CC771C71F62000ECA9E9 /* Tutorials.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F1CC761C71F62000ECA9E9 /* Tutorials.m */; };
 		F40BD2C00EB3218C5158DC9D /* libPods-Newstracker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F0F0D185879429CE2D9EF81 /* libPods-Newstracker.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		04D166FF1C6DACA500EE4FC5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 04EF68691C0F0EE100EC8A06 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 04D166F41C6DACA500EE4FC5;
+			remoteInfo = BackgroundWidget;
+		};
 		04EF688E1C0F0EE100EC8A06 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 04EF68691C0F0EE100EC8A06 /* Project object */;
@@ -147,6 +165,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				04D167011C6DACA500EE4FC5 /* BackgroundWidget.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -268,6 +287,13 @@
 		04BD0FB91C1EE2A400B37ACB /* map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map.png; sourceTree = "<group>"; };
 		04BD0FBA1C1EE2A400B37ACB /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
 		04BD0FBB1C1EE2A400B37ACB /* user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = user.png; sourceTree = "<group>"; };
+		04D166F51C6DACA500EE4FC5 /* BackgroundWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BackgroundWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		04D166F81C6DACA500EE4FC5 /* TodayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TodayViewController.h; sourceTree = "<group>"; };
+		04D166F91C6DACA500EE4FC5 /* TodayViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodayViewController.m; sourceTree = "<group>"; };
+		04D166FC1C6DACA500EE4FC5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		04D166FE1C6DACA500EE4FC5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		04D167051C6DF7CD00EE4FC5 /* Newstracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Newstracker.entitlements; sourceTree = "<group>"; };
+		04D167061C6DF86000EE4FC5 /* BackgroundWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = BackgroundWidget.entitlements; sourceTree = "<group>"; };
 		04E6BB741C27CA4300EE3AB6 /* automaticlogout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = automaticlogout.png; sourceTree = "<group>"; };
 		04E6BB751C27CA4300EE3AB6 /* gps.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gps.png; sourceTree = "<group>"; };
 		04E6BB761C27CA4300EE3AB6 /* groupmessage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = groupmessage.png; sourceTree = "<group>"; };
@@ -297,6 +323,15 @@
 		04EF68981C0F0EE100EC8A06 /* NewstrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NewstrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		04EF689C1C0F0EE100EC8A06 /* NewstrackerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NewstrackerUITests.m; sourceTree = "<group>"; };
 		04EF689E1C0F0EE100EC8A06 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		04F1CC671C71BC7C00ECA9E9 /* TutorialScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TutorialScreen.h; sourceTree = "<group>"; };
+		04F1CC681C71BC7C00ECA9E9 /* TutorialScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TutorialScreen.m; sourceTree = "<group>"; };
+		04F1CC6B1C71C26400ECA9E9 /* five-min.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "five-min.png"; sourceTree = "<group>"; };
+		04F1CC6C1C71C26400ECA9E9 /* four-min.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "four-min.png"; sourceTree = "<group>"; };
+		04F1CC6D1C71C26400ECA9E9 /* one-min.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "one-min.png"; sourceTree = "<group>"; };
+		04F1CC6E1C71C26400ECA9E9 /* three-min.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "three-min.png"; sourceTree = "<group>"; };
+		04F1CC6F1C71C26400ECA9E9 /* two-min.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "two-min.png"; sourceTree = "<group>"; };
+		04F1CC751C71F62000ECA9E9 /* Tutorials.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tutorials.h; sourceTree = "<group>"; };
+		04F1CC761C71F62000ECA9E9 /* Tutorials.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tutorials.m; sourceTree = "<group>"; };
 		04F2B5411C3A36EC0010162B /* MyProtocolMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyProtocolMethod.h; sourceTree = "<group>"; };
 		575A5FF8DFAE43D41E3F5038 /* Pods-Newstracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Newstracker.release.xcconfig"; path = "Pods/Target Support Files/Pods-Newstracker/Pods-Newstracker.release.xcconfig"; sourceTree = "<group>"; };
 		6F0F0D185879429CE2D9EF81 /* libPods-Newstracker.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Newstracker.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -304,6 +339,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		04D166F21C6DACA500EE4FC5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				04D166F61C6DACA500EE4FC5 /* NotificationCenter.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		04EF686E1C0F0EE100EC8A06 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -574,6 +617,7 @@
 		04650B421C172CC500007047 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				04F1CC661C71B85B00ECA9E9 /* iPhone Tutorials */,
 				0438977C1C68B3590054A3BC /* Message */,
 				0482CC8F1C648108001C94A7 /* pushIcon.png */,
 				043C17FF1C23DA2D00FB242E /* Online/Offline User */,
@@ -655,6 +699,18 @@
 			name = MarkerIcon;
 			sourceTree = "<group>";
 		};
+		04D166F71C6DACA500EE4FC5 /* BackgroundWidget */ = {
+			isa = PBXGroup;
+			children = (
+				04D167061C6DF86000EE4FC5 /* BackgroundWidget.entitlements */,
+				04D166F81C6DACA500EE4FC5 /* TodayViewController.h */,
+				04D166F91C6DACA500EE4FC5 /* TodayViewController.m */,
+				04D166FB1C6DACA500EE4FC5 /* MainInterface.storyboard */,
+				04D166FE1C6DACA500EE4FC5 /* Info.plist */,
+			);
+			path = BackgroundWidget;
+			sourceTree = "<group>";
+		};
 		04E6BB801C27CA4900EE3AB6 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -704,6 +760,7 @@
 				04EF68731C0F0EE100EC8A06 /* Newstracker */,
 				04EF68901C0F0EE100EC8A06 /* NewstrackerTests */,
 				04EF689B1C0F0EE100EC8A06 /* NewstrackerUITests */,
+				04D166F71C6DACA500EE4FC5 /* BackgroundWidget */,
 				04EF68721C0F0EE100EC8A06 /* Products */,
 				1DA333DCB63704CF1A79A7E5 /* Pods */,
 				F681AD94867DBB6F7A30B247 /* Frameworks */,
@@ -716,6 +773,7 @@
 				04EF68711C0F0EE100EC8A06 /* Newstracker.app */,
 				04EF688D1C0F0EE100EC8A06 /* NewstrackerTests.xctest */,
 				04EF68981C0F0EE100EC8A06 /* NewstrackerUITests.xctest */,
+				04D166F51C6DACA500EE4FC5 /* BackgroundWidget.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -723,6 +781,7 @@
 		04EF68731C0F0EE100EC8A06 /* Newstracker */ = {
 			isa = PBXGroup;
 			children = (
+				04D167051C6DF7CD00EE4FC5 /* Newstracker.entitlements */,
 				0482CC941C64C7EF001C94A7 /* MyPushView */,
 				046138021C1029BB001F574D /* Modal Objects */,
 				04227F8D1C452FC200166C7A /* Background Location Update */,
@@ -733,6 +792,7 @@
 				043C17FA1C23D42800FB242E /* Custom Button */,
 				045E57401C293CB700CA4462 /* SearchTableViewController */,
 				04650B291C16C9BF00007047 /* SideMenu CollectionView */,
+				04F1CC6A1C71BC8700ECA9E9 /* Tutorial Screen */,
 				04EF68D61C0F450A00EC8A06 /* App Delegate */,
 				042AF59A1C205DB1004291EE /* Splash View Controller */,
 				041A5E901C11B0BD00B2B7AB /* Login View Controller */,
@@ -816,6 +876,29 @@
 			name = "Map View Controller";
 			sourceTree = "<group>";
 		};
+		04F1CC661C71B85B00ECA9E9 /* iPhone Tutorials */ = {
+			isa = PBXGroup;
+			children = (
+				04F1CC6B1C71C26400ECA9E9 /* five-min.png */,
+				04F1CC6C1C71C26400ECA9E9 /* four-min.png */,
+				04F1CC6D1C71C26400ECA9E9 /* one-min.png */,
+				04F1CC6E1C71C26400ECA9E9 /* three-min.png */,
+				04F1CC6F1C71C26400ECA9E9 /* two-min.png */,
+			);
+			name = "iPhone Tutorials";
+			sourceTree = "<group>";
+		};
+		04F1CC6A1C71BC8700ECA9E9 /* Tutorial Screen */ = {
+			isa = PBXGroup;
+			children = (
+				04F1CC751C71F62000ECA9E9 /* Tutorials.h */,
+				04F1CC761C71F62000ECA9E9 /* Tutorials.m */,
+				04F1CC671C71BC7C00ECA9E9 /* TutorialScreen.h */,
+				04F1CC681C71BC7C00ECA9E9 /* TutorialScreen.m */,
+			);
+			name = "Tutorial Screen";
+			sourceTree = "<group>";
+		};
 		1DA333DCB63704CF1A79A7E5 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -837,6 +920,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		04D166F41C6DACA500EE4FC5 /* BackgroundWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 04D167041C6DACA600EE4FC5 /* Build configuration list for PBXNativeTarget "BackgroundWidget" */;
+			buildPhases = (
+				04D166F11C6DACA500EE4FC5 /* Sources */,
+				04D166F21C6DACA500EE4FC5 /* Frameworks */,
+				04D166F31C6DACA500EE4FC5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BackgroundWidget;
+			productName = BackgroundWidget;
+			productReference = 04D166F51C6DACA500EE4FC5 /* BackgroundWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		04EF68701C0F0EE100EC8A06 /* Newstracker */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 04EF68A11C0F0EE100EC8A06 /* Build configuration list for PBXNativeTarget "Newstracker" */;
@@ -852,6 +952,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				04D167001C6DACA500EE4FC5 /* PBXTargetDependency */,
 			);
 			name = Newstracker;
 			productName = Newstracker;
@@ -903,10 +1004,22 @@
 				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = Micheal;
 				TargetAttributes = {
+					04D166F41C6DACA500EE4FC5 = {
+						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = H2UW5RTL22;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
+					};
 					04EF68701C0F0EE100EC8A06 = {
 						CreatedOnToolsVersion = 7.1;
 						DevelopmentTeam = H2UW5RTL22;
 						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};
@@ -941,11 +1054,20 @@
 				04EF68701C0F0EE100EC8A06 /* Newstracker */,
 				04EF688C1C0F0EE100EC8A06 /* NewstrackerTests */,
 				04EF68971C0F0EE100EC8A06 /* NewstrackerUITests */,
+				04D166F41C6DACA500EE4FC5 /* BackgroundWidget */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		04D166F31C6DACA500EE4FC5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				04D166FD1C6DACA500EE4FC5 /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		04EF686F1C0F0EE100EC8A06 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -956,7 +1078,9 @@
 				04E6BB8C1C27E3CF00EE3AB6 /* ltarrow.png in Resources */,
 				04EF68871C0F0EE100EC8A06 /* LaunchScreen.storyboard in Resources */,
 				042CE4D61C1AE8C300503F62 /* redot.png in Resources */,
+				04F1CC711C71C26400ECA9E9 /* four-min.png in Resources */,
 				042538B31C58E328004FE875 /* createIncident.png in Resources */,
+				04F1CC741C71C26400ECA9E9 /* two-min.png in Resources */,
 				04EF68841C0F0EE100EC8A06 /* Assets.xcassets in Resources */,
 				042538B41C58E328004FE875 /* deleteIncident.png in Resources */,
 				048C26351C3D19C300E95215 /* usericon.png in Resources */,
@@ -966,6 +1090,7 @@
 				042AF5911C205C87004291EE /* splashicon.png in Resources */,
 				04EF687F1C0F0EE100EC8A06 /* Main.storyboard in Resources */,
 				0482CC961C64D738001C94A7 /* eye.png in Resources */,
+				04F1CC701C71C26400ECA9E9 /* five-min.png in Resources */,
 				0438977B1C68B3540054A3BC /* new.png in Resources */,
 				043C17FD1C23DA2800FB242E /* greecircle.png in Resources */,
 				04BD0FBC1C1EE2A400B37ACB /* aboutus.png in Resources */,
@@ -973,6 +1098,7 @@
 				042538B61C58E350004FE875 /* map-pointer.png in Resources */,
 				04650B4C1C173D7100007047 /* bluepin.png in Resources */,
 				04E6BB7D1C27CA4300EE3AB6 /* incidentdeletion.png in Resources */,
+				04F1CC731C71C26400ECA9E9 /* three-min.png in Resources */,
 				04BD0FBE1C1EE2A400B37ACB /* logout.png in Resources */,
 				042AF5861C204E5E004291EE /* arrow.png in Resources */,
 				04BD0FB11C1EC55200B37ACB /* blackpin.png in Resources */,
@@ -985,6 +1111,7 @@
 				042AF56C1C1FDDF2004291EE /* loginicon.png in Resources */,
 				048C263D1C3D284E00E95215 /* question.png in Resources */,
 				043C17FE1C23DA2800FB242E /* greycircle.png in Resources */,
+				04F1CC721C71C26400ECA9E9 /* one-min.png in Resources */,
 				04AEE4651C299E08001D536A /* Roboto-Medium.ttf in Resources */,
 				04E6BB7C1C27CA4300EE3AB6 /* groupmessage.png in Resources */,
 				0482CC981C64D754001C94A7 /* message.png in Resources */,
@@ -1080,6 +1207,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		04D166F11C6DACA500EE4FC5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				04D166FA1C6DACA500EE4FC5 /* TodayViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		04EF686D1C0F0EE100EC8A06 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1098,9 +1233,11 @@
 				046137F81C101662001F574D /* FoodItems.m in Sources */,
 				040E0EDD1C281E6D000EDFD2 /* User.m in Sources */,
 				04650B281C16C9B200007047 /* SideMenuViewController.m in Sources */,
+				04F1CC691C71BC7C00ECA9E9 /* TutorialScreen.m in Sources */,
 				042C3C2C1C56085E001EE815 /* UIColor+myColors.m in Sources */,
 				042AF5811C203F42004291EE /* IncidentListViewController.m in Sources */,
 				04EF687C1C0F0EE100EC8A06 /* MapViewController.m in Sources */,
+				04F1CC771C71F62000ECA9E9 /* Tutorials.m in Sources */,
 				043897711C688D430054A3BC /* Message.m in Sources */,
 				046137FB1C101662001F574D /* WebServiceHandler.m in Sources */,
 				04E6BB871C27E1B900EE3AB6 /* GroupMessageViewController.m in Sources */,
@@ -1155,6 +1292,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		04D167001C6DACA500EE4FC5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 04D166F41C6DACA500EE4FC5 /* BackgroundWidget */;
+			targetProxy = 04D166FF1C6DACA500EE4FC5 /* PBXContainerItemProxy */;
+		};
 		04EF688F1C0F0EE100EC8A06 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 04EF68701C0F0EE100EC8A06 /* Newstracker */;
@@ -1168,6 +1310,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		04D166FB1C6DACA500EE4FC5 /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				04D166FC1C6DACA500EE4FC5 /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
 		04EF687D1C0F0EE100EC8A06 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1187,6 +1337,38 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		04D167021C6DACA600EE4FC5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = BackgroundWidget/BackgroundWidget.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = BackgroundWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.dci.Newstracker.BackgroundWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		04D167031C6DACA600EE4FC5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = BackgroundWidget/BackgroundWidget.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = BackgroundWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.dci.Newstracker.BackgroundWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 		04EF689F1C0F0EE100EC8A06 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1204,8 +1386,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1227,7 +1409,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "fcff1dfc-ab76-45dc-a9f1-a2be532c16e0";
+				PROVISIONING_PROFILE = "ca66a602-d62a-4985-9e3d-3cba00f62451";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1250,8 +1432,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -1266,7 +1448,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "fcff1dfc-ab76-45dc-a9f1-a2be532c16e0";
+				PROVISIONING_PROFILE = "ca66a602-d62a-4985-9e3d-3cba00f62451";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -1278,6 +1460,7 @@
 			baseConfigurationReference = F500388903745AC75D7ED686 /* Pods-Newstracker.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Newstracker/Newstracker.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Newstracker/Info.plist;
@@ -1294,6 +1477,7 @@
 			baseConfigurationReference = 575A5FF8DFAE43D41E3F5038 /* Pods-Newstracker.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Newstracker/Newstracker.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Newstracker/Info.plist;
@@ -1356,6 +1540,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		04D167041C6DACA600EE4FC5 /* Build configuration list for PBXNativeTarget "BackgroundWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				04D167021C6DACA600EE4FC5 /* Debug */,
+				04D167031C6DACA600EE4FC5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		04EF686C1C0F0EE100EC8A06 /* Build configuration list for PBXProject "Newstracker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -39,8 +39,8 @@
     
     [manager GET:URL parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
-         [self parseGeocodeData:responseObject];
          [SVProgressHUD dismiss];
+         [self parseGeocodeData:responseObject];
          [[UIApplication sharedApplication] endIgnoringInteractionEvents];
      }
      failure:^(AFHTTPRequestOperation *operation, NSError *error)
@@ -62,8 +62,8 @@
     
     [manager GET:URL parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
      {
-         [self parseTimeDistanceData:responseObject];
          [SVProgressHUD dismiss];
+         [self parseTimeDistanceData:responseObject];
          [[UIApplication sharedApplication] endIgnoringInteractionEvents];
      }
          failure:^(AFHTTPRequestOperation *operation, NSError *error)
@@ -73,30 +73,6 @@
          }
          [SVProgressHUD dismiss];
          [[UIApplication sharedApplication] endIgnoringInteractionEvents];
-     }];
-    
-}
-
-- (void)bgTimeDistanceForURL:(NSString *)URL
-{
-    [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    
-    [manager GET:URL parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
-     {
-         NSArray *routeArray = responseObject[@"routes"];
-         if (routeArray.count>0)
-         {
-             NSString *distance = responseObject[@"routes"][0][@"legs"][0][@"distance"][@"text"];
-             NSString *duration = responseObject[@"routes"][0][@"legs"][0][@"duration"][@"text"];
-             
-             NSLog(@"Distance: %@", distance);
-             NSLog(@"Time: %@", duration);
-         }
-     }
-         failure:^(AFHTTPRequestOperation *operation, NSError *error)
-     {
-         NSLog(@"error: %@", [error localizedDescription]);
      }];
     
 }
@@ -156,24 +132,24 @@
     [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject)
      {
+         [SVProgressHUD dismiss];
          NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:responseObject];
          xmlParser.delegate = self;
          BOOL isParsed = [xmlParser parse];
          if (isParsed)
          {
          }
-         [SVProgressHUD dismiss];
          [[UIApplication sharedApplication] endIgnoringInteractionEvents];
      }
      failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
+         [SVProgressHUD dismiss];
          if ([self.delegate respondsToSelector:@selector(requestFailedWithError:)]) {
              [self.delegate requestFailedWithError:error];
          }
          if (gfailure!=nil) {
              gfailure([error localizedDescription]);
          }
-         [SVProgressHUD dismiss];
          [[UIApplication sharedApplication] endIgnoringInteractionEvents];
      }];
     [operation setQueuePriority:NSOperationQueuePriorityVeryHigh];

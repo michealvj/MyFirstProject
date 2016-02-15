@@ -104,8 +104,14 @@
         }
         case 5:
         {
+            [UserDefaults showTutorials];
+            MapViewController *nav = [self.storyboard instantiateViewControllerWithIdentifier:@"MapViewController"];
+            UINavigationController *navigationController = self.menuContainerViewController.centerViewController;
+            NSArray *controllers = [NSArray arrayWithObject:nav];
+            navigationController.viewControllers = controllers;
+            [navigationController popViewControllerAnimated:YES];
             [self.menuContainerViewController setMenuState:MFSideMenuStateClosed];
-            NSLog(@"about page");
+
             break;
        }
         case 6:
@@ -149,6 +155,8 @@
     [UserDefaults clearOfflineDatas];
     
     [[LocationTracker sharedLocationManager] stopUpdatingLocation];
+    AppDelegate *appdel = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [appdel.locationUpdateTimer invalidate];
 }
 
 @end

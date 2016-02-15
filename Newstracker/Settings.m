@@ -30,11 +30,9 @@
         !finalSettings.isVisibleToOtherUsers == initialSettings.isVisibleToOtherUsers||
         ![finalSettings.logoutTime isEqualToString: initialSettings.logoutTime];
         
-        NSLog(@"Settings changed");
     }
     else {
         isChanged = NO;
-        NSLog(@"Settings not changed");
     }
     
     return isChanged;

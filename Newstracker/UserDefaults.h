@@ -29,7 +29,10 @@
 + (id)getDeviceToken;
 + (CLLocationCoordinate2D)getMapLocation;
 + (id)getMapAddress;
++ (void)tutorialsSeen;
++ (void)showTutorials;
 
++ (BOOL)isFirstTime;
 + (BOOL)isLogin;
 + (BOOL)isManager;
 

@@ -15,6 +15,7 @@
 #import "utils.h"
 #import "MapViewController.h"
 #import "ForgotViewController.h"
+#import "AppDelegate.h"
 #import <POP.h>
 
 @interface LoginViewController ()
@@ -64,8 +65,14 @@
 {
     [self.emailTextField resignFirstResponder];
     [self.passwordTextField resignFirstResponder];
-    [WebServiceHandler sharedInstance].delegate = self;
-    [[WebServiceHandler sharedInstance] getCurrentUserDetailsForEmailID:self.emailTextField.text AndPassword:self.passwordTextField.text];
+    
+   if ([self.emailTextField hasText]&&[self.passwordTextField hasText]) {
+        [WebServiceHandler sharedInstance].delegate = self;
+        [[WebServiceHandler sharedInstance] getCurrentUserDetailsForEmailID:self.emailTextField.text AndPassword:self.passwordTextField.text];
+    }
+    else {
+        [[CodeSnip sharedInstance] showAlert:@"News Crew Tracker" withMessage:@"Some fields are empty" withTarget:self];
+    }
 }
 
 - (IBAction)forgetPasswordClicked:(id)sender
@@ -113,7 +120,10 @@
         [UserDefaults setGroupNameWithValue:groupName];
         [UserDefaults setUserTypeWithValue:userType];
         
-        
+        AppDelegate *appdel = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        [appdel.locationUpdateTimer invalidate];
+        [appdel backgroundLocationUpdate];
+
         [[SideBar sharedInstance] setUpSideMenu];
     }
     else if ([data[@"Status"]isEqualToString:@"Failed"])

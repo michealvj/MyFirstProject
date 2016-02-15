@@ -12,13 +12,15 @@
 
 + (void)setUserIDWithValue:(id)value
 {
-    [[NSUserDefaults standardUserDefaults] setValue:value forKey:@"userID"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    NSUserDefaults *sharedUserID = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.dci.Newstracker"];
+    [sharedUserID setValue:value forKey:@"userID"];
+    [sharedUserID synchronize];
 }
 
 + (id)getUserID
 {
-    return [[NSUserDefaults standardUserDefaults] valueForKey:@"userID"];
+    NSUserDefaults *sharedUserID = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.dci.Newstracker"];
+     return [sharedUserID valueForKey:@"userID"];
 }
 
 + (void)setLastIncidentIDWithValue:(id)value
@@ -140,6 +142,12 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
++ (void)tutorialsSeen
+{
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasSeenTutorials"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 + (id)getMapAddress
 {
     if ([[NSUserDefaults standardUserDefaults] valueForKey:@"mapAddress"])
@@ -157,7 +165,8 @@
 
 + (void)clearUserID
 {
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"userID"];
+    NSUserDefaults *sharedUserID = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.dci.Newstracker"];
+    [sharedUserID removeObjectForKey:@"userID"];
 }
 
 + (void)clearGroupID
@@ -181,16 +190,37 @@
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"mapLongitude"];
 }
 
++ (void)showTutorials
+{
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"hasSeenTutorials"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 
 + (BOOL)isLogin
 {
-    if ([[NSUserDefaults standardUserDefaults] valueForKey:@"userID"]) {
+    NSUserDefaults *sharedUserID = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.dci.Newstracker"];
+
+    if ([sharedUserID valueForKey:@"userID"]) {
         return YES;
     }
     else {
         return NO;
     }
 }
+
++ (BOOL)isFirstTime
+{
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"hasSeenTutorials"])
+    {
+        return NO;
+    }
+    else
+    {
+        return YES;
+    }
+}
+
 
 #pragma mark - Offline Data storage
 

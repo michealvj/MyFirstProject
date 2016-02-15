@@ -25,6 +25,7 @@
     [self navigationBarSetup];
     [self initialiseMapView];
     self.searchTableView.hidden = YES;
+    self.searchTextField.delegate = self;
     [WebServiceHandler sharedInstance].delegate = self;
 }
 
@@ -57,9 +58,10 @@
 
 - (IBAction)searchButton:(id)sender
 {
-    self.searchTextField.text = @"";
-    self.searchTableView.hidden=YES;
-    [self.searchTextField becomeFirstResponder];
+    [self loadNearBySearchResults:self.searchTextField.text];
+//    self.searchTextField.text = @"";
+//    self.searchTableView.hidden=YES;
+//    [self.searchTextField becomeFirstResponder];
 }
 
 #pragma mark - textField Delegate Methods
@@ -106,6 +108,8 @@
     return YES;
 }
 
+#pragma mark - Search Delegate
+
 - (void)loadSearchResults:(NSString *)searchText
 {
     searchText = [searchText stringByReplacingOccurrencesOfString:@" " withString:@"+"];
@@ -150,6 +154,58 @@
                      }
                      [searchAddress addObject:addressString];
                  }
+             }
+             [self.searchTableView reloadData];
+         }
+         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+     }
+         failure:^(AFHTTPRequestOperation *operation, NSError *error)
+     {
+         [[CodeSnip sharedInstance] showAlert:@"Error" withMessage:[error localizedDescription] withTarget:self];
+         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+     }];
+    
+}
+
+- (void)loadNearBySearchResults:(NSString *)searchText
+{
+    searchText = [searchText stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+    CLLocationCoordinate2D currentCoordinate = [[LocationTracker sharedInstance] getCurrentLocation].location.coordinate;
+    NSString *browserKey = GOOGLE_SERVER_KEY1;
+    int radius = 2500;
+    
+    NSString *urlString = [NSString stringWithFormat:
+                           @"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%f,%f&radius=%i&name=%@&key=%@", currentCoordinate.latitude, currentCoordinate.longitude, radius, searchText,browserKey];
+    
+    
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    
+    [manager GET:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject)
+     {
+         NSDictionary *jsonData = responseObject;
+         NSLog(@"%@", jsonData);
+         NSArray *predictions = jsonData[@"results"];
+         
+         searchLocation = [[NSMutableArray alloc] initWithCapacity:5];
+         searchAddress = [[NSMutableArray alloc] initWithCapacity:5];
+         searchFullAddress = [[NSMutableArray alloc] initWithCapacity:5];
+         searchPlaceIDs = [[NSMutableArray alloc] initWithCapacity:5];
+         
+         if (predictions.count==0) {
+             [searchLocation addObject:@"No results found"];
+             [searchAddress addObject:@""];
+             [searchFullAddress addObject:@""];
+             [self.searchTableView reloadData];
+         }
+         
+         else {
+             for (NSDictionary *predict in predictions) {
+                 [searchFullAddress addObject:predict[@"vicinity"]];
+                 [searchPlaceIDs addObject:predict[@"place_id"]];
+                 [searchLocation addObject:predict[@"name"]];
+                 [searchAddress addObject:predict[@"vicinity"]];
              }
              [self.searchTableView reloadData];
          }

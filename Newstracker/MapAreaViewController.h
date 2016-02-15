@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "utils.h"
 
-@interface MapAreaViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, WebServiceHandlerDelegate>
+@interface MapAreaViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, WebServiceHandlerDelegate, UISearchBarDelegate>
 @property (weak, nonatomic) IBOutlet UIView *mapParentView;
 @property (weak, nonatomic) IBOutlet UITextField *searchTextField;
 @property (weak, nonatomic) IBOutlet UITableView *searchTableView;
