@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		040E0EDD1C281E6D000EDFD2 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 040E0EDC1C281E6D000EDFD2 /* User.m */; };
+		0418EA831C7C274A0096DAB1 /* privacypolicy-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 0418EA821C7C274A0096DAB1 /* privacypolicy-icon.png */; };
+		0418EA851C7C2E170096DAB1 /* privacy.png in Resources */ = {isa = PBXBuildFile; fileRef = 0418EA841C7C2E170096DAB1 /* privacy.png */; };
+		0418EA881C7C2FE70096DAB1 /* PrivacyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0418EA871C7C2FE70096DAB1 /* PrivacyViewController.m */; };
 		041A5E8F1C11B0AE00B2B7AB /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 041A5E8E1C11B0AE00B2B7AB /* LoginViewController.m */; };
 		041A5E931C11D1A600B2B7AB /* SideBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 041A5E921C11D1A600B2B7AB /* SideBar.m */; };
 		04227F8A1C452FBC00166C7A /* LocationTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 04227F851C452FBC00166C7A /* LocationTracker.m */; };
@@ -175,6 +178,10 @@
 /* Begin PBXFileReference section */
 		040E0EDB1C281E6C000EDFD2 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		040E0EDC1C281E6D000EDFD2 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		0418EA821C7C274A0096DAB1 /* privacypolicy-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "privacypolicy-icon.png"; sourceTree = "<group>"; };
+		0418EA841C7C2E170096DAB1 /* privacy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = privacy.png; sourceTree = "<group>"; };
+		0418EA861C7C2FE70096DAB1 /* PrivacyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrivacyViewController.h; sourceTree = "<group>"; };
+		0418EA871C7C2FE70096DAB1 /* PrivacyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrivacyViewController.m; sourceTree = "<group>"; };
 		041A5E8D1C11B0AE00B2B7AB /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		041A5E8E1C11B0AE00B2B7AB /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		041A5E911C11D1A600B2B7AB /* SideBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SideBar.h; path = Utilities/SideBar.h; sourceTree = "<group>"; };
@@ -372,6 +379,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0418EA891C7C2FEF0096DAB1 /* Privacy View Controller */ = {
+			isa = PBXGroup;
+			children = (
+				0418EA861C7C2FE70096DAB1 /* PrivacyViewController.h */,
+				0418EA871C7C2FE70096DAB1 /* PrivacyViewController.m */,
+			);
+			name = "Privacy View Controller";
+			sourceTree = "<group>";
+		};
 		041A38FB1C142F2E0060A61D /* Webservice */ = {
 			isa = PBXGroup;
 			children = (
@@ -637,6 +653,8 @@
 		04650B431C172CE900007047 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
+				0418EA841C7C2E170096DAB1 /* privacy.png */,
+				0418EA821C7C274A0096DAB1 /* privacypolicy-icon.png */,
 				0482CC971C64D754001C94A7 /* message.png */,
 				048C26361C3D19DE00E95215 /* menu.png */,
 				04BD0FB61C1EE2A400B37ACB /* aboutus.png */,
@@ -804,6 +822,7 @@
 				04E6BB881C27E1C000EE3AB6 /* Group Message View Controller */,
 				047D5EE01C31035300807552 /* Map Area View Controller */,
 				043897751C68914F0054A3BC /* Message View Controller */,
+				0418EA891C7C2FEF0096DAB1 /* Privacy View Controller */,
 				04EF687D1C0F0EE100EC8A06 /* Main.storyboard */,
 				04F2B5411C3A36EC0010162B /* MyProtocolMethod.h */,
 				04EF68831C0F0EE100EC8A06 /* Assets.xcassets */,
@@ -1076,6 +1095,7 @@
 				04E6BB8B1C27E3CF00EE3AB6 /* home.png in Resources */,
 				04B955AF1C34F9E10078C8CA /* edit.png in Resources */,
 				04E6BB8C1C27E3CF00EE3AB6 /* ltarrow.png in Resources */,
+				0418EA851C7C2E170096DAB1 /* privacy.png in Resources */,
 				04EF68871C0F0EE100EC8A06 /* LaunchScreen.storyboard in Resources */,
 				042CE4D61C1AE8C300503F62 /* redot.png in Resources */,
 				04F1CC711C71C26400ECA9E9 /* four-min.png in Resources */,
@@ -1101,6 +1121,7 @@
 				04F1CC731C71C26400ECA9E9 /* three-min.png in Resources */,
 				04BD0FBE1C1EE2A400B37ACB /* logout.png in Resources */,
 				042AF5861C204E5E004291EE /* arrow.png in Resources */,
+				0418EA831C7C274A0096DAB1 /* privacypolicy-icon.png in Resources */,
 				04BD0FB11C1EC55200B37ACB /* blackpin.png in Resources */,
 				042AF56D1C1FDDF2004291EE /* password.png in Resources */,
 				0482CC901C648108001C94A7 /* pushIcon.png in Resources */,
@@ -1238,6 +1259,7 @@
 				042AF5811C203F42004291EE /* IncidentListViewController.m in Sources */,
 				04EF687C1C0F0EE100EC8A06 /* MapViewController.m in Sources */,
 				04F1CC771C71F62000ECA9E9 /* Tutorials.m in Sources */,
+				0418EA881C7C2FE70096DAB1 /* PrivacyViewController.m in Sources */,
 				043897711C688D430054A3BC /* Message.m in Sources */,
 				046137FB1C101662001F574D /* WebServiceHandler.m in Sources */,
 				04E6BB871C27E1B900EE3AB6 /* GroupMessageViewController.m in Sources */,
@@ -1341,14 +1363,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BackgroundWidget/BackgroundWidget.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
 				INFOPLIST_FILE = BackgroundWidget/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.dci.Newstracker.BackgroundWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "42caf02c-844e-4af7-939b-ec2f943f0cee";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -1357,14 +1379,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BackgroundWidget/BackgroundWidget.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
 				INFOPLIST_FILE = BackgroundWidget/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.dci.Newstracker.BackgroundWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "42caf02c-844e-4af7-939b-ec2f943f0cee";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -1386,8 +1408,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1409,7 +1431,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "ca66a602-d62a-4985-9e3d-3cba00f62451";
+				PROVISIONING_PROFILE = "a946554b-c7b9-4f79-88b2-51fce35cafb3";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1432,8 +1454,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -1448,7 +1470,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "ca66a602-d62a-4985-9e3d-3cba00f62451";
+				PROVISIONING_PROFILE = "a946554b-c7b9-4f79-88b2-51fce35cafb3";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -1461,14 +1483,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Newstracker/Newstracker.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
 				INFOPLIST_FILE = Newstracker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.dci.Newstracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "f82306b6-44b3-4ee5-bfd6-6f38d7954a07";
 			};
 			name = Debug;
 		};
@@ -1478,14 +1500,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Newstracker/Newstracker.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
 				INFOPLIST_FILE = Newstracker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.dci.Newstracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "f82306b6-44b3-4ee5-bfd6-6f38d7954a07";
 			};
 			name = Release;
 		};

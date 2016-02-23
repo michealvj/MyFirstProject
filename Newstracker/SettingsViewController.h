@@ -9,10 +9,20 @@
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 
+typedef enum {
+    SendGroupMessage,
+    SetMapArea,
+    GPSSettings,
+    AutoLogoutSwitch,
+    LogoutTime,
+    AutoDeleteSwitch,
+    IncidentDeletionTime,
+    AllUserCanSee
+} SettingsObject;
+
 @interface SettingsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, WebServiceHandlerDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *settingsTableView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *datePickerBottomConstraint;
 @property (weak, nonatomic) IBOutlet UIDatePicker *datePicker;
 @property (weak, nonatomic) IBOutlet UIView *datePopupView;
-
 @end

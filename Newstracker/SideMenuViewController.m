@@ -27,6 +27,7 @@
     
     menuArray = [[Menu sharedInstance] getMenuList];
     self.groupNameLabel.text = [UserDefaults getGroupName];
+
 }
 
 #pragma mark - Collectionview delegate and datasource
@@ -115,6 +116,26 @@
             break;
        }
         case 6:
+        {
+            PrivacyViewController *nav = [self.storyboard instantiateViewControllerWithIdentifier:@"PrivacyViewController"];
+            nav.navigationTitle = @"Privacy Policy";
+            UINavigationController *navigationController = self.menuContainerViewController.centerViewController;
+            NSArray *controllers = [NSArray arrayWithObject:nav];
+            navigationController.viewControllers = controllers;
+            [self.menuContainerViewController setMenuState:MFSideMenuStateClosed];
+            break;
+        }
+        case 7:
+        {
+            PrivacyViewController *nav = [self.storyboard instantiateViewControllerWithIdentifier:@"PrivacyViewController"];
+            nav.navigationTitle = @"Terms & Conditions";
+            UINavigationController *navigationController = self.menuContainerViewController.centerViewController;
+            NSArray *controllers = [NSArray arrayWithObject:nav];
+            navigationController.viewControllers = controllers;
+            [self.menuContainerViewController setMenuState:MFSideMenuStateClosed];
+            break;
+        }
+        case 8:
         {
             [self.menuContainerViewController setMenuState:MFSideMenuStateClosed];
             [WebServiceHandler sharedInstance].delegate = self;

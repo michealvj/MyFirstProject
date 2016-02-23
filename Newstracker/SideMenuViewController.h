@@ -16,6 +16,7 @@
 #import "LoginViewController.h"
 #import "SettingsViewController.h"
 #import "MessageViewController.h"
+#import "PrivacyViewController.h"
 
 @interface SideMenuViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, WebServiceHandlerDelegate>
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;

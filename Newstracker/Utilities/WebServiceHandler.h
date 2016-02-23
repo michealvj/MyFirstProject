@@ -53,6 +53,7 @@
 
 +(WebServiceHandler *)sharedInstance;
 - (void)updateCurrentLocation:(CLLocationCoordinate2D)currentCoordinate WithGPSStatus:(NSString *)gpsStatus;
+- (void)updateDeviceID:(NSString *)deviceToken;
 
 - (void)getGeocodeForURL:(NSString *)URL;
 - (void)getTimeDistanceForURL:(NSString *)URL;

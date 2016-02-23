@@ -26,6 +26,7 @@
     if (initialSettings!=nil)
     {
         isChanged = ![finalSettings.incidentDeletionTime isEqualToString:initialSettings.incidentDeletionTime]||
+        !finalSettings.isAutomaticLogoutEnabled == initialSettings.isAutomaticLogoutEnabled||
         !finalSettings.isAutomaticDeletionEnabled == initialSettings.isAutomaticDeletionEnabled||
         !finalSettings.isVisibleToOtherUsers == initialSettings.isVisibleToOtherUsers||
         ![finalSettings.logoutTime isEqualToString: initialSettings.logoutTime];

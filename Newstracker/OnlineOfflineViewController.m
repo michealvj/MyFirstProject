@@ -112,6 +112,7 @@
         titleLabel.textColor = [UIColor blackColor];
     }
     else {
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         imageView.image = [UIImage imageNamed:@"greycircle.png"];
         userIconImage.alpha = 0.5;
         titleLabel.textColor = GREYTEXTCOLOR;
@@ -124,10 +125,12 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    MapViewController *map = [self.storyboard instantiateViewControllerWithIdentifier:@"MapViewController"];
-    map.selectedUser = [dataArray objectAtIndex:indexPath.row];
-    [self.navigationController pushViewController:map animated:YES];
+    User *selectedUser = [dataArray objectAtIndex:indexPath.row];
+    if ([selectedUser.status isEqualToString:@"Online"]) {
+        MapViewController *map = [self.storyboard instantiateViewControllerWithIdentifier:@"MapViewController"];
+        map.selectedUser = [dataArray objectAtIndex:indexPath.row];
+        [self.navigationController pushViewController:map animated:YES];
+    }
 }
 
 @end

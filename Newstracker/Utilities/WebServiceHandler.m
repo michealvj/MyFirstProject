@@ -33,7 +33,7 @@
 
 - (void)getGeocodeForURL:(NSString *)URL
 {
-    [SVProgressHUD showWithStatus:@"Getting Location"];
+    [SVProgressHUD showWithStatus:@"Getting location"];
     [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     
@@ -56,7 +56,7 @@
 
 - (void)getTimeDistanceForURL:(NSString *)URL
 {
-    [SVProgressHUD showWithStatus:@"Getting Travel Time"];
+    [SVProgressHUD showWithStatus:@"Getting duration"];
     [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     
@@ -105,7 +105,7 @@
       }
      failure:^(AFHTTPRequestOperation *operation, NSError *error)
      {
-         NSLog(@"Error in Background update: %@", [error localizedDescription]);
+         NSLog(@"Error in Background: %@", [error localizedDescription]);
      }];
     [operation setQueuePriority:NSOperationQueuePriorityLow];
     [operation setQualityOfService:NSOperationQualityOfServiceBackground];
@@ -161,7 +161,7 @@
 - (void)getSettingsWithSuccess:(void (^)(Settings *settings))success WithError:(void (^)(NSString * failure))failure
 {
     NSString *userID = [UserDefaults getUserID];
-    self.progressStatus = @"Loading Settings";
+    self.progressStatus = @"Loading";
     NSString *soapBeginTag = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">\n<soap12:Body>\n"];
     NSString *soapEndTag = [NSString stringWithFormat:@"\n</soap12:Body>\n</soap12:Envelope>"];
     
@@ -195,6 +195,7 @@
     [soapMessage appendString:[NSString stringWithFormat:@"<Location>%@</Location>\n", settings.mapLocation]];
     [soapMessage appendString:[NSString stringWithFormat:@"<UserView>%i</UserView>\n", settings.isVisibleToOtherUsers]];
     [soapMessage appendString:[NSString stringWithFormat:@"<IncidentDeleteStatus>%i</IncidentDeleteStatus>\n", settings.isAutomaticDeletionEnabled]];
+    [soapMessage appendString:[NSString stringWithFormat:@"<LogOutStatus>%i</LogOutStatus>\n", settings.isAutomaticLogoutEnabled]];
     [soapMessage appendString:[NSString stringWithFormat:@"<DeletionTime>%@</DeletionTime>\n", settings.incidentDeletionTime]];
     [soapMessage appendString:[NSString stringWithFormat:@"<LogoutTime>%@</LogoutTime>\n", settings.logoutTime]];
     [soapMessage appendString:[NSString stringWithFormat:@"<UserId>%@</UserId>\n", userID]];
@@ -209,7 +210,7 @@
     NSString *userID = [UserDefaults getUserID];
     
     
-    self.progressStatus = @"Sending Message...";
+    self.progressStatus = @"Sending message";
     NSString *soapBeginTag = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">\n<soap12:Body>\n"];
     NSString *soapEndTag = [NSString stringWithFormat:@"\n</soap12:Body>\n</soap12:Envelope>"];
     
@@ -260,6 +261,25 @@
     [self postSoapMessage:soapMessage WithContentType:@"application/soap+xml; charset=utf-8"];
 }
 
+- (void)updateDeviceID:(NSString *)deviceToken
+{
+    NSString *userID = [UserDefaults getUserID];
+    
+    NSString *soapBeginTag = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">\n<soap12:Body>\n"];
+    NSString *soapEndTag = [NSString stringWithFormat:@"\n</soap12:Body>\n</soap12:Envelope>"];
+    
+    NSMutableString *soapMessage = [[NSMutableString alloc] init];
+    [soapMessage appendString:soapBeginTag];
+    [soapMessage appendString:[NSString stringWithFormat:@"<UpdateDeviceId xmlns=\"http://tempuri.org/\">\n"]];
+    [soapMessage appendString:[NSString stringWithFormat:@"<UserId>%@</UserId>\n", userID]];
+    [soapMessage appendString:[NSString stringWithFormat:@"<GCMID>%@</GCMID>\n", deviceToken]];
+    [soapMessage appendString:[NSString stringWithFormat:@"</UpdateDeviceId>"]];
+    [soapMessage appendString:soapEndTag];
+    
+    [self postBackgroundSoapMessage:soapMessage WithContentType:@"application/soap+xml; charset=utf-8"];
+}
+
+
 - (void)getPasswordForEmailID:(NSString *)emailID
 {
     self.progressStatus = @"Sending";
@@ -278,7 +298,7 @@
 
 - (void)logOffUser
 {
-    self.progressStatus = @"Logging Off";
+    self.progressStatus = @"Logging off";
     NSString *groupID = [UserDefaults getGroupID];
     NSString *userID = [UserDefaults getUserID];
     
@@ -382,7 +402,7 @@
 
 - (void)createIncidentWithParams:(NSDictionary *)createInfo
 {
-    self.progressStatus = @"Creating Incident";
+    self.progressStatus = @"Creating incident";
     NSString *userID = [UserDefaults getUserID];
     NSString *incidentName = createInfo[@"IncidentName"];
     NSString *description = createInfo[@"Description"];
@@ -420,7 +440,7 @@
 
 - (void)updateIncidentWithParams:(NSDictionary *)createInfo
 {
-    self.progressStatus = @"Updating Incident";
+    self.progressStatus = @"Updating incident";
     NSString *groupID = [UserDefaults getGroupID];
     NSString *userID = [UserDefaults getUserID];
     NSString *incidentID = createInfo[@"IncidentId"];
@@ -462,7 +482,7 @@
 
 - (void)deleteIncidentWithID:(NSString *)incidentID
 {
-    self.progressStatus = @"Deleting Incident";
+    self.progressStatus = @"Deleting incident";
     NSString *userID = [UserDefaults getUserID];
     
     NSString *soapBeginTag = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">\n<soap12:Body>\n"];
@@ -481,7 +501,7 @@
 
 - (void)getAllIncidents
 {
-    self.progressStatus = @"Loading Incidents";
+    self.progressStatus = @"Loading incidents";
     CLLocationCoordinate2D currentCoordinate = [[[LocationTracker alloc] init]getCurrentLocation].location.coordinate;
     NSString *userID = [UserDefaults getUserID];
     NSString *latitude = [NSString stringWithFormat:@"%f", currentCoordinate.latitude];
@@ -505,7 +525,7 @@
 
 - (void)getAllMessages
 {
-    self.progressStatus = @"Loading Messages";
+    self.progressStatus = @"Loading messages";
     NSString *userID = [UserDefaults getUserID];
     
     NSString *soapBeginTag = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">\n<soap12:Body>\n"];
@@ -524,7 +544,7 @@
 
 - (void)getIncidentNearUser:(NSString *)incidentID
 {
-    self.progressStatus = @"Loading Users";
+    self.progressStatus = @"Loading users";
     NSString *userID = [UserDefaults getUserID];
     
     NSString *soapBeginTag = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">\n<soap12:Body>\n"];
@@ -543,19 +563,21 @@
 
 - (void)assignIncident:(NSString *)incidentID forUserID:(NSString *)userID
 {
-    self.progressStatus = @"Assigning Incident";
+    self.progressStatus = @"Assigning incident";
     NSString *groupID = [UserDefaults getGroupID];
+    NSString *assignedByID = [UserDefaults getUserID];
     
     NSString *soapBeginTag = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">\n<soap12:Body>\n"];
     NSString *soapEndTag = [NSString stringWithFormat:@"\n</soap12:Body>\n</soap12:Envelope>"];
     
     NSMutableString *soapMessage = [[NSMutableString alloc] init];
     [soapMessage appendString:soapBeginTag];
-    [soapMessage appendString:[NSString stringWithFormat:@"<AssignIncident xmlns=\"http://tempuri.org/\">\n"]];
+    [soapMessage appendString:[NSString stringWithFormat:@"<AssignIncidentTest xmlns=\"http://tempuri.org/\">\n"]];
     [soapMessage appendString:[NSString stringWithFormat:@"<GroupId>%@</GroupId>\n", groupID]];
     [soapMessage appendString:[NSString stringWithFormat:@"<UserId>%@</UserId>\n", userID]];
     [soapMessage appendString:[NSString stringWithFormat:@"<IncidentId>%@</IncidentId>\n", incidentID]];
-    [soapMessage appendString:[NSString stringWithFormat:@"</AssignIncident>"]];
+    [soapMessage appendString:[NSString stringWithFormat:@"<AssignedById>%@</AssignedById>\n", assignedByID]];
+    [soapMessage appendString:[NSString stringWithFormat:@"</AssignIncidentTest>"]];
     [soapMessage appendString:soapEndTag];
     
     [self postSoapMessage:soapMessage WithContentType:@"application/soap+xml; charset=utf-8"];
@@ -563,19 +585,21 @@
 
 - (void)unassignIncident:(NSString *)incidentID forUserID:(NSString *)userID
 {
-    self.progressStatus = @"Unassigning Incident";
+    self.progressStatus = @"Unassigning incident";
     NSString *groupID = [UserDefaults getGroupID];
-    
+    NSString *assignedByID = [UserDefaults getUserID];
+   
     NSString *soapBeginTag = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">\n<soap12:Body>\n"];
     NSString *soapEndTag = [NSString stringWithFormat:@"\n</soap12:Body>\n</soap12:Envelope>"];
     
     NSMutableString *soapMessage = [[NSMutableString alloc] init];
     [soapMessage appendString:soapBeginTag];
-    [soapMessage appendString:[NSString stringWithFormat:@"<UnAssignIncident xmlns=\"http://tempuri.org/\">\n"]];
+    [soapMessage appendString:[NSString stringWithFormat:@"<UnAssignIncidentTest xmlns=\"http://tempuri.org/\">\n"]];
     [soapMessage appendString:[NSString stringWithFormat:@"<GroupId>%@</GroupId>\n", groupID]];
     [soapMessage appendString:[NSString stringWithFormat:@"<UserId>%@</UserId>\n", userID]];
     [soapMessage appendString:[NSString stringWithFormat:@"<IncidentId>%@</IncidentId>\n", incidentID]];
-    [soapMessage appendString:[NSString stringWithFormat:@"</UnAssignIncident>"]];
+    [soapMessage appendString:[NSString stringWithFormat:@"<AssignedById>%@</AssignedById>\n", assignedByID]];
+    [soapMessage appendString:[NSString stringWithFormat:@"</UnAssignIncidentTest>"]];
     [soapMessage appendString:soapEndTag];
     
     [self postSoapMessage:soapMessage WithContentType:@"application/soap+xml; charset=utf-8"];
@@ -583,7 +607,7 @@
 
 - (void)getUsersIncidentForUserID:(NSString *)userID
 {
-    self.progressStatus = @"Getting Incidents";
+    self.progressStatus = @"Getting incidents";
     NSString *groupID = [UserDefaults getGroupID];
     
     NSString *soapBeginTag = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">\n<soap12:Body>\n"];
@@ -620,7 +644,7 @@
 
 - (void)getAllUsers
 {
-    self.progressStatus = @"Loading Users";
+    self.progressStatus = @"Loading users";
     NSString *groupID = [UserDefaults getGroupID];
     
     NSString *soapBeginTag = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">\n<soap12:Body>\n"];
@@ -639,7 +663,7 @@
 - (void)updateCurrentLocation:(CLLocationCoordinate2D)currentCoordinate WithGPSStatus:(NSString *)gpsStatus
 {
     NSString *userID = [UserDefaults getUserID];
-    NSLog(@"Updating current Location...");
+    NSLog(@"Updating current Location");
     NSString *soapBeginTag = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">\n<soap12:Body>\n"];
     NSString *soapEndTag = [NSString stringWithFormat:@"\n</soap12:Body>\n</soap12:Envelope>"];
     
@@ -680,7 +704,7 @@
             [self.delegate didReceiveUserData:json];
         }
         else {
-            NSLog(@"Error in delegate...");
+            NSLog(@"Error in delegate");
         }
     }
     
@@ -696,7 +720,10 @@
             [self parseMemberAndIncidentDetailsData:json];
         }
     }
-    
+    else if ([currentElementName isEqualToString:@"UpdateDeviceIdResult"])
+    {
+        NSLog(@"%@", json[@"Message"]);
+    }
     else if ([currentElementName isEqualToString:@"NewIncidentResult"])
     {
         [self parseNewIncidentDetails:json];
@@ -717,11 +744,11 @@
     {
         [self parseIncidentNearUser:json];
     }
-    else if ([currentElementName isEqualToString:@"AssignIncidentResult"])
+    else if ([currentElementName isEqualToString:@"AssignIncidentTestResult"])
     {
         [self parseAssignIncident:json];
     }
-    else if ([currentElementName isEqualToString:@"UnAssignIncidentResult"])
+    else if ([currentElementName isEqualToString:@"UnAssignIncidentTestResult"])
     {
         [self parseUnassignIncident:json];
     }
@@ -863,6 +890,7 @@
         NSString *logoutTime = settingsDict[@"LogoutTime"];
         NSString *incidentDeletionTime = settingsDict[@"IncDeletionTime"];
         NSString *incDeletionStatus = [NSString stringWithFormat:@"%@", settingsDict[@"IncDeletionStatus"]];
+        NSString *logoutStatus = [NSString stringWithFormat:@"%@", settingsDict[@"LogOutStatus"]];
         NSString *userView = [NSString stringWithFormat:@"%@", settingsDict[@"UserView"]];
         NSString *location = [NSString stringWithFormat:@"%@", settingsDict[@"Location"]];
         
@@ -871,6 +899,7 @@
         settings.gpsTime = gpsTime;
         settings.logoutTime = logoutTime;
         settings.incidentDeletionTime = incidentDeletionTime;
+        settings.isAutomaticLogoutEnabled = [logoutStatus isEqualToString:@"0"] ? NO:YES;;
         settings.isAutomaticDeletionEnabled = [incDeletionStatus isEqualToString:@"0"] ? NO:YES;
         settings.isVisibleToOtherUsers = [userView isEqualToString:@"0"] ? NO:YES;
         settings.mapLocation = location;
@@ -985,7 +1014,6 @@
             newUser.coordinate = CLLocationCoordinate2DMake([lat doubleValue], [lng doubleValue]);
             newUser.isAssigned = [user[@"IncidentStatus"] isEqualToString:@"Assign"]?NO:YES;
             [userList addObject:newUser];
-
         }
         if ([self.delegate respondsToSelector:@selector(didGetIncidentNearUser:)]) {
              [self.delegate didGetIncidentNearUser:userList];

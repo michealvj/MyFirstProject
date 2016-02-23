@@ -64,7 +64,12 @@
 
 + (id)getDeviceToken
 {
-    return [[NSUserDefaults standardUserDefaults] valueForKey:@"deviceToken"];
+    if ([[NSUserDefaults standardUserDefaults] valueForKey:@"deviceToken"]) {
+        return [[NSUserDefaults standardUserDefaults] valueForKey:@"deviceToken"];
+    }
+    else {
+        return @"";
+    }
 }
 
 + (void)setUserTypeWithValue:(id)value

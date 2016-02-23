@@ -58,11 +58,10 @@
     {
         self.navigationController.navigationBar.barTintColor =[UIColor whiteColor];
         self.navigationController.navigationBarHidden = YES;
-
+        
         tutorialScreen = [[TutorialScreen alloc] init];
         [tutorialScreen buildIntroOnView:self.view WithCompletionHandler:^{
-          NSLog(@"hai");
-         [UserDefaults tutorialsSeen];
+          [UserDefaults tutorialsSeen];
           [self loadInitialView];
         }];
         
@@ -94,6 +93,7 @@
     
     //Adding Marker
     //[self checkAppSettings];
+//    [self refreshMap];
     [[WebServiceHandler sharedInstance] getMemberAndIncidentDetails];
     
     //setting Flags
@@ -497,6 +497,7 @@
     {
         isAssignedArray = assignedArray;
         self.notificationMoreTableView.alwaysBounceVertical = NO;
+        self.notificationMoreTableView.tableFooterView = [[UIView alloc] init];
         [self.notificationMoreTableView reloadData];
         [self showNotificationMoreView];
     }
@@ -521,7 +522,7 @@
 - (void)didCreateNewIncident:(Incident *)incident
 {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [SVProgressHUD showSuccessWithStatus:@"Incident Created"];
+        [SVProgressHUD showSuccessWithStatus:@"Incident created"];
     });
 
     [self.incidentDetailTitle resignFirstResponder];
@@ -1465,7 +1466,7 @@
     
     self.viewIncidentTitleHeightConstraint.constant = [self.viewIncidentTitle contentSize].height;
    
-   self.viewIncidentAddressHeightConstraint.constant = [self.viewIncidentAddress contentSize].height;
+   self.viewIncidentAddressHeightConstraint.constant = [self.viewIncidentAddress contentSize].height+8;
 
     self.viewIncidentDescriptionHeightConstraint.constant = [self.viewIncidentDescription contentSize].height;
     NSLog(@"description height: %f", self.viewIncidentDescriptionHeightConstraint.constant);

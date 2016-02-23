@@ -9,6 +9,7 @@
 
 #import "AppDelegate.h"
 #import "MyPushView.h"
+#import <AudioToolbox/AudioToolbox.h>
 
 @interface AppDelegate ()
 
@@ -98,7 +99,10 @@
         }
     }
 }
-
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
+{
+    [application registerForRemoteNotifications];
+}
 
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
 {
@@ -108,6 +112,9 @@
     devToken = [devToken stringByReplacingOccurrencesOfString:@" " withString:@""];
     NSLog(@"My token is: %@", devToken);
     [UserDefaults setDeviceTokenWithValue:devToken];
+    
+    
+    [[WebServiceHandler sharedInstance] updateDeviceID:devToken];
 }
 
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
@@ -120,32 +127,51 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
+    NSString *messageType = userInfo[@"nfy"];
     NSString *pushMessage = userInfo[@"aps"][@"alert"];
     NSString *userName = userInfo[@"SendBy"];
     NSString *time = [userInfo[@"sent"] stringByReplacingOccurrencesOfString:@"\"" withString:@""];
     NSString *alertTitle = [NSString stringWithFormat:@"%@\n%@", userName, time];
     
+    NSString *incidentName = userInfo[@"IncidentName"];
     NSLog(@"Push Message: %@", userInfo);
-    
     
     UIApplicationState state = [application applicationState];
     if (state == UIApplicationStateActive)
     {
        MyPushView *push = [[MyPushView alloc] initWithTitle:@"News Crew Tracker" WithMessage:pushMessage];
-       push.userInfo = @{@"SendBy": userName, @"sent": time};;
+       push.userInfo = @{@"SendBy": userName, @"sent": time, @"IncidentName": incidentName, @"MessageType": messageType};
        [push addTarget:self action:@selector(showMessage:)];
         
         UILocalNotification* localNotification = [[UILocalNotification alloc] init];
         localNotification.fireDate = [NSDate date];
-        localNotification.userInfo = @{@"SendBy": userName, @"sent": time};
+        localNotification.userInfo = @{@"SendBy": userName, @"sent": time, @"IncidentName": incidentName, @"MessageType": messageType};
         localNotification.alertTitle = @"News Crew Tracker";
         localNotification.alertBody = pushMessage;
         localNotification.timeZone = [NSTimeZone defaultTimeZone];
         [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+        
+        if([[UIDevice currentDevice].model isEqualToString:@"iPhone"])
+        {
+ 
+            AudioServicesPlaySystemSound (1007);
+//            AudioServicesPlaySystemSound (1352); //works ALWAYS as of this post
+        }
+        else
+        {
+            AudioServicesPlayAlertSound (1105);
+        }
+
     }
         
     else
     {
+        if ([messageType isEqualToString:@"Group Message"]) {
+            alertTitle = [NSString stringWithFormat:@"%@\n%@", userName, time];
+        }
+        else {
+            alertTitle = [NSString stringWithFormat:@"%@\n%@", incidentName, time];
+        }
         [[CodeSnip sharedInstance] showAlert:alertTitle withMessage:pushMessage withTarget:self.window.rootViewController];
     }
 }
@@ -153,11 +179,20 @@
 - (void)showMessage:(id)tap
 {
     MyPushView *pushView = (MyPushView *)[tap superview];
-    NSLog(@"hai");
     NSDictionary *userInfo = pushView.userInfo;
     NSString *userName = userInfo[@"SendBy"];
     NSString *time = userInfo[@"sent"];
-    NSString *alertTitle = [NSString stringWithFormat:@"%@\n%@", userName, time];
+    NSString *messageType = userInfo[@"MessageType"];
+    NSString *incidentName = userInfo[@"IncidentName"];
+    
+    NSString *alertTitle;
+    if ([messageType isEqualToString:@"Group Message"]) {
+         alertTitle = [NSString stringWithFormat:@"%@\n%@", userName, time];
+    }
+    else {
+        alertTitle = [NSString stringWithFormat:@"%@\n%@", incidentName, time];
+    }
+   
     
     [[CodeSnip sharedInstance] showAlert:alertTitle withMessage:pushView.message withTarget:self.window.rootViewController];
     [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
@@ -178,7 +213,17 @@
         NSDictionary *userInfo = notification.userInfo;
         NSString *userName = userInfo[@"SendBy"];
         NSString *time = userInfo[@"sent"];
-        NSString *alertTitle = [NSString stringWithFormat:@"%@\n%@", userName, time];
+        NSString *messageType = userInfo[@"MessageType"];
+        NSString *incidentName = userInfo[@"IncidentName"];
+        
+        NSString *alertTitle;
+        if ([messageType isEqualToString:@"Group Message"]) {
+            alertTitle = [NSString stringWithFormat:@"%@\n%@", userName, time];
+        }
+        else {
+            alertTitle = [NSString stringWithFormat:@"%@\n%@", incidentName, time];
+        }
+
         
         [[CodeSnip sharedInstance] showAlert:alertTitle withMessage:notification.alertBody withTarget:self.window.rootViewController];
     }

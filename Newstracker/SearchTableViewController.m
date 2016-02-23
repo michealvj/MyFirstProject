@@ -31,6 +31,7 @@
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
+    [self.searchAddressBar resignFirstResponder];
     [self loadNearBySearchResults:searchBar.text];
 }
 

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "UserDefaults.h"
 
 @interface Tutorials : NSObject
 @property (nonatomic, strong) NSString *title;

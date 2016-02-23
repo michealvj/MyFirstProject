@@ -19,9 +19,11 @@
 #import <POP.h>
 
 @interface LoginViewController ()
+{
+    BOOL isMovedUp;
+}
 @property (weak, nonatomic) IBOutlet UITextField *emailTextField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
-
 @end
 
 @implementation LoginViewController
@@ -37,7 +39,7 @@
     
     [self setPlaceHolderText:@"Enter your email" ForTextField:self.emailTextField];
     [self setPlaceHolderText:@"Password" ForTextField:self.passwordTextField];
-    
+    isMovedUp = NO;
  }
 
 - (void)setPlaceHolderText:(NSString *)placeHolder ForTextField:(UITextField *)textField
@@ -147,13 +149,12 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    CGRect textFieldFrame = self.emailTextField.frame;
-    [self.scrollView setContentOffset:CGPointMake(0, CGRectGetMinY(textFieldFrame)-40)];
+    [self moveScrollviewUp];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    [self.scrollView setContentOffset:CGPointMake(0, 0)];
+    [self moveScrollviewDown];
 
 }
 
@@ -162,14 +163,33 @@
     if ([textField isEqual:self.emailTextField]) {
         [textField resignFirstResponder];
         [self.passwordTextField becomeFirstResponder];
-        CGRect textFieldFrame = self.emailTextField.frame;
-        [self.scrollView setContentOffset:CGPointMake(0, CGRectGetMinY(textFieldFrame)-40)];
+        [self moveScrollviewUp];
 
     }
     else {
         [textField resignFirstResponder];
-        [self.scrollView setContentOffset:CGPointMake(0, 0)];
+        [self moveScrollviewDown];
     }
     return YES;
 }
+
+- (void)moveScrollviewUp
+{
+    CGRect textFieldFrame = self.emailTextField.frame;
+    if (!isMovedUp) {
+        [self.scrollView setContentOffset:CGPointMake(0, CGRectGetMinY(textFieldFrame)-40) animated:YES];
+        isMovedUp = YES;
+    }
+
+}
+
+- (void)moveScrollviewDown
+{
+    if (isMovedUp) {
+        isMovedUp = NO;
+        [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+    }
+   
+}
+
 @end

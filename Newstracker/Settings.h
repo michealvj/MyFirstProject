@@ -20,6 +20,7 @@
 @property (nonatomic,retain) NSString *logoutTime;
 @property (nonatomic,retain) NSString *gpsTime;
 @property (nonatomic,assign) BOOL isAutomaticDeletionEnabled;
+@property (nonatomic,assign) BOOL isAutomaticLogoutEnabled;
 @property (nonatomic,assign) BOOL isManager;
 @property (nonatomic,assign) BOOL isVisibleToOtherUsers;
 

@@ -102,14 +102,14 @@
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     if ([text isEqualToString:@"\n"]) {
-//        [self resetView];
-//        if (textView.text.length==0)
-//        {
-//            self.charactersLabel.text = @"";
-//            textView.text = @"Enter Message here...";
-//        }
+        [self resetView];
+        if (textView.text.length==0)
+        {
+            self.charactersLabel.text = @"";
+            textView.text = @"Enter Message here...";
+        }
         [textView resignFirstResponder];
-        [self sendMessage];
+//        [self sendMessage];
         return NO;
     }
     else if (textView.text.length==1&&[text isEqualToString:@""])
