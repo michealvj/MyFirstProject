@@ -1406,9 +1406,9 @@
 {
     NSString *incidentID = selectedIncidentMarker.userData[@"incidentID"];
     
-    UIAlertController *alert = [[CodeSnip sharedInstance] createAlertWithAction:selectedIncidentMarker.title withMessage:@"Are you sure to delete this incident?" withCancelButton:@"NO" withTarget:self];
+    UIAlertController *alert = [[CodeSnip sharedInstance] createAlertWithAction:selectedIncidentMarker.title withMessage:@"Are you sure to delete this incident?" withCancelButton:@"No" withTarget:self];
     
-    [alert addAction:[UIAlertAction actionWithTitle:@"YES" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action)
+    [alert addAction:[UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action)
     {
         [[WebServiceHandler sharedInstance] deleteIncidentWithID:incidentID];
         

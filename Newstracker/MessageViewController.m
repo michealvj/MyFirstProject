@@ -53,6 +53,8 @@
     
     self.messageTableView.estimatedRowHeight = 100.0f;
     self.messageTableView.rowHeight = UITableViewAutomaticDimension;
+    
+    [self.messageTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:dataArray.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     [self.messageTableView reloadData];
 }
 

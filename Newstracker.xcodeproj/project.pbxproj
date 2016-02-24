@@ -11,6 +11,8 @@
 		0418EA831C7C274A0096DAB1 /* privacypolicy-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 0418EA821C7C274A0096DAB1 /* privacypolicy-icon.png */; };
 		0418EA851C7C2E170096DAB1 /* privacy.png in Resources */ = {isa = PBXBuildFile; fileRef = 0418EA841C7C2E170096DAB1 /* privacy.png */; };
 		0418EA881C7C2FE70096DAB1 /* PrivacyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0418EA871C7C2FE70096DAB1 /* PrivacyViewController.m */; };
+		0418EA8F1C7C63FD0096DAB1 /* six.png in Resources */ = {isa = PBXBuildFile; fileRef = 0418EA8E1C7C63FD0096DAB1 /* six.png */; };
+		0418EA911C7C67320096DAB1 /* five-min.png in Resources */ = {isa = PBXBuildFile; fileRef = 0418EA901C7C67320096DAB1 /* five-min.png */; };
 		041A5E8F1C11B0AE00B2B7AB /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 041A5E8E1C11B0AE00B2B7AB /* LoginViewController.m */; };
 		041A5E931C11D1A600B2B7AB /* SideBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 041A5E921C11D1A600B2B7AB /* SideBar.m */; };
 		04227F8A1C452FBC00166C7A /* LocationTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 04227F851C452FBC00166C7A /* LocationTracker.m */; };
@@ -128,7 +130,6 @@
 		04EF68921C0F0EE100EC8A06 /* NewstrackerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EF68911C0F0EE100EC8A06 /* NewstrackerTests.m */; };
 		04EF689D1C0F0EE100EC8A06 /* NewstrackerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EF689C1C0F0EE100EC8A06 /* NewstrackerUITests.m */; };
 		04F1CC691C71BC7C00ECA9E9 /* TutorialScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F1CC681C71BC7C00ECA9E9 /* TutorialScreen.m */; };
-		04F1CC701C71C26400ECA9E9 /* five-min.png in Resources */ = {isa = PBXBuildFile; fileRef = 04F1CC6B1C71C26400ECA9E9 /* five-min.png */; };
 		04F1CC711C71C26400ECA9E9 /* four-min.png in Resources */ = {isa = PBXBuildFile; fileRef = 04F1CC6C1C71C26400ECA9E9 /* four-min.png */; };
 		04F1CC721C71C26400ECA9E9 /* one-min.png in Resources */ = {isa = PBXBuildFile; fileRef = 04F1CC6D1C71C26400ECA9E9 /* one-min.png */; };
 		04F1CC731C71C26400ECA9E9 /* three-min.png in Resources */ = {isa = PBXBuildFile; fileRef = 04F1CC6E1C71C26400ECA9E9 /* three-min.png */; };
@@ -182,6 +183,8 @@
 		0418EA841C7C2E170096DAB1 /* privacy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = privacy.png; sourceTree = "<group>"; };
 		0418EA861C7C2FE70096DAB1 /* PrivacyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrivacyViewController.h; sourceTree = "<group>"; };
 		0418EA871C7C2FE70096DAB1 /* PrivacyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrivacyViewController.m; sourceTree = "<group>"; };
+		0418EA8E1C7C63FD0096DAB1 /* six.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = six.png; sourceTree = "<group>"; };
+		0418EA901C7C67320096DAB1 /* five-min.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "five-min.png"; sourceTree = "<group>"; };
 		041A5E8D1C11B0AE00B2B7AB /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		041A5E8E1C11B0AE00B2B7AB /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		041A5E911C11D1A600B2B7AB /* SideBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SideBar.h; path = Utilities/SideBar.h; sourceTree = "<group>"; };
@@ -332,7 +335,6 @@
 		04EF689E1C0F0EE100EC8A06 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		04F1CC671C71BC7C00ECA9E9 /* TutorialScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TutorialScreen.h; sourceTree = "<group>"; };
 		04F1CC681C71BC7C00ECA9E9 /* TutorialScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TutorialScreen.m; sourceTree = "<group>"; };
-		04F1CC6B1C71C26400ECA9E9 /* five-min.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "five-min.png"; sourceTree = "<group>"; };
 		04F1CC6C1C71C26400ECA9E9 /* four-min.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "four-min.png"; sourceTree = "<group>"; };
 		04F1CC6D1C71C26400ECA9E9 /* one-min.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "one-min.png"; sourceTree = "<group>"; };
 		04F1CC6E1C71C26400ECA9E9 /* three-min.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "three-min.png"; sourceTree = "<group>"; };
@@ -898,7 +900,8 @@
 		04F1CC661C71B85B00ECA9E9 /* iPhone Tutorials */ = {
 			isa = PBXGroup;
 			children = (
-				04F1CC6B1C71C26400ECA9E9 /* five-min.png */,
+				0418EA8E1C7C63FD0096DAB1 /* six.png */,
+				0418EA901C7C67320096DAB1 /* five-min.png */,
 				04F1CC6C1C71C26400ECA9E9 /* four-min.png */,
 				04F1CC6D1C71C26400ECA9E9 /* one-min.png */,
 				04F1CC6E1C71C26400ECA9E9 /* three-min.png */,
@@ -1097,6 +1100,7 @@
 				04E6BB8C1C27E3CF00EE3AB6 /* ltarrow.png in Resources */,
 				0418EA851C7C2E170096DAB1 /* privacy.png in Resources */,
 				04EF68871C0F0EE100EC8A06 /* LaunchScreen.storyboard in Resources */,
+				0418EA8F1C7C63FD0096DAB1 /* six.png in Resources */,
 				042CE4D61C1AE8C300503F62 /* redot.png in Resources */,
 				04F1CC711C71C26400ECA9E9 /* four-min.png in Resources */,
 				042538B31C58E328004FE875 /* createIncident.png in Resources */,
@@ -1110,7 +1114,6 @@
 				042AF5911C205C87004291EE /* splashicon.png in Resources */,
 				04EF687F1C0F0EE100EC8A06 /* Main.storyboard in Resources */,
 				0482CC961C64D738001C94A7 /* eye.png in Resources */,
-				04F1CC701C71C26400ECA9E9 /* five-min.png in Resources */,
 				0438977B1C68B3540054A3BC /* new.png in Resources */,
 				043C17FD1C23DA2800FB242E /* greecircle.png in Resources */,
 				04BD0FBC1C1EE2A400B37ACB /* aboutus.png in Resources */,
@@ -1121,6 +1124,7 @@
 				04F1CC731C71C26400ECA9E9 /* three-min.png in Resources */,
 				04BD0FBE1C1EE2A400B37ACB /* logout.png in Resources */,
 				042AF5861C204E5E004291EE /* arrow.png in Resources */,
+				0418EA911C7C67320096DAB1 /* five-min.png in Resources */,
 				0418EA831C7C274A0096DAB1 /* privacypolicy-icon.png in Resources */,
 				04BD0FB11C1EC55200B37ACB /* blackpin.png in Resources */,
 				042AF56D1C1FDDF2004291EE /* password.png in Resources */,
@@ -1363,14 +1367,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BackgroundWidget/BackgroundWidget.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: vijayakumar Radhakrishnan (H2UW5RTL22)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: vijayakumar Radhakrishnan (H2UW5RTL22)";
 				INFOPLIST_FILE = BackgroundWidget/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.dci.Newstracker.BackgroundWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "42caf02c-844e-4af7-939b-ec2f943f0cee";
+				PROVISIONING_PROFILE = "acbcfa7e-f319-4315-9d99-c359188cfd4e";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -1379,14 +1383,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BackgroundWidget/BackgroundWidget.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: vijayakumar Radhakrishnan (H2UW5RTL22)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: vijayakumar Radhakrishnan (H2UW5RTL22)";
 				INFOPLIST_FILE = BackgroundWidget/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.dci.Newstracker.BackgroundWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "42caf02c-844e-4af7-939b-ec2f943f0cee";
+				PROVISIONING_PROFILE = "acbcfa7e-f319-4315-9d99-c359188cfd4e";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -1483,14 +1487,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Newstracker/Newstracker.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: vijayakumar Radhakrishnan (H2UW5RTL22)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: vijayakumar Radhakrishnan (H2UW5RTL22)";
 				INFOPLIST_FILE = Newstracker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.dci.Newstracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f82306b6-44b3-4ee5-bfd6-6f38d7954a07";
+				PROVISIONING_PROFILE = "67f553e1-d8fb-44e7-a2b7-fc71078cb2cd";
 			};
 			name = Debug;
 		};
@@ -1500,14 +1504,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Newstracker/Newstracker.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: vijayakumar Radhakrishnan (GCKUTRYNGF)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: vijayakumar Radhakrishnan (H2UW5RTL22)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: vijayakumar Radhakrishnan (H2UW5RTL22)";
 				INFOPLIST_FILE = Newstracker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.dci.Newstracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f82306b6-44b3-4ee5-bfd6-6f38d7954a07";
+				PROVISIONING_PROFILE = "67f553e1-d8fb-44e7-a2b7-fc71078cb2cd";
 			};
 			name = Release;
 		};

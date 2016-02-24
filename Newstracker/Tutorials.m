@@ -40,8 +40,8 @@
     Tutorials *tutorial6 = [Tutorials new];
     tutorial6.title = @"User visibility setting";
     tutorial6.desc = @"Only group managers can only see user locations or alternatively all users can see each other";
-    tutorial6.imageName = @"two-min.png";
-
+    tutorial6.imageName = @"six.png";
+    
     NSArray *allTutorials;
     if ([UserDefaults isManager]) {
        allTutorials = @[tutorial1, tutorial2, tutorial3, tutorial4, tutorial5, tutorial6];
